@@ -1,113 +1,94 @@
-import Image from "next/image";
+'use client';
+import { useEffect, useState } from "react";
+import InputMask from 'react-input-mask';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Home() {
+  const [maxDate, setMaxDate] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [birthdate, setBirthdate] = useState('');
+  const [address, setAddress] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
+  useEffect(() => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    setMaxDate(`${year}-${month}-${day}`);
+  }, []);
+
+  const handleSubmit = (e: any) => {
+    e.preventDefault(); // Prevents default form submission
+    
+    if (password === confirmPassword) {
+      toast("Form submitted successfully!", { type: "success" }); // Display toast notification
+      // Here can add further logic to handle form submission, e.g., send data to backend
+
+      // Reset all form fields
+      setFirstName('');
+      setLastName('');
+      setEmail('');
+      setBirthdate('');
+      setAddress('');
+      setPhoneNumber('');
+      setPassword('');
+      setConfirmPassword('');
+    };
+  }
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+    <main className="flex min-h-screen flex-col items-center justify-between p-10">
+      <ToastContainer />
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="first">First Name</label>
+        <input type="text" id="first" name="first" value={firstName} onChange={(e) => setFirstName(e.target.value)} minLength={2} maxLength={100} required />
 
-      <div className="relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+        <label htmlFor="last">Last Name</label>
+        <input type="text" id="last" name="last" value={lastName} onChange={(e) => setLastName(e.target.value)} minLength={2} maxLength={100} required />
 
-      <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
+        <label htmlFor="email">Email</label>
+        <input type="email" id="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
+        <label htmlFor="birthdate">Date of Birth</label>
+        <input type="date" id="birthdate" name="birthdate" value={birthdate} onChange={(e) => setBirthdate(e.target.value)} max={maxDate} required />
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Explore starter templates for Next.js.
-          </p>
-        </a>
+        <label htmlFor="address">Address</label>
+        <input type="text" id="address" name="address" value={address} onChange={(e) => setAddress(e.target.value)} maxLength={100} />
 
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-balance text-sm opacity-50">
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+        <label htmlFor="phone">Phone Number</label>
+        <InputMask mask="(999)-999-9999" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} id="phone" name="phone"></InputMask>
+
+        <label htmlFor="password">Password</label>
+        <input type="text" id="password" name="password" value={password}
+          pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[?@!#$%^&*])(?!.*[^A-Za-z\d?@!#$%^&*]).{15,}$"
+          onChange={(e) => {
+            const { value } = e.target;
+            // Remove any characters that are not in the allowed set
+            const sanitizedValue = value.replace(/[^A-Za-z\d?@!#$%^&*]/g, '');
+            setPassword(sanitizedValue);
+          }}
+          required />
+
+        <label htmlFor="passwordconfirmed">Confirm Password</label>
+        <input type="text" id="passwordconfirmed" name="passwordconfirmed" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
+
+        <h2 className="font-bold py-2">Password Requirements:</h2>
+        <ol className="text-xs pb-5">
+          <li style={{ color: /.{15,}/.test(password) ? 'green' : 'red' }}>- Be at least 15 characters long</li>
+          <li style={{ color: /[A-Z]/.test(password) ? 'green' : 'red' }}>- Contain 1 uppercase letter</li>
+          <li style={{ color: /[0-9]/.test(password) ? 'green' : 'red' }}>- Contain 1 number</li>
+          <li style={{ color: /[?!@#$%^&*]/.test(password) ? 'green' : 'red' }}>- Contain 1 special character </li>
+          <li style={{ color: password === confirmPassword ? 'green' : 'red' }}>- Confirm password matches</li>
+        </ol>
+
+        <button type="submit">Submit</button>
+      </form>
     </main>
   );
-}
+};
