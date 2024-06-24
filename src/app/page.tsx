@@ -74,7 +74,7 @@ export default function Home() {
           <li style={{ color: /.{15,}/.test(password) ? 'green' : 'red' }}>- Be at least 15 characters long</li>
           <li style={{ color: /[A-Z]/.test(password) ? 'green' : 'red' }}>- Contain 1 uppercase letter</li>
           <li style={{ color: /[0-9]/.test(password) ? 'green' : 'red' }}>- Contain 1 number</li>
-          <li style={{ color: /[?!@#$%^&*]/.test(password) ? 'green' : 'red' }}>- Contain 1 special character </li>
+          <li style={{ color: /[?!@#$%^&*]/.test(password) ? 'green' : 'red' }}>- Contain 1 special character: ? ! @ # $ % ^ & *</li>
           <li style={{ color: password === confirmPassword ? 'green' : 'red' }}>- Confirm password matches</li>
         </ol>
 
