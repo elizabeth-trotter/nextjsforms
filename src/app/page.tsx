@@ -15,14 +15,6 @@ export default function Home() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  useEffect(() => {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, '0');
-    const day = String(today.getDate()).padStart(2, '0');
-    setMaxDate(`${year}-${month}-${day}`);
-  }, []);
-
   const handleSubmit = (e: any) => {
     e.preventDefault(); // Prevents default form submission
     
@@ -56,7 +48,7 @@ export default function Home() {
         <input type="email" id="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
 
         <label htmlFor="birthdate">Date of Birth</label>
-        <input type="date" id="birthdate" name="birthdate" value={birthdate} onChange={(e) => setBirthdate(e.target.value)} max={maxDate} required />
+        <input type="date" id="birthdate" name="birthdate" value={birthdate} onChange={(e) => setBirthdate(e.target.value)} max={new Date().toISOString().split("T")[0]} required />
 
         <label htmlFor="address">Address</label>
         <input type="text" id="address" name="address" value={address} onChange={(e) => setAddress(e.target.value)} maxLength={100} />
