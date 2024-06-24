@@ -75,7 +75,7 @@ export default function Home() {
           <li style={{ color: /[A-Z]/.test(password) ? 'green' : 'red' }}>- Contain 1 uppercase letter</li>
           <li style={{ color: /[0-9]/.test(password) ? 'green' : 'red' }}>- Contain 1 number</li>
           <li style={{ color: /[?!@#$%^&*]/.test(password) ? 'green' : 'red' }}>- Contain 1 special character: ? ! @ # $ % ^ & *</li>
-          <li style={{ color: password === confirmPassword ? 'green' : 'red' }}>- Confirm password matches</li>
+          <li style={{ color: password === confirmPassword && password.length > 0 ? 'green' : 'red' }}>- Confirm password matches</li>
         </ol>
 
         <button type="submit">Submit</button>
