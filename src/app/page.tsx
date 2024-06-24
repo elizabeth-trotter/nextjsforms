@@ -40,16 +40,16 @@ export default function Home() {
         <h1 className="text-lg font-bold text-center pb-1">Next.js Form Practice</h1>
         <p className="text-xs tracking-wide text-center pb-4">Name: Elizabeth Trotter <span className="hidden sm:inline">|</span> <span className="block sm:inline">Updated: June 24, 2024</span></p>
 
-        <label htmlFor="first">First Name</label>
+        <label htmlFor="first">First Name *</label>
         <input type="text" id="first" name="first" value={firstName} onChange={(e) => setFirstName(e.target.value)} minLength={2} maxLength={100} required />
 
-        <label htmlFor="last">Last Name</label>
+        <label htmlFor="last">Last Name *</label>
         <input type="text" id="last" name="last" value={lastName} onChange={(e) => setLastName(e.target.value)} minLength={2} maxLength={100} required />
 
-        <label htmlFor="email">Email</label>
+        <label htmlFor="email">Email *</label>
         <input type="email" autoComplete="true" id="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
 
-        <label htmlFor="birthdate">Date of Birth</label>
+        <label htmlFor="birthdate">Date of Birth *</label>
         <input type="date" id="birthdate" name="birthdate" value={birthdate} onChange={(e) => setBirthdate(e.target.value)} max={new Date().toISOString().split("T")[0]} required />
 
         <label htmlFor="address">Address</label>
@@ -58,7 +58,7 @@ export default function Home() {
         <label htmlFor="phone">Phone Number</label>
         <InputMask autoComplete="true" mask="(999)-999-9999" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} id="phone" name="phone"></InputMask>
 
-        <label htmlFor="password">Password</label>
+        <label htmlFor="password">Password *</label>
         <input type="password" id="password" name="password" value={password}
           pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[?@!#$%^&*])(?!.*[^A-Za-z\d?@!#$%^&*]).{15,}$"
           onChange={(e) => {
@@ -69,9 +69,9 @@ export default function Home() {
           }}
           required />
 
-        <label htmlFor="passwordconfirmed">Confirm Password</label>
+        <label htmlFor="passwordconfirmed">Confirm Password *</label>
         <input type="password" id="passwordconfirmed" name="passwordconfirmed" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
-
+        
         <h2 className="font-bold pb-2">Password Requirements:</h2>
         <ol className="text-xs pb-5">
           <li style={{ color: /.{15,}/.test(password) ? '#004600' : '#8B0000' }}>- Be at least 15 characters long</li>
@@ -82,6 +82,8 @@ export default function Home() {
         </ol>
 
         <button type="submit">Submit</button>
+        <p className="text-xs text-end pt-1">* fields required</p>
+
       </form>
     </main>
   );
