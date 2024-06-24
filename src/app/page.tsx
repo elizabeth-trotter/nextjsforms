@@ -5,7 +5,6 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export default function Home() {
-  const [maxDate, setMaxDate] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -57,7 +56,7 @@ export default function Home() {
         <InputMask mask="(999)-999-9999" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} id="phone" name="phone"></InputMask>
 
         <label htmlFor="password">Password</label>
-        <input type="text" id="password" name="password" value={password}
+        <input type="password" id="password" name="password" value={password}
           pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[?@!#$%^&*])(?!.*[^A-Za-z\d?@!#$%^&*]).{15,}$"
           onChange={(e) => {
             const { value } = e.target;
@@ -68,7 +67,7 @@ export default function Home() {
           required />
 
         <label htmlFor="passwordconfirmed">Confirm Password</label>
-        <input type="text" id="passwordconfirmed" name="passwordconfirmed" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
+        <input type="password" id="passwordconfirmed" name="passwordconfirmed" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
 
         <h2 className="font-bold py-2">Password Requirements:</h2>
         <ol className="text-xs pb-5">
