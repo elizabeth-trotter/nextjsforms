@@ -74,11 +74,11 @@ export default function Home() {
 
         <h2 className="font-bold pb-2">Password Requirements:</h2>
         <ol className="text-xs pb-5">
-          <li style={{ color: /.{15,}/.test(password) ? '#008A00' : '#EF0000' }}>- Be at least 15 characters long</li>
-          <li style={{ color: /[A-Z]/.test(password) ? '#008A00' : '#EF0000' }}>- Contain 1 uppercase letter</li>
-          <li style={{ color: /[0-9]/.test(password) ? '#008A00' : '#EF0000' }}>- Contain 1 number</li>
-          <li style={{ color: /[?!@#$%^&*]/.test(password) ? '#008A00' : '#EF0000' }}>- Contain 1 special character: ? ! @ # $ % ^ & *</li>
-          <li style={{ color: password === confirmPassword && password.length > 0 ? '#008A00' : '#EF0000' }}>- Confirm password matches</li>
+          <li style={{ color: /.{15,}/.test(password) ? '#004600' : '#8B0000' }}>- Be at least 15 characters long</li>
+          <li style={{ color: /[A-Z]/.test(password) ? '#004600' : '#8B0000' }}>- Contain 1 uppercase letter</li>
+          <li style={{ color: /[0-9]/.test(password) ? '#004600' : '#8B0000' }}>- Contain 1 number</li>
+          <li style={{ color: /[?!@#$%^&*]/.test(password) ? '#004600' : '#8B0000' }}>- Contain 1 special character: ? ! @ # $ % ^ & *</li>
+          <li style={{ color: password === confirmPassword && password.length > 0 ? '#004600' : '#8B0000' }}>- Confirm password matches</li>
         </ol>
 
         <button type="submit">Submit</button>
