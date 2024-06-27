@@ -99,13 +99,26 @@ export default function Home() {
 
               <div className='flex flex-col relative'>
                 <p className='text-red-600 absolute top-0 right-1'>*</p>
-                <input placeholder="First Name" type="text" id="firstName" name="firstName" className={`${isSubmitted && formData.firstname === '' ? 'border-red-500 text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12' : 'text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12'}`} value={formData.firstname} onChange={updateForm} minLength={2} maxLength={100} />
+                <input placeholder="First Name" type="text" id="firstName" name="firstName" className={`${isSubmitted && formData.firstname === '' ? 'border-red-500 text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12' : 'text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12'}`} value={formData.firstname} minLength={2} maxLength={100}
+                  onChange={(e) => {
+                    const { value } = e.target;
+                    // Remove any characters that are not in the allowed set
+                    const sanitizedValueFirst = value.replace(/[^A-Za-z\u00C0-\u00FF ]+/g, '');
+                    setFormData({ ...formData, firstname: sanitizedValueFirst });
+                  }}
+                />
               </div>
-
 
               <div className='flex flex-col relative'>
                 <p className='text-red-600 absolute top-0 right-1'>*</p>
-                <input placeholder="Last Name" type="text" id="lastName" name="lastName" className={`${isSubmitted && formData.lastname === '' ? 'border-red-500 text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12' : 'text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12'}`} value={formData.lastname} onChange={updateForm} minLength={2} maxLength={100} />
+                <input placeholder="Last Name" type="text" id="lastName" name="lastName" className={`${isSubmitted && formData.lastname === '' ? 'border-red-500 text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12' : 'text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12'}`} value={formData.lastname} minLength={2} maxLength={100}
+                  onChange={(e) => {
+                    const { value } = e.target;
+                    // Remove any characters that are not in the allowed set
+                    const sanitizedValueLast = value.replace(/[^A-Za-z\u00C0-\u00FF ]+/g, '');
+                    setFormData({ ...formData, lastname: sanitizedValueLast });
+                  }}
+                />
               </div>
 
               <div className='flex flex-col relative'>
