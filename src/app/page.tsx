@@ -1,4 +1,5 @@
 'use client';
+import { GetFormsAPI, SendFormAPI } from "@/DataServices/DataService";
 import { useEffect, useState } from "react";
 import InputMask from 'react-input-mask';
 import { ToastContainer, toast } from 'react-toastify';
@@ -6,17 +7,22 @@ import 'react-toastify/dist/ReactToastify.css';
 
 export default function Home() {
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
+    firstname: '',
+    lastname: '',
     email: '',
-    birthdate: '',
+    dob: '',
     address: '',
-    phoneNumber: '',
+    phonenumber: '',
     password: '',
     confirmPassword: '',
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [maxDate, setMaxDate] = useState('');
+
+  const SendFormAPICall = async (form: IForm) => {
+    const data = await SendFormAPI(form);
+    return data;
+  }
 
   useEffect(() => {
     const today = new Date();
@@ -24,6 +30,7 @@ export default function Home() {
     const month = String(today.getMonth() + 1).padStart(2, '0');
     const day = String(today.getDate()).padStart(2, '0');
     setMaxDate(`${year}-${month}-${day}`);
+
   }, []);
 
   const updateForm = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,33 +41,38 @@ export default function Home() {
     })
   }
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitted(true);
 
-    const isFilled = formData.firstName && formData.lastName && formData.email && formData.birthdate && formData.password && formData.confirmPassword;
+    const isFilled = formData.firstname && formData.lastname && formData.email && formData.dob && formData.password && formData.confirmPassword;
     const passwordsMatch = formData.password === formData.confirmPassword;
-    const checkFirstName = /^[A-Za-z\u00C0-\u00FF][A-Za-z\u00C0-\u00FF'\-]+([\ A-Za-z\u00C0-\u00FF][A-Za-z\u00C0-\u00FF'\-]+)*$/.test(formData.firstName)
-    const checkLastName = /^[A-Za-z\u00C0-\u00FF][A-Za-z\u00C0-\u00FF'\-]+([\ A-Za-z\u00C0-\u00FF][A-Za-z\u00C0-\u00FF'\-]+)*$/.test(formData.lastName)
 
-    if (isFilled && passwordsMatch && checkFirstName && checkLastName) {
-      toast("Form submitted successfully!", { type: "success" });
+    if (isFilled && passwordsMatch) {
+      const data = await SendFormAPICall(formData)
 
-      // Reset all form fields
-      // setFormData({
-      //   firstName: '',
-      //   lastName: '',
-      //   email: '',
-      //   birthdate: '',
-      //   address: '',
-      //   phoneNumber: '',
-      //   password: '',
-      //   confirmPassword: '',
-      // });
-      setIsSubmitted(false);
+      if (data) {
+        toast("Form submitted successfully!", { type: "success" });
+
+        // Reset all form fields
+        setFormData({
+          firstname: '',
+          lastname: '',
+          email: '',
+          dob: '',
+          address: '',
+          phonenumber: '',
+          password: '',
+          confirmPassword: '',
+        });
+        setIsSubmitted(false);
+      } else {
+        toast("API to connect the form is currenty down!", { type: "warning" });
+      }
+
     } else {
       if (!isFilled) {
-        toast("Please fill out all required fields.", { type: "error" });
+        toast("Please fill out all required fields.", { type: "error", className: " !grid !grid-cols-[95%_5%] text-center" });
       }
       if (!passwordsMatch) {
         toast("Passwords do not match.", { type: "error" });
@@ -73,31 +85,32 @@ export default function Home() {
       }
     }
   };
+  
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-10">
       <ToastContainer />
-      <form onSubmit={handleSubmit} className="w-full max-w-xl bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+      <form onSubmit={handleSubmit} className="w-full max-w-xl bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 block ">
         <h1 className="text-lg font-bold text-center pb-1">Next.js Form Practice</h1>
         <p className="text-xs tracking-wide text-center pb-4">Name: Elizabeth Trotter <span className="hidden sm:inline">|</span> <span className="block sm:inline">Updated: June 27, 2024</span></p>
 
-        <label htmlFor="firstName">First Name *</label>
-        <input type="text" id="firstName" name="firstName" className={`${isSubmitted && formData.firstName === '' ? 'border-red-500' : ''}`} value={formData.firstName} onChange={updateForm} minLength={2} maxLength={100} />
+        <label htmlFor="firstname">First Name *</label>
+        <input type="text" id="firstname" name="firstname" className={`${isSubmitted && formData.firstname === '' ? 'border-red-500' : ''}`} value={formData.firstname} onChange={updateForm} minLength={2} maxLength={100} />
 
-        <label htmlFor="lastName">Last Name *</label>
-        <input type="text" id="lastName" name="lastName" className={`${isSubmitted && formData.lastName === '' ? 'border-red-500' : ''}`} value={formData.lastName} onChange={updateForm} minLength={2} maxLength={100} />
+        <label htmlFor="lastname">Last Name *</label>
+        <input type="text" id="lastname" name="lastname" className={`${isSubmitted && formData.lastname === '' ? 'border-red-500' : ''}`} value={formData.lastname} onChange={updateForm} minLength={2} maxLength={100} />
 
         <label htmlFor="email">Email *</label>
         <input type="email" autoComplete="email" id="email" name="email" className={`${isSubmitted && formData.email === '' ? 'border-red-500' : ''}`} value={formData.email} onChange={updateForm} />
 
-        <label htmlFor="birthdate">Date of Birth *</label>
-        <input type="date" id="birthdate" name="birthdate" className={`${isSubmitted && formData.birthdate === '' ? 'border-red-500' : ''}`} value={formData.birthdate} onChange={updateForm} max={maxDate} />
+        <label htmlFor="dob">Date of Birth *</label>
+        <input type="date" id="dob" name="dob" className={`${isSubmitted && formData.dob === '' ? 'border-red-500' : ''}`} value={formData.dob} onChange={updateForm} max={maxDate} />
 
         <label htmlFor="address">Address</label>
         <input type="text" autoComplete="street-address" id="address" name="address" value={formData.address} onChange={updateForm} maxLength={100} />
 
-        <label htmlFor="phoneNumber">Phone Number</label>
-        <InputMask autoComplete="tel" mask="(999)-999-9999" value={formData.phoneNumber} onChange={updateForm} id="phoneNumber" name="phoneNumber"></InputMask>
+        <label htmlFor="phonenumber">Phone Number</label>
+        <InputMask autoComplete="tel" mask="(999)-999-9999" value={formData.phonenumber} onChange={updateForm} id="phonenumber" name="phonenumber"></InputMask>
 
         <label htmlFor="password">Password *</label>
         <input type="password" id="password" name="password" className={`${isSubmitted && formData.password === '' ? 'border-red-500' : ''}`} value={formData.password}
