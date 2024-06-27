@@ -1,5 +1,5 @@
 'use client';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import InputMask from 'react-input-mask';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -16,6 +16,15 @@ export default function Home() {
     confirmPassword: '',
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [maxDate, setMaxDate] = useState('');
+
+  useEffect(() => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    setMaxDate(`${year}-${month}-${day}`);
+  }, []);
 
   const updateForm = (e: React.ChangeEvent<HTMLInputElement>) => {
     // Pass through current values and update
@@ -62,7 +71,7 @@ export default function Home() {
       <ToastContainer />
       <form onSubmit={handleSubmit} className="w-full max-w-xl bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <h1 className="text-lg font-bold text-center pb-1">Next.js Form Practice</h1>
-        <p className="text-xs tracking-wide text-center pb-4">Name: Elizabeth Trotter <span className="hidden sm:inline">|</span> <span className="block sm:inline">Updated: June 24, 2024</span></p>
+        <p className="text-xs tracking-wide text-center pb-4">Name: Elizabeth Trotter <span className="hidden sm:inline">|</span> <span className="block sm:inline">Updated: June 27, 2024</span></p>
 
         <label htmlFor="firstName">First Name *</label>
         <input type="text" id="firstName" name="firstName" className={`${isSubmitted && formData.firstName === '' ? 'border-red-500' : ''}`} value={formData.firstName} onChange={updateForm} minLength={2} maxLength={100} />
@@ -74,7 +83,7 @@ export default function Home() {
         <input type="email" autoComplete="email" id="email" name="email" className={`${isSubmitted && formData.email === '' ? 'border-red-500' : ''}`} value={formData.email} onChange={updateForm} />
 
         <label htmlFor="birthdate">Date of Birth *</label>
-        <input type="date" id="birthdate" name="birthdate" className={`${isSubmitted && formData.birthdate === '' ? 'border-red-500' : ''}`} value={formData.birthdate} onChange={updateForm} max={new Date().toISOString().split("T")[0]} />
+        <input type="date" id="birthdate" name="birthdate" className={`${isSubmitted && formData.birthdate === '' ? 'border-red-500' : ''}`} value={formData.birthdate} onChange={updateForm} max={maxDate} />
 
         <label htmlFor="address">Address</label>
         <input type="text" autoComplete="street-address" id="address" name="address" value={formData.address} onChange={updateForm} maxLength={100} />
