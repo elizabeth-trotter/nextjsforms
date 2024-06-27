@@ -47,8 +47,10 @@ export default function Home() {
 
     const isFilled = formData.firstname && formData.lastname && formData.email && formData.dob && formData.password && formData.confirmPassword;
     const passwordsMatch = formData.password === formData.confirmPassword;
+    const checkFirstName = /^[A-Za-z\u00C0-\u00FF][A-Za-z\u00C0-\u00FF'\-]+([\ A-Za-z\u00C0-\u00FF][A-Za-z\u00C0-\u00FF'\-]+)*$/.test(formData.firstname)
+    const checkLastName = /^[A-Za-z\u00C0-\u00FF][A-Za-z\u00C0-\u00FF'\-]+([\ A-Za-z\u00C0-\u00FF][A-Za-z\u00C0-\u00FF'\-]+)*$/.test(formData.lastname)
 
-    if (isFilled && passwordsMatch) {
+    if (isFilled && passwordsMatch && checkFirstName && checkLastName) {
       const data = await SendFormAPICall(formData)
 
       if (data) {
