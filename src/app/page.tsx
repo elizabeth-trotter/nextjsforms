@@ -79,9 +79,7 @@ export default function Home() {
       if (!passwordsMatch) {
         toast("Passwords do not match.", { type: "error" });
       }
-      if (!checkFirstName || !checkLastName) {
-        toast('Numbers and special characters are not allowed for names', { type: "error" });
-      }
+
     }
   };
 
@@ -181,7 +179,7 @@ export default function Home() {
             </div>
 
             <div className="flex justify-center mt-6 w-full flex-col">
-              <button type="button" className="bg-[#DD8A3E] hover:brightness-90 p-4 w-full text-white text-sm font-bold tracking-wide" >Submit</button>
+              <button type="submit" className="bg-[#DD8A3E] hover:brightness-90 p-4 w-full text-white text-sm font-bold tracking-wide" >Submit</button>
               <p className="text-xs text-end pt-1">* fields required</p>
             </div>
 
