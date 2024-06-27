@@ -15,7 +15,7 @@ label {
   margin-bottom: 5px;
 }
 
-input {
+/* input {
   border: 1px solid #ccc;
   padding: 10px;
   font-size: 16px;
@@ -24,9 +24,9 @@ input {
   margin-bottom: 10px;
   border-radius: 4px;
   outline-offset: 4px;
-}
+} */
 
-button {
+/* button {
   background-color: black;
   border-radius: 4px;
   color: white;
@@ -45,4 +45,31 @@ button:hover {
 button[aria-disabled="true"] {
   opacity: 0.5;
   cursor: not-allowed;
+} */
+
+@font-face {
+  font-family: RobotoCondensed;
+  src: url(/RobotoCondensed.ttf);
+}
+
+@font-face {
+  font-family: Roboto;
+  src: url(/Roboto-Regular.ttf);
+}
+
+@font-face {
+  font-family: Open-Sans;
+  src: url(/Open-Sans.ttf);
+}
+
+.robotoCondensed {
+  font-family: RobotoCondensed;
+}
+
+.roboto {
+  font-family: Roboto;
+}
+
+.openSans {
+  font-family: Open-Sans;
 }
