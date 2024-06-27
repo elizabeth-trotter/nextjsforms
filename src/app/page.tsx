@@ -79,10 +79,7 @@ export default function Home() {
       if (!passwordsMatch) {
         toast("Passwords do not match.", { type: "error" });
       }
-      if (!checkFirstName) {
-        toast('Numbers and special characters are not allowed for names', { type: "error" });
-      }
-      if (!checkLastName) {
+      if (!checkFirstName || !checkLastName) {
         toast('Numbers and special characters are not allowed for names', { type: "error" });
       }
     }
