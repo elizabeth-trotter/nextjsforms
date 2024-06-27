@@ -40,21 +40,23 @@ export default function Home() {
 
     const isFilled = formData.firstName && formData.lastName && formData.email && formData.birthdate && formData.password && formData.confirmPassword;
     const passwordsMatch = formData.password === formData.confirmPassword;
+    const checkFirstName = /^[A-Za-z\u00C0-\u00FF][A-Za-z\u00C0-\u00FF'\-]+([\ A-Za-z\u00C0-\u00FF][A-Za-z\u00C0-\u00FF'\-]+)*$/.test(formData.firstName)
+    const checkLastName = /^[A-Za-z\u00C0-\u00FF][A-Za-z\u00C0-\u00FF'\-]+([\ A-Za-z\u00C0-\u00FF][A-Za-z\u00C0-\u00FF'\-]+)*$/.test(formData.lastName)
 
-    if (isFilled && passwordsMatch) {
+    if (isFilled && passwordsMatch && checkFirstName && checkLastName) {
       toast("Form submitted successfully!", { type: "success" });
 
       // Reset all form fields
-      setFormData({
-        firstName: '',
-        lastName: '',
-        email: '',
-        birthdate: '',
-        address: '',
-        phoneNumber: '',
-        password: '',
-        confirmPassword: '',
-      });
+      // setFormData({
+      //   firstName: '',
+      //   lastName: '',
+      //   email: '',
+      //   birthdate: '',
+      //   address: '',
+      //   phoneNumber: '',
+      //   password: '',
+      //   confirmPassword: '',
+      // });
       setIsSubmitted(false);
     } else {
       if (!isFilled) {
@@ -62,6 +64,12 @@ export default function Home() {
       }
       if (!passwordsMatch) {
         toast("Passwords do not match.", { type: "error" });
+      }
+      if (!checkFirstName) {
+        toast('Numbers and special characters are not allowed for names', { type: "error" });
+      }
+      if (!checkLastName) {
+        toast('Numbers and special characters are not allowed for names', { type: "error" });
       }
     }
   };
@@ -100,7 +108,7 @@ export default function Home() {
             const sanitizedValue = value.replace(/[^A-Za-z\d?@!#$%^&*]/g, '');
             setFormData({ ...formData, password: sanitizedValue });
           }}
-          />
+        />
 
         <label htmlFor="confirmPassword">Confirm Password *</label>
         <input type="password" id="confirmPassword" name="confirmPassword" className={`${isSubmitted && formData.confirmPassword === '' ? 'border-red-500' : ''}`} value={formData.confirmPassword} onChange={updateForm} />
