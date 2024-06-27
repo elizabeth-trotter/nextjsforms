@@ -91,7 +91,7 @@ export default function Home() {
       <ToastContainer />
       <div className="flex items-center flex-col">
         <img src="/WA-Logo.png" alt="William's Act Logo" />
-        <div className="bg-white px-6 py-4 min-w-72 sm:max-w-[538px] max-w-[288px] mb-12">
+        <div className="bg-white px-6 py-4 sm:min-w-[538px] sm:max-w-[538px] max-w-[288px] mb-12">
           <h1 className="text-center text-[34px] text-black mb-6 robotoCondensed font-light ">USER <strong className="font-bold">SIGN UP</strong></h1>
 
           <form onSubmit={handleSubmit} className="openSans font-semibold">
@@ -152,7 +152,7 @@ export default function Home() {
               </div>
 
 
-              <div className=" col-span-2">
+              <div className=" sm:col-span-2">
                 <h2 className="font-bold pb-2">Password Requirements:</h2>
                 <ol className="text-xs pb-5">
                   <li style={{ color: /.{15,}/.test(formData.password) ? '#004600' : '#8B0000' }}>- Be at least 15 characters long</li>
