@@ -67,7 +67,7 @@ export default function Home() {
         });
         setIsSubmitted(false);
       } else {
-
+        toast("API to connect the form is currenty down!", { type: "warning" });
       }
 
     } else {
