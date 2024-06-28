@@ -2,7 +2,7 @@
 
 
 import PasswordRulesComponent from "@/components/PasswordRulesComponent";
-import { GetFormsAPI, SendFormAPI } from "@/utils/DataServices/DataService";
+import { CreateAccountAPI, GetFormsAPI } from "@/utils/DataServices/DataService";
 import { useEffect, useState } from "react";
 import InputMask from 'react-input-mask';
 import { ToastContainer, toast } from 'react-toastify';
@@ -23,8 +23,8 @@ export default function Home() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [maxDate, setMaxDate] = useState('');
 
-  const SendFormAPICall = async (form: IForm) => {
-    const data = await SendFormAPI(form);
+  const CreateAccountAPICall = async (form: IForm) => {
+    const data = await CreateAccountAPI(form);
     return data;
   }
 
@@ -33,6 +33,8 @@ export default function Home() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
+
+  const [isLoginPage, setIsLoginPage] = useState<boolean>(false);
 
   useEffect(() => {
     const today = new Date();
@@ -61,7 +63,7 @@ export default function Home() {
     const checkLastName = /^[A-Za-z\u00C0-\u00FF][A-Za-z\u00C0-\u00FF'\-]+([\ A-Za-z\u00C0-\u00FF][A-Za-z\u00C0-\u00FF'\-]+)*$/.test(formData.lastname)
 
     if (isFilled && passwordsMatch && checkFirstName && checkLastName) {
-      const data = await SendFormAPICall(formData)
+      const data = await CreateAccountAPICall(formData)
 
       if (data) {
         toast("Form submitted successfully!", { type: "success", className: " !grid !grid-cols-[95%_5%] text-center" });
@@ -116,7 +118,7 @@ export default function Home() {
       <div className="flex items-center flex-col">
         <img className="w-[230px] p-5 mb-4" src="/WA-Logo.png" alt="William's Act Logo" />
         <div className="bg-white px-6 py-4 sm:min-w-[538px] sm:max-w-[538px] max-w-[288px] mb-12">
-          <h1 className="text-center text-[34px] text-black mb-6 robotoCondensed font-light ">USER <strong className="font-bold">SIGN UP</strong></h1>
+          <h1 className="text-center text-[34px] text-black mb-6 robotoCondensed font-light ">USER <strong className="font-bold">{isLoginPage ? "LOGIN" : "SIGN UP"}</strong></h1>
 
           <form onSubmit={handleSubmit} className="openSans font-semibold">
             <div className="grid sm:grid-cols-2 gap-x-6 gap-y-4 ">
@@ -164,18 +166,17 @@ export default function Home() {
 
               <div className='flex flex-col relative'>
 
-
-                <InputMask className="text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12" placeholder="(xxx)-xxx-xxxx" autoComplete="tel" mask="(999)-999-9999" value={formData.phonenumber} onChange={updateForm} id="phonenumber" name="phonenumber"></InputMask>
+                <InputMask className={`${/\([0-9]{3}\)-[0-9]{3}-[0-9]{4}/.test(formData.phonenumber) === false && formData.phonenumber.length > 0 ? "border border-red-500" : ""} text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12`} placeholder="(xxx)-xxx-xxxx" autoComplete="tel" mask="(999)-999-9999" value={formData.phonenumber} onChange={updateForm} id="phonenumber" name="phonenumber"></InputMask>
               </div>
 
               <div className='flex flex-col relative'>
 
                 {
-                  showPasswordToolTip && <div className="absolute -top-44 bg-white w-80 rounded-sm openSans mx-auto left-0 right-0 shadow-md p-4 z-40">
+                  showPasswordToolTip && <div className="absolute -top-44 bg-white sm:w-80 w-full rounded-sm openSans mx-auto left-0 right-0 shadow-md p-4 z-40">
                     <h1 className="openSans font-semibold mb-2">Password Requirements</h1>
                     <PasswordRulesComponent correct={/.{15,}/.test(formData.password)} error={formData.password === "" ? false : true} rule="Be at least 15 characters long" />
-                    <PasswordRulesComponent correct={/[A-Z]/.test(formData.password)} error={/[A-Za-z]/.test(formData.password) ? true : false} rule="Contain 1 uppercase letter" />
-                    <PasswordRulesComponent correct={/[0-9]/.test(formData.password)} error={formData.password === "" ? false : !(/[0-9]/.test(formData.password))} rule="Contain 1 number" />
+                    <PasswordRulesComponent correct={/[A-Z]/.test(formData.password)} error={formData.password === "" ? false : true} rule="Contain 1 uppercase letter" />
+                    <PasswordRulesComponent correct={/[0-9]/.test(formData.password)} error={formData.password === "" ? false : true} rule="Contain 1 number" />
                     <PasswordRulesComponent correct={/[?!@#$%^&*]/.test(formData.password)} error={formData.password === "" ? false : true} rule="Contain 1 special character: ? ! @ # $ % ^ & *" />
                     <PasswordRulesComponent correct={formData.password === formData.confirmPassword && formData.password.length > 0} error={formData.password === "" ? false : formData.password !== formData.confirmPassword} rule="Confirm Passwords Match" />
                   </div>

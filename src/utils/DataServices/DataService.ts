@@ -1,7 +1,7 @@
 const url = 'https://williamform.azurewebsites.net/'
 
-export const SendFormAPI = async (form: IForm) => {
-    const res = await fetch(url + 'Form/AddForm', {
+export const CreateAccountAPI = async (form: IForm) => {
+    const res = await fetch(url + 'User/AddUser', {
         method: "POST",
         headers: {
             'Content-Type': "application/json"
@@ -12,8 +12,8 @@ export const SendFormAPI = async (form: IForm) => {
         const message = "An error message has occured"
         throw new Error(message)
     }
-    const data = res.json();
-    return data
+    const data = await res.json();
+    return data;
 }
 
 export const GetFormsAPI = async () => {
