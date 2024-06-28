@@ -33,7 +33,7 @@ const ManagementPage = () => {
             id: 'actions',
             Cell: ({ row }: { row: Row<IForm> }) => (
                 <div>
-                    <button onClick={() => console.log('Edit', row.original)}>Edit</button>
+                    <button onClick={() => openEditModal(row.original)}>Edit</button>
                     <button onClick={() => console.log('Delete', row.original)}>Delete</button>
                 </div>
             )
@@ -69,10 +69,10 @@ const ManagementPage = () => {
             <h1>User Management</h1>
             <table {...getTableProps()}>
                 <thead>
-                    {headerGroups.map((headerGroup, headerGroupIndex) => (
-                        <tr {...headerGroup.getHeaderGroupProps()} key={`headerGroup-${headerGroupIndex}`}>
-                            {headerGroup.headers.map((column, columnIndex) => (
-                                <th {...column.getHeaderProps(column.getSortByToggleProps())} key={`column-${columnIndex}`}>
+                    {headerGroups.map(headerGroup => (
+                        <tr {...headerGroup.getHeaderGroupProps()} key={headerGroup.id}>
+                            {headerGroup.headers.map(column => (
+                                <th {...column.getHeaderProps(column.getSortByToggleProps())} key={column.id}>
                                     {column.render('Header')}
                                     <span>
                                         {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
@@ -83,12 +83,12 @@ const ManagementPage = () => {
                     ))}
                 </thead>
                 <tbody {...getTableBodyProps()}>
-                    {rows.map((row, rowIndex) => {
+                    {rows.map(row => {
                         prepareRow(row);
                         return (
-                            <tr {...row.getRowProps()} key={`row-${rowIndex}`}>
-                                {row.cells.map((cell, cellIndex) => (
-                                    <td {...cell.getCellProps()} key={`cell-${cellIndex}`}>{cell.render('Cell')}</td>
+                            <tr {...row.getRowProps()} key={row.id}>
+                                {row.cells.map(cell => (
+                                    <td {...cell.getCellProps()} key={cell.column.id}>{cell.render('Cell')}</td>
                                 ))}
                             </tr>
                         );
@@ -108,3 +108,4 @@ const ManagementPage = () => {
 };
 
 export default ManagementPage;
+
