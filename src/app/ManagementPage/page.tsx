@@ -1,5 +1,3 @@
-'use client'
-
 import React, { useEffect, useState, useMemo } from 'react';
 import { useTable, useSortBy, Column, Row } from 'react-table';
 import EditUserModal from '@/components/EditUserModal/EditUserModal';
@@ -71,9 +69,9 @@ const ManagementPage = () => {
             <table {...getTableProps()}>
                 <thead>
                     {headerGroups.map(headerGroup => (
-                        <tr {...headerGroup.getHeaderGroupProps()}>
+                        <tr {...headerGroup.getHeaderGroupProps()} key={headerGroup.id}>
                             {headerGroup.headers.map(column => (
-                                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                                <th {...column.getHeaderProps(column.getSortByToggleProps())} key={column.id}>
                                     {column.render('Header')}
                                     <span>
                                         {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
@@ -87,9 +85,9 @@ const ManagementPage = () => {
                     {rows.map(row => {
                         prepareRow(row);
                         return (
-                            <tr {...row.getRowProps()}>
+                            <tr {...row.getRowProps()} key={row.id}>
                                 {row.cells.map(cell => (
-                                    <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                                    <td {...cell.getCellProps()} key={cell.column.id}>{cell.render('Cell')}</td>
                                 ))}
                             </tr>
                         );
