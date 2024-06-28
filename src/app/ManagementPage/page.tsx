@@ -1,9 +1,15 @@
 'use client'
 
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, use } from 'react';
 import { useTable, useSortBy, Column, Row } from 'react-table';
 import EditUserModal from '@/components/EditUserModal/EditUserModal';
 import { IForm } from '@/Interfaces/Interface';
+import { checkToken } from '@/utils/DataServices/DataService';
+import { notFound, useRouter } from 'next/navigation';
+import { useAppContext } from '@/context/Context';
+
+const data = useAppContext()
+const router = useRouter()
 
 const ManagementPage = () => {
     const [users, setUsers] = useState<IForm[]>([]);
@@ -64,6 +70,14 @@ const ManagementPage = () => {
         console.log('Saving user:', user);
         closeEditModal();
     };
+
+    if(checkToken()){
+        if(!data.admin){
+            return notFound()
+        }
+    } else {
+        router.push('/')
+    }
 
     return (
         <div>

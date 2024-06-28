@@ -11,7 +11,7 @@ const page = () => {
   const [ editModal, setEditModal] = useState(false)
   return (
     <div>
-      <NavbarComponent/>
+      <NavbarComponent admin={true}/>
     <div className='flex flex-col items-center pt-14'>
 
       

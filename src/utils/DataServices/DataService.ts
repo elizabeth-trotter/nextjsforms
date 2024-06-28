@@ -1,6 +1,9 @@
 import { ICreateAccount, IUser, ILogin } from "@/Interfaces/Interface";
+import { useAppContext } from "@/context/Context";
+import { useEffect } from "react";
 
 const url = "https://williamform.azurewebsites.net/";
+const data = useAppContext()
 
 export const CreateAccountAPI = async (form: ICreateAccount) => {
   const res = await fetch(url + "User/AddUser", {
@@ -54,3 +57,13 @@ export const ForgetPasswordAPI = async (user: string, newPassword: string) => {
   const data = await res.json();
   return data;
 };
+
+export const checkToken = () => {
+  let result = false;
+
+  if(data.admin != null){
+    result = true;
+  }
+
+  return result;
+}

@@ -3,11 +3,14 @@
 
 import NavbarComponent from "@/components/NavbarComponent";
 import PasswordRulesComponent from "@/components/PasswordRulesComponent";
-import { CreateAccountAPI } from "@/utils/DataServices/DataService";
+import { CreateAccountAPI, checkToken } from "@/utils/DataServices/DataService";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import InputMask from 'react-input-mask';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
+const router = useRouter()
 
 const page = () => {
     const [formData, setFormData] = useState({
@@ -83,6 +86,9 @@ const page = () => {
         }
     };
 
+    if (!checkToken()) {
+        router.push('/')
+    }
 
     return (
         <div>
