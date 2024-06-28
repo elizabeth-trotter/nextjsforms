@@ -1,5 +1,6 @@
 'use client';
 
+
 import PasswordRulesComponent from "@/components/PasswordRulesComponent";
 import { CreateAccountAPI, LoginAPI, ResetPasswordAPI } from "@/utils/DataServices/DataService";
 import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
@@ -235,13 +236,10 @@ export default function Home() {
     <div className="min-h-screen w-full bg-[#23527C]">
       <main className="flex items-center justify-center">
         <ToastContainer />
-        {loginData.admin ? (
-          <ManagementPage />
-        ) : (
           <div className="flex items-center flex-col">
             <img className="w-[230px] p-5 mb-4" src="/WA-Logo.png" alt="William's Act Logo" />
             <div className="bg-white px-6 py-4 sm:min-w-[350px] sm:max-w-[538px] max-w-[288px] mb-12">
-              <h1 className="text-center text-[34px] text-black mb-6 robotoCondensed font-light ">USER <strong className="font-bold">{isLoginPage ? "LOGIN" : "SIGN UP"}</strong></h1>
+              <h1 className="text-center text-[34px] text-black mb-6 robotoCondensed font-light ">{!isForgotPasswordPage ? "USER" : ""} <strong className="font-bold">{isLoginPage ? "LOGIN" : isForgotPasswordPage ? "RESET PASSWORD" : "SIGN UP"}</strong></h1>
 
             <form onSubmit={handleSubmit} className="openSans font-semibold">
               <div className="gap-x-6 gap-y-4 ">
@@ -341,7 +339,7 @@ export default function Home() {
               </form>
             </div>
           </div>
-        )}
+        
       </main>
       <FooterComponent />
     </div>
