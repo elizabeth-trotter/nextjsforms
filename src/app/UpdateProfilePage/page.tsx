@@ -2,14 +2,12 @@
 
 
 import NavbarComponent from "@/components/NavbarComponent";
-import PasswordRulesComponent from "@/components/PasswordRulesComponent";
-import { CreateAccountAPI } from "@/utils/DataServices/DataService";
 import { useEffect, useState } from "react";
 import InputMask from 'react-input-mask';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const page = () => {
+const UpdateProfilePage = () => {
     const [formData, setFormData] = useState({
         firstname: '',
         lastname: '',
@@ -163,4 +161,4 @@ const page = () => {
     )
 }
 
-export default page
+export default UpdateProfilePage
