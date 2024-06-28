@@ -17,16 +17,20 @@ const page = () => {
       
       <table>
         <thead className='text-white text-2xl bg-[#23527C] gap-2 border border-black '>
-            <th className='my-4'></th>
-            <td>Name</td>
+          <tr>
+              <th className='my-4'></th>
+            <td>First Name</td>
+            <td>Last Name</td>
             <td>Date of Birth</td>
             <td>Address</td>
             <td>Email</td>
             <td>Phone</td>
+          </tr>
+        
         </thead>
         <tbody>
           <tr className=' border border-black'>
-            <th className='flex flex-row items-center p-2 gap-2'>
+            <td className='flex flex-row items-center p-2 gap-2'>
             <Image
               src="/Trash.png"
               alt="Delete"
@@ -42,15 +46,18 @@ const page = () => {
               // onClick={}
               className='cursor-pointer'
               />
-            </th>
-            <td className='px-2 w-48'>Marcos Rodriguez</td>
+            </td>
+            <td className=' border-black px-2 w-48'>Marcos </td>
+            <td className='border border-black px-2 w-48'> Rodriguez</td>
             <td className=' border border-black px-2 w-48'>9/11/2001</td>
             <td className=' border border-black px-2 w-48'>2922 Transworld Dr</td>
             <td className=' border border-black px-2 w-80'>marcos.e.rodriguez2003@gmail.com</td>
             <td className=' border border-black px-2 w-48'>(911) 911- 9111</td>
           </tr>
+
+
           <tr className=' border border-black bg-gray-300'>
-            <th className='flex flex-row items-center p-2 gap-2'>
+            <td className='flex flex-row items-center p-2 gap-2'>
             <Image
               src="/Trash.png"
               alt="Delete"
@@ -66,7 +73,7 @@ const page = () => {
               // onClick={}
               className='cursor-pointer'
               />
-            </th>
+            </td>
             <td className='px-2 '>Xavier Hopkins</td>
             <td className=' border border-black px-2'>4/20/2003</td>
             <td className=' border border-black px-2'>2922 Transworld Dr</td>
