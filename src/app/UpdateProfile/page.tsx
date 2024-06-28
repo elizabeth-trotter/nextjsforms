@@ -1,6 +1,7 @@
 'use client'
 
 
+import NavbarComponent from "@/components/NavbarComponent";
 import PasswordRulesComponent from "@/components/PasswordRulesComponent";
 import { CreateAccountAPI, GetFormsAPI } from "@/utils/DataServices/DataService";
 import { useEffect, useState } from "react";
@@ -47,29 +48,36 @@ const page = () => {
         e.preventDefault();
         setIsSubmitted(true);
 
-        const isFilled = formData.firstname && formData.lastname && formData.email;
+        const isFilled = formData.firstname && formData.lastname && formData.email && formData.dob;
         const checkFirstName = /^[A-Za-z\u00C0-\u00FF][A-Za-z\u00C0-\u00FF'\-]+([\ A-Za-z\u00C0-\u00FF][A-Za-z\u00C0-\u00FF'\-]+)*$/.test(formData.firstname)
         const checkLastName = /^[A-Za-z\u00C0-\u00FF][A-Za-z\u00C0-\u00FF'\-]+([\ A-Za-z\u00C0-\u00FF][A-Za-z\u00C0-\u00FF'\-]+)*$/.test(formData.lastname)
 
         if (isFilled && checkFirstName && checkLastName) {
-            // const data = await UpdateProfileAPICall(formData)
+            if (formData.phonenumber.length > 0 && !/\([0-9]{3}\)-[0-9]{3}-[0-9]{4}/.test(formData.phonenumber)) {
+                toast("Please fill out your number.", { type: "error", className: " !grid !grid-cols-[95%_5%] text-center" });
+            } else {
+                // const data = await UpdateProfileAPICall(formData)
 
-            // if (data) {
-            //     toast("Form submitted successfully!", { type: "success", className: " !grid !grid-cols-[95%_5%] text-center" });
+                // if (data) {
+                //     toast("Form submitted successfully!", { type: "success", className: " !grid !grid-cols-[95%_5%] text-center" });
 
-            //     // Reset all form fields
-            //     setFormData({
-            //         firstname: '',
-            //         lastname: '',
-            //         email: '',
-            //         dob: '',
-            //         address: '',
-            //         phonenumber: ''
-            //     });
-            //     setIsSubmitted(false);
-            // } else {
-            //     toast("API to connect the form is currenty down!", { type: "warning", className: " !grid !grid-cols-[95%_5%] text-center" });
-            // }
+                // } else {
+                //     toast("API to connect the form is currenty down!", { type: "warning", className: " !grid !grid-cols-[95%_5%] text-center" });
+                // }
+
+                toast("You've successfully updated your account!", { type: "success", className: " !grid !grid-cols-[95%_5%] text-center" });
+
+                // Reset all form fields
+                setFormData({
+                    firstname: '',
+                    lastname: '',
+                    email: '',
+                    dob: '',
+                    address: '',
+                    phonenumber: ''
+                });
+                setIsSubmitted(false);
+            }
 
         } else {
 
@@ -138,10 +146,14 @@ const page = () => {
                                         <input className="text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12" placeholder="Address" type="text" autoComplete="street-address" id="address" name="address" value={formData.address} onChange={updateForm} maxLength={100} />
                                     </div>
 
+                                    <div className='flex flex-col relative'>
+                                        <InputMask className={`${/\([0-9]{3}\)-[0-9]{3}-[0-9]{4}/.test(formData.phonenumber) === false && formData.phonenumber.length > 0 ? "border border-red-500" : ""} text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12`} placeholder="(xxx)-xxx-xxxx" autoComplete="tel" mask="(999)-999-9999" value={formData.phonenumber} onChange={updateForm} id="phonenumber" name="phonenumber"></InputMask>
+                                    </div>
+
                                 </div>
 
                                 <div className="flex justify-center mt-6 w-full flex-col">
-                                    <button type="submit" className="bg-[#DD8A3E] hover:brightness-90 p-4 w-full text-white text-sm font-bold tracking-wide" >Submit</button>
+                                    <button type="submit" className="bg-[#DD8A3E] hover:brightness-90 p-4 w-full text-white text-sm font-bold tracking-wide" >Update</button>
                                     <p className=" text-red-600 text-xs text-end pt-1 openSans">* fields required</p>
                                 </div>
 

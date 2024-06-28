@@ -22,3 +22,8 @@ export const GetFormsAPI = async () => {
     return data;
 }
 
+export const GetAllUsersAPI = async () => {
+    const promise = await fetch(url + 'User/GetAllUsers');
+    const data: IUser[] = await promise.json();
+    return data;
+}
