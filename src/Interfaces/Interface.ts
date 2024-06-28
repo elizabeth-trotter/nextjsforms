@@ -3,7 +3,11 @@ interface IForm {
     lastname: string,
     address: string,
     phonenumber: string,
-    password: string,
     email: string,
     dob: string,
+}
+
+interface ICreateAccount {
+    email: string,
+    password: string
 }

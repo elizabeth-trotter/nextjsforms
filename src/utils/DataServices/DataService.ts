@@ -1,6 +1,6 @@
 const url = 'https://williamform.azurewebsites.net/'
 
-export const CreateAccountAPI = async (form: IForm) => {
+export const CreateAccountAPI = async (form: ICreateAccount) => {
     const res = await fetch(url + 'User/AddUser', {
         method: "POST",
         headers: {
