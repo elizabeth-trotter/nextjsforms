@@ -1,3 +1,4 @@
+'use client'
 import React, { useEffect, useState, useMemo } from 'react';
 import { useTable, useSortBy, Column, Row } from 'react-table';
 import EditUserModal from '@/components/EditUserModal/EditUserModal';
@@ -68,10 +69,10 @@ const ManagementPage = () => {
             <h1>User Management</h1>
             <table {...getTableProps()}>
                 <thead>
-                    {headerGroups.map(headerGroup => (
-                        <tr {...headerGroup.getHeaderGroupProps()} key={headerGroup.id}>
-                            {headerGroup.headers.map(column => (
-                                <th {...column.getHeaderProps(column.getSortByToggleProps())} key={column.id}>
+                    {headerGroups.map((headerGroup, headerGroupIndex) => (
+                        <tr {...headerGroup.getHeaderGroupProps()} key={`headerGroup-${headerGroupIndex}`}>
+                            {headerGroup.headers.map((column, columnIndex) => (
+                                <th {...column.getHeaderProps(column.getSortByToggleProps())} key={`column-${columnIndex}`}>
                                     {column.render('Header')}
                                     <span>
                                         {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
@@ -82,12 +83,12 @@ const ManagementPage = () => {
                     ))}
                 </thead>
                 <tbody {...getTableBodyProps()}>
-                    {rows.map(row => {
+                    {rows.map((row, rowIndex) => {
                         prepareRow(row);
                         return (
-                            <tr {...row.getRowProps()} key={row.id}>
-                                {row.cells.map(cell => (
-                                    <td {...cell.getCellProps()} key={cell.column.id}>{cell.render('Cell')}</td>
+                            <tr {...row.getRowProps()} key={`row-${rowIndex}`}>
+                                {row.cells.map((cell, cellIndex) => (
+                                    <td {...cell.getCellProps()} key={`cell-${cellIndex}`}>{cell.render('Cell')}</td>
                                 ))}
                             </tr>
                         );
