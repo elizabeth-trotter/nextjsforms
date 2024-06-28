@@ -3,6 +3,15 @@ export interface ICreateAccount {
     password: string
 }
 
+export interface IForm {
+    firstname: string;
+    lastname: string;
+    address: string;
+    phonenumber: string;
+    email: string;
+    dob: string;
+}
+
 export interface ILogin {
     email: string,
     password: string
