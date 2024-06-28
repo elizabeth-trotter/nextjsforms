@@ -1,4 +1,4 @@
-import { ICreateAccount, IUser, ILogin } from "@/Interfaces/Interface";
+import { ICreateAccount, IUser, ILogin, IToken, IForm, IUserForm } from "@/Interfaces/Interface";
 
 const url = "https://williamform.azurewebsites.net/";
 
@@ -25,7 +25,7 @@ export const GetAllUsersAPI = async () => {
 };
 
 export const LoginAPI = async (login: ILogin) => {
-  const res = await fetch(url + "User/AddUser", {
+  const res = await fetch(url + "User/Login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -40,7 +40,7 @@ export const LoginAPI = async (login: ILogin) => {
   return data;
 };
 
-export const ForgetPasswordAPI = async (user: string, newPassword: string) => {
+export const ResetPasswordAPI = async (user: string, newPassword: string) => {
   const res = await fetch(url + `User/ResetPassword/${user}/${newPassword}`, {
     method: "PUT",
     headers: {
@@ -54,3 +54,19 @@ export const ForgetPasswordAPI = async (user: string, newPassword: string) => {
   const data = await res.json();
   return data;
 };
+
+export const AddStudentAPI = async (form: IUserForm) => {
+    const res = await fetch(url + "Form/AddForm", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
+      if (!res.ok) {
+        const message = "An error message has occured";
+        throw new Error(message);
+      }
+      const data = await res.json();
+      return data;
+}

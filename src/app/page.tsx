@@ -1,7 +1,8 @@
 'use client';
 
+
 import PasswordRulesComponent from "@/components/PasswordRulesComponent";
-import { CreateAccountAPI, LoginAPI } from "@/utils/DataServices/DataService";
+import { CreateAccountAPI, LoginAPI, ResetPasswordAPI } from "@/utils/DataServices/DataService";
 import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
 import InputMask from 'react-input-mask';
 import { ToastContainer, toast } from 'react-toastify';
@@ -9,17 +10,19 @@ import 'react-toastify/dist/ReactToastify.css';
 import { IoLogoFacebook } from "react-icons/io";
 import FooterComponent from "@/components/FooterComponent/page";
 import { useAppContext } from "@/context/Context";
-import { ICreateAccount } from "@/Interfaces/Interface";
-import ManagementPage from '@/app/ManagementPage/page'; // Import ManagementPage
+import { ICreateAccount, IToken } from "@/Interfaces/Interface";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const pageContext = useAppContext();
+
+  const router = useRouter();
 
   const [loginData, setLoginData] = useState({
     email: '',
     password: '',
     confirmPassword: '',
-    admin: false,
+    isAdmin: false,
     oldPassword: ''
   });
 
@@ -35,11 +38,14 @@ export default function Home() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
   const [showOldPassword, setShowOldPassword] = useState<boolean>(false);
-  const [isLoginPage, setIsLoginPage] = useState<boolean>(false);
+
+  const [isLoginPage, setIsLoginPage] = useState<boolean>(true);
+
   const [loginError, setLoginError] = useState<boolean>(false);
   const [isForgotPasswordPage, setIsForgotPasswordPage] = useState<boolean>();
   const [loginErrorForgetPassword, setLoginErrorForgetPassword] = useState<boolean>(false);
-  const [newPasswordBoolean, setNewPasswordBoolean] = useState<boolean>(false);
+
+  const [newPasswordBooleanError, setNewPasswordBooleanError] = useState<boolean>(false);
 
   useEffect(() => {
     pageContext.logout();
@@ -47,14 +53,15 @@ export default function Home() {
 
   const updateForm = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLoginData({
-      ...loginData,
-      [e.target.name]: e.target.value
-    });
+      ...loginData, //get the existing form 
+      [e.target.name]: e.target.value //[] to get property name dynamically
+    })
+    setLoginError(false);
     if (e.target.name === 'oldPassword' || e.target.name === "email") {
       setLoginErrorForgetPassword(false);
     }
     if (e.target.name === 'password' || 'confirmPassword') {
-      setNewPasswordBoolean(false);
+      setNewPasswordBooleanError(false);
     }
   };
 
@@ -75,7 +82,7 @@ export default function Home() {
             email: '',
             password: '',
             confirmPassword: '',
-            admin: false,
+            isAdmin: false,
             oldPassword: ''
           });
           setIsSubmitted(false);
@@ -84,33 +91,61 @@ export default function Home() {
         } else {
           toast("API to connect the form is currently down!", { type: "warning", className: " !grid !grid-cols-[95%_5%] text-center" });
         }
+      } else if (isLoginPage) {
+        try {
+          const data: IToken = await LoginAPI(loginData);
+          if (data.token !== undefined || data.token !== null) {
+            toast("You've logged in!", { type: "success", className: " !grid !grid-cols-[95%_5%] text-center" });
+
+            pageContext.setAdmin(data.isAdmin);
+            pageContext.setToken(data.token);
+            pageContext.setId(data.id);
+
+            router.push('/UpdateProfilePage')
+          }
+        } catch (error) {
+          toast("Username or password is incorrect", { type: "warning", className: " !grid !grid-cols-[95%_5%] text-center" });
+          setLoginError(true);
+        }
+
       } else if (isForgotPasswordPage && !loginErrorForgetPassword) {
         if (loginData.oldPassword) {
-          const data = await LoginAPI(loginData);
-          if (data && loginData.oldPassword !== loginData.password) {
-            toast("You've successfully reset your password!", { type: "success", className: " !grid !grid-cols-[95%_5%] text-center" });
+          try {
+            const data: IToken = await LoginAPI({email: loginData.email, password: loginData.oldPassword});
 
-            setLoginData({
-              email: '',
-              password: '',
-              confirmPassword: '',
-              admin: false,
-              oldPassword: ''
-            });
-            setIsSubmitted(false);
-            setIsForgotPasswordPage(false);
-            setIsLoginPage(true);
-          } else if (data && loginData.oldPassword === loginData.password) {
-            toast("You can't reset your password to your previous password.", { type: "error", className: " !grid !grid-cols-[95%_5%] text-center" });
-            setLoginErrorForgetPassword(true);
-          } else if (data) {
-            // Handle other cases
+            if (data.token !== undefined || data.token !== null && loginData.oldPassword !== loginData.password) {
+              try {
+                const data = await ResetPasswordAPI(loginData.email, loginData.password)
+                toast("You've successfully reset your password!", { type: "success", className: " !grid !grid-cols-[95%_5%] text-center" });
+
+                // Reset all form fields
+                setLoginData({
+                  email: '',
+                  password: '',
+                  confirmPassword: '',
+                  isAdmin: false,
+                  oldPassword: ''
+                });
+                setIsSubmitted(false);
+                setIsForgotPasswordPage(false);
+                setIsLoginPage(true);
+              } catch (error) {
+                toast("Something went wrong, the api might be down", { type: "success", className: " !grid !grid-cols-[95%_5%] text-center" });
+
+              }
+            } else if (data.token !== undefined || data.token === null && loginData.oldPassword === loginData.password) {
+              toast("Your password can't be reset to your old previous password.", { type: "error", className: " !grid !grid-cols-[95%_5%] text-center" });
+              setNewPasswordBooleanError(true);
+            }
+          } catch (error) {
+            toast("Your email or password is invalid or incorrect.", { type: "error", className: " !grid !grid-cols-[95%_5%] text-center" });
+            setLoginErrorForgetPassword(true)
           }
         } else {
           toast("Please fill out all required fields.", { type: "error", className: " !grid !grid-cols-[95%_5%] text-center" });
         }
       } else if (loginErrorForgetPassword) {
-        toast("You can't reset your password to your previous password.", { type: "error", className: " !grid !grid-cols-[95%_5%] text-center" });
+        toast("Your email or password is invalid or incorrect.", { type: "error", className: " !grid !grid-cols-[95%_5%] text-center" });
       }
     } else {
       if (!isFilled) {
@@ -152,6 +187,13 @@ export default function Home() {
   };
 
   const goLogin = () => {
+    setLoginData({
+      email: '',
+      password: '',
+      confirmPassword: '',
+      isAdmin: false,
+      oldPassword: ''
+    });
     setIsLoginPage(true);
     setIsForgotPasswordPage(false);
     setIsSubmitted(false);
@@ -159,6 +201,13 @@ export default function Home() {
   };
 
   const goSignUp = () => {
+    setLoginData({
+      email: '',
+      password: '',
+      confirmPassword: '',
+      isAdmin: false,
+      oldPassword: ''
+    });
     setIsLoginPage(false);
     setIsForgotPasswordPage(false);
     setIsSubmitted(false);
@@ -166,6 +215,13 @@ export default function Home() {
   };
 
   const goForgotPassword = () => {
+    setLoginData({
+      email: '',
+      password: '',
+      confirmPassword: '',
+      isAdmin: false,
+      oldPassword: ''
+    });
     setIsLoginPage(false);
     setIsForgotPasswordPage(true);
     setIsSubmitted(false);
@@ -173,33 +229,36 @@ export default function Home() {
   };
 
   const handleSelect = (e: ChangeEvent<HTMLSelectElement>) => {
-    e.target.value === "admin" ? setLoginData({ ...loginData, admin: true }) : setLoginData({ ...loginData, admin: false });
-  };
+    e.target.value === "admin" ? setLoginData({ ...loginData, isAdmin: true }) : setLoginData({ ...loginData, isAdmin: false })
+  }
 
   return (
     <div className="min-h-screen w-full bg-[#23527C]">
       <main className="flex items-center justify-center">
         <ToastContainer />
-        {loginData.admin ? (
-          <ManagementPage />
-        ) : (
           <div className="flex items-center flex-col">
             <img className="w-[230px] p-5 mb-4" src="/WA-Logo.png" alt="William's Act Logo" />
             <div className="bg-white px-6 py-4 sm:min-w-[350px] sm:max-w-[538px] max-w-[288px] mb-12">
-              <h1 className="text-center text-[34px] text-black mb-6 robotoCondensed font-light ">USER <strong className="font-bold">{isLoginPage ? "LOGIN" : "SIGN UP"}</strong></h1>
+              <h1 className="text-center text-[34px] text-black mb-6 robotoCondensed font-light ">{!isForgotPasswordPage ? "USER" : ""} <strong className="font-bold">{isLoginPage ? "LOGIN" : isForgotPasswordPage ? "RESET PASSWORD" : "SIGN UP"}</strong></h1>
 
-              <form onSubmit={handleSubmit} className="openSans font-semibold">
-                <div className="gap-x-6 gap-y-4">
-                  <div className='flex flex-col relative'>
-                    {showEmailToolTip && !isLoginPage && !isForgotPasswordPage && (
-                      <div className="absolute -top-24 bg-white sm:w-80 w-full rounded-sm openSans mx-auto left-0 right-0 shadow-md p-4 z-40">
-                        <h1 className="openSans font-semibold mb-2">Email Requirement</h1>
-                        <PasswordRulesComponent correct={loginData.email.includes('@')} error={loginData.email === "" ? false : true} rule="Contain 1 @ symbol" />
-                      </div>
-                    )}
-                    <p className='text-red-600 absolute top-0 right-1'>*</p>
-                    <input placeholder="Email" type="email" autoComplete="email" id="email" name="email" className={`${isLoginPage ? loginError ? "border border-red-500" : "" : !loginData.email.includes('@') && loginData.email.length > 0 || loginErrorForgetPassword ? "border border-red-500" : isSubmitted && loginData.email === '' ? 'border border-red-500 ' : ''} text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12`} value={loginData.email} onChange={updateForm} onFocus={showEmailToolTipTrue} onBlur={showEmailToolTipFalse} />
-                  </div>
+            <form onSubmit={handleSubmit} className="openSans font-semibold">
+              <div className="gap-x-6 gap-y-4 ">
+
+                {/* Username Input Field */}
+                <div className='flex flex-col relative'>
+
+                  {
+                    // Password Tool Tip
+                    showEmailToolTip && !isLoginPage && !isForgotPasswordPage && <div className="absolute -top-24 bg-white sm:w-80 w-full rounded-sm openSans mx-auto left-0 right-0 shadow-md p-4 z-40">
+                      <h1 className="openSans font-semibold mb-2">Email Requirement</h1>
+                      <PasswordRulesComponent correct={loginData.email.includes('@')} error={loginData.email === "" ? false : true} rule="Contain 1 @ symbol" />
+                    </div>
+                  }
+
+                  <p className='text-red-600 absolute top-0 right-1'>*</p>
+                  <input placeholder="Email" type={isLoginPage ? "text" : "email"} autoComplete="email" id="email" name="email" className={`${isLoginPage ? loginError ? "border border-red-500" : "" : !loginData.email.includes('@') && loginData.email.length > 0 || loginErrorForgetPassword ? "border border-red-500" : isSubmitted && loginData.email === '' ? 'border border-red-500 ' : ''} text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12`} value={loginData.email} onChange={updateForm} onFocus={showEmailToolTipTrue} onBlur={showEmailToolTipFalse} />
+
+                </div>
 
                   {isForgotPasswordPage && (
                     <div className='flex flex-col relative'>
@@ -209,38 +268,55 @@ export default function Home() {
                     </div>
                   )}
 
-                  <div className='flex flex-col relative'>
-                    {showPasswordToolTip && !isLoginPage && (
-                      <div className="absolute -top-44 bg-white sm:w-80 w-full rounded-sm openSans mx-auto left-0 right-0 shadow-md p-4 z-40">
-                        <h1 className="openSans font-semibold mb-2">Password Requirements</h1>
-                        <PasswordRulesComponent correct={/.{15,}/.test(loginData.password)} error={loginData.password === "" ? false : true} rule="Be at least 15 characters long" />
-                        <PasswordRulesComponent correct={/[A-Z]/.test(loginData.password)} error={loginData.password === "" ? false : true} rule="Contain 1 uppercase letter" />
-                        <PasswordRulesComponent correct={/[0-9]/.test(loginData.password)} error={loginData.password === "" ? false : true} rule="Contain 1 number" />
-                        <PasswordRulesComponent correct={/[?!@#$%^&*]/.test(loginData.password)} error={loginData.password === "" ? false : true} rule="Contain 1 special character: ? ! @ # $ % ^ & *" />
-                        <PasswordRulesComponent correct={loginData.password === loginData.confirmPassword && loginData.password.length > 0} error={loginData.password === "" ? false : loginData.password !== loginData.confirmPassword} rule="Confirm Passwords Match" />
-                      </div>
-                    )}
-                    <p className='text-red-600 absolute top-0 right-1'>*</p>
-                    <img className="hover:cursor-pointer absolute top-3 right-5 aspect-square w-6" src={showPassword ? "/eye.svg" : "/eye-slash.svg"} alt="eyeball" onClick={handleShowPassword} />
-                    <input placeholder={isForgotPasswordPage ? "New Password" : "Password"} type={showPassword ? "text" : "password"} id="password" name="password" className={`${isLoginPage ? loginError ? "border border-red-500" : "" : (isSubmitted && loginData.password === '') || (loginData.password !== loginData.confirmPassword) || newPasswordBoolean ? 'border border-red-500' : ''} text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12 px-12`} value={loginData.password}
-                      pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[?@!#$%^&*])(?!.*[^A-Za-z\d?@!#$%^&*]).{15,}$"
-                      onFocus={showPasswordToolTipTrue}
-                      onBlur={showPasswordToolTipFalse}
-                      onChange={(e) => {
-                        const { value } = e.target;
-                        const sanitizedValue = value.replace(/[^A-Za-z\d?@!#$%^&*]/g, '');
-                        setLoginData({ ...loginData, password: sanitizedValue });
-                      }}
-                    />
-                  </div>
+                <div className='flex flex-col relative'>
 
-                  {!isLoginPage && (
-                    <div className='flex flex-col relative'>
-                      <p className='text-red-600 absolute top-0 right-1'>*</p>
-                      <img className="hover:cursor-pointer absolute top-3 right-5 aspect-square w-6" src={showConfirmPassword ? "/eye.svg" : "/eye-slash.svg"} alt="eyeball" onClick={handleShowConfirmPassword} />
-                      <input placeholder="Re-Type Password" type={showConfirmPassword ? "text" : "password"} id="confirmPassword" name="confirmPassword" className={`${(isSubmitted && loginData.password === '') || (loginData.password !== loginData.confirmPassword) || newPasswordBoolean ? 'border border-red-500' : ''} text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12 px-12`} value={loginData.confirmPassword} onChange={updateForm} onFocus={showPasswordToolTipTrue} onBlur={showPasswordToolTipFalse} />
+                  {
+                    // Password Tool Tip
+                    showPasswordToolTip && !isLoginPage && <div className="absolute -top-44 bg-white sm:w-80 w-full rounded-sm openSans mx-auto left-0 right-0 shadow-md p-4 z-40">
+                      <h1 className="openSans font-semibold mb-2">Password Requirements</h1>
+                      <PasswordRulesComponent correct={/.{15,}/.test(loginData.password)} error={loginData.password === "" ? false : true} rule="Be at least 15 characters long" />
+                      <PasswordRulesComponent correct={/[A-Z]/.test(loginData.password)} error={loginData.password === "" ? false : true} rule="Contain 1 uppercase letter" />
+                      <PasswordRulesComponent correct={/[0-9]/.test(loginData.password)} error={loginData.password === "" ? false : true} rule="Contain 1 number" />
+                      <PasswordRulesComponent correct={/[?!@#$%^&*]/.test(loginData.password)} error={loginData.password === "" ? false : true} rule="Contain 1 special character: ? ! @ # $ % ^ & *" />
+                      <PasswordRulesComponent correct={loginData.password === loginData.confirmPassword && loginData.password.length > 0} error={loginData.password === "" ? false : loginData.password !== loginData.confirmPassword} rule="Confirm Passwords Match" />
                     </div>
-                  )}
+                  }
+
+                  <p className='text-red-600 absolute top-0 right-1'>*</p>
+
+                  <img className="hover:cursor-pointer absolute top-3 right-5 aspect-square w-6" src={showPassword ? "/eye.svg" : "/eye-slash.svg"} alt="eyeball" onClick={handleShowPassword} />
+
+                  {/* Password Input Field */}
+                  {!isLoginPage && <input placeholder={isForgotPasswordPage ? "New Password" : "Password"} type={showPassword ? "text" : "password"} id="password" name="password" className={`${isLoginPage ? loginError ? "border border-red-500" : "" : (isSubmitted && loginData.password === '') || (loginData.password !== loginData.confirmPassword) || newPasswordBooleanError ? 'border border-red-500' : ''} text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12 px-12`} value={loginData.password}
+                    pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[?@!#$%^&*])(?!.*[^A-Za-z\d?@!#$%^&*]).{15,}$"
+                    onFocus={showPasswordToolTipTrue}
+                    onBlur={showPasswordToolTipFalse}
+                    onChange={(e) => {
+                      const { value } = e.target;
+                      // Remove any characters that are not in the allowed set
+                      const sanitizedValue = value.replace(/[^A-Za-z\d?@!#$%^&*]/g, '');
+                      setLoginData({ ...loginData, password: sanitizedValue });
+                    }}
+                  />}
+
+                  {isLoginPage && !isForgotPasswordPage && <input placeholder={isForgotPasswordPage ? "New Password" : "Password"} type={showPassword ? "text" : "password"} id="password" name="password" className={`${isLoginPage ? loginError ? "border border-red-500" : "" : (isSubmitted && loginData.password === '') || (loginData.password !== loginData.confirmPassword) || newPasswordBooleanError ? 'border border-red-500' : ''} text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12 px-12`} value={loginData.password}
+                    onFocus={showPasswordToolTipTrue}
+                    onBlur={showPasswordToolTipFalse}
+                    onChange={(e) => {
+                      const { value } = e.target;
+                      // Remove any characters that are not in the allowed set
+                      const sanitizedValue = value.replace(/[^A-Za-z\d?@!#$%^&*]/g, '');
+                      setLoginData({ ...loginData, password: sanitizedValue });
+                    }}
+                  />}
+                </div>
+
+                {/* Confirm Password Field */}
+                {!isLoginPage && <div className='flex flex-col relative'>
+                  <p className='text-red-600 absolute top-0 right-1'>*</p>
+                  <img className="hover:cursor-pointer absolute top-3 right-5 aspect-square w-6" src={showConfirmPassword ? "/eye.svg" : "/eye-slash.svg"} alt="eyeball" onClick={handleShowConfirmPassword} />
+                  <input placeholder="Re-Type Password" type={showConfirmPassword ? "text" : "password"} id="confirmPassword" name="confirmPassword" className={`${(isSubmitted && loginData.password === '') || (loginData.password !== loginData.confirmPassword) || newPasswordBooleanError ? 'border border-red-500' : ''} text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12 px-12`} value={loginData.confirmPassword} onChange={updateForm} onFocus={showPasswordToolTipTrue} onBlur={showPasswordToolTipFalse} />
+                </div>}
 
                   {!isLoginPage && !isForgotPasswordPage && (
                     <select onChange={(e) => handleSelect(e)} className="w-full text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12">
@@ -263,7 +339,7 @@ export default function Home() {
               </form>
             </div>
           </div>
-        )}
+        
       </main>
       <FooterComponent />
     </div>

@@ -12,9 +12,26 @@ export interface IForm {
     dob: string;
 }
 
+export interface IUserForm {
+    id: number;
+    firstname: string;
+    lastname: string;
+    address: string;
+    phonenumber: string;
+    dob: string;
+    email: string;
+    isDeleted: boolean;
+}
+
 export interface ILogin {
     email: string,
     password: string
+}
+
+export interface IToken {
+    token: string,
+    id: number,
+    isAdmin: boolean
 }
 
 export interface IUser {

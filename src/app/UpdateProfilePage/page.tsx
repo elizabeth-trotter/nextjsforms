@@ -2,19 +2,26 @@
 
 
 import NavbarComponent from "@/components/NavbarComponent";
+import { useAppContext } from "@/context/Context";
+import { AddStudentAPI } from "@/utils/DataServices/DataService";
 import { useEffect, useState } from "react";
 import InputMask from 'react-input-mask';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const UpdateProfilePage = () => {
+    const pageContext = useAppContext();
+
+
     const [formData, setFormData] = useState({
+        id: 0,
         firstname: '',
         lastname: '',
         email: '',
         dob: '',
         address: '',
         phonenumber: '',
+        isDeleted: false
     });
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [maxDate, setMaxDate] = useState('');
@@ -49,31 +56,28 @@ const UpdateProfilePage = () => {
             if (formData.phonenumber.length > 0 && !/\([0-9]{3}\)-[0-9]{3}-[0-9]{4}/.test(formData.phonenumber)) {
                 toast("Please fill out your number.", { type: "error", className: " !grid !grid-cols-[95%_5%] text-center" });
             } else {
-                // const data = await UpdateProfileAPICall(formData)
+                try {
+                    await AddStudentAPI(formData)
+                    toast("You've successfully added a student to the directory!", { type: "success", className: " !grid !grid-cols-[95%_5%] text-center" });
 
-                // if (data) {
-                //     toast("Form submitted successfully!", { type: "success", className: " !grid !grid-cols-[95%_5%] text-center" });
-
-                // } else {
-                //     toast("API to connect the form is currenty down!", { type: "warning", className: " !grid !grid-cols-[95%_5%] text-center" });
-                // }
-
-                toast("You've successfully updated your account!", { type: "success", className: " !grid !grid-cols-[95%_5%] text-center" });
-
-                // Reset all form fields
-                setFormData({
-                    firstname: '',
-                    lastname: '',
-                    email: '',
-                    dob: '',
-                    address: '',
-                    phonenumber: ''
-                });
-                setIsSubmitted(false);
+                    // Reset all form fields
+                    setFormData({
+                        id: 0,
+                        firstname: '',
+                        lastname: '',
+                        email: '',
+                        dob: '',
+                        address: '',
+                        phonenumber: '',
+                        isDeleted: false
+                    });
+                    setIsSubmitted(false);
+                } catch (error) {
+                    toast("You currently can't add a student, the api might be down right now, sorry", { type: "warning", className: " !grid !grid-cols-[95%_5%] text-center" });
+                }
             }
 
         } else {
-
             if (!isFilled) {
                 toast("Please fill out all required fields.", { type: "error", className: " !grid !grid-cols-[95%_5%] text-center" });
             }
@@ -84,17 +88,17 @@ const UpdateProfilePage = () => {
 
     return (
         <div>
-            <NavbarComponent admin={false} />
+            <NavbarComponent admin={pageContext.admin} />
 
             <main className="min-h-screen w-full bg-[#23527C] flex items-center justify-center">
                 <ToastContainer />
 
                 <div className="px-6 py-4">
-                    <h1 className="text-center text-[34px] mb-6 robotoCondensed font-bold text-white">Dashboard</h1>
+                    <h1 className="text-center text-[34px] mb-6 robotoCondensed font-bold text-white"></h1>
 
                     <div className="flex items-center flex-col">
                         <div className="bg-white px-6 py-4 sm:min-w-[538px] sm:max-w-[538px] max-w-[288px] mb-12">
-                            <h1 className="text-center text-[34px] text-black mb-6 robotoCondensed font-light "><strong className="font-bold">UPDATE PROFILE</strong></h1>
+                            <h1 className="text-center text-[34px] text-black mb-6 robotoCondensed font-light "><strong className="font-bold">ADD STUDENT</strong></h1>
 
                             <form onSubmit={handleSubmit} className="openSans font-semibold">
                                 <div className="grid sm:grid-cols-2 gap-x-6 gap-y-4 ">
