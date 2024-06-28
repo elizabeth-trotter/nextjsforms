@@ -9,6 +9,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { IoLogoFacebook } from "react-icons/io";
 import FooterComponent from "@/components/FooterComponent/page";
+import { IForm } from "@/Interfaces/Interface";
 
 export default function Home() {
   const [formData, setFormData] = useState({
