@@ -1,9 +1,31 @@
-export interface IForm {
-    firstname: string,
-    lastname: string,
-    address: string,
-    phonenumber: string,
-    password: string,
+export interface ICreateAccount {
     email: string,
-    dob: string,
+    password: string
+}
+
+export interface IForm {
+    firstname: string;
+    lastname: string;
+    address: string;
+    phonenumber: string;
+    email: string;
+    dob: string;
+}
+
+export interface ILogin {
+    email: string,
+    password: string
+}
+
+export interface IUser {
+    id: number;
+    firstname: string;
+    lastname: string;
+    address: string;
+    phonenumber: string;
+    salt: string;
+    hash: string;
+    email: string;
+    dob: string;
+    isAdmin: boolean;
 }
