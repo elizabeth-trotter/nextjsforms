@@ -1,18 +1,14 @@
-interface IForm {
-    firstname: string,
-    lastname: string,
-    address: string,
-    phonenumber: string,
-    email: string,
-    dob: string,
-}
-
-interface ICreateAccount {
+export interface ICreateAccount {
     email: string,
     password: string
 }
 
-interface IUser {
+export interface ILogin {
+    email: string,
+    password: string
+}
+
+export interface IUser {
     id: number;
     firstname: string;
     lastname: string;

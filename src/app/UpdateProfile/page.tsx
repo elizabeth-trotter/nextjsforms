@@ -3,7 +3,7 @@
 
 import NavbarComponent from "@/components/NavbarComponent";
 import PasswordRulesComponent from "@/components/PasswordRulesComponent";
-import { CreateAccountAPI, GetFormsAPI } from "@/utils/DataServices/DataService";
+import { CreateAccountAPI } from "@/utils/DataServices/DataService";
 import { useEffect, useState } from "react";
 import InputMask from 'react-input-mask';
 import { ToastContainer, toast } from 'react-toastify';
@@ -20,11 +20,6 @@ const page = () => {
     });
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [maxDate, setMaxDate] = useState('');
-
-    // const UpdateProfileAPICall = async (form: IForm) => {
-    //     const data = await CreateAccountAPI(form);
-    //     return data;
-    // }
 
     useEffect(() => {
 

@@ -2,7 +2,7 @@
 
 
 import PasswordRulesComponent from "@/components/PasswordRulesComponent";
-import { CreateAccountAPI, GetFormsAPI } from "@/utils/DataServices/DataService";
+import { CreateAccountAPI, LoginAPI } from "@/utils/DataServices/DataService";
 import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
 import InputMask from 'react-input-mask';
 import { ToastContainer, toast } from 'react-toastify';
@@ -10,6 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { IoLogoFacebook } from "react-icons/io";
 import FooterComponent from "@/components/FooterComponent/page";
 import { useAppContext } from "@/context/Context";
+import { ICreateAccount } from "@/interfaces/Interface";
 
 export default function Home() {
   const pageContext = useAppContext();
@@ -45,7 +46,9 @@ export default function Home() {
 
   const [isForgotPasswordPage, setIsForgotPasswordPage] = useState<boolean>();
 
-  const [oldPasswordBoolean, setOldPasswordBoolean] = useState<boolean>(false);
+  const [loginErrorForgetPassword, setLoginErrorForgetPassword] = useState<boolean>(false);
+
+  const [newPasswordBoolean, setNewPasswordBoolean] = useState<boolean>(false);
 
   useEffect(() => {
     pageContext.logout();
@@ -57,6 +60,13 @@ export default function Home() {
       ...loginData, //get the existing form 
       [e.target.name]: e.target.value //[] to get property name dynamically
     })
+    if (e.target.name === 'oldPassword' || e.target.name === "email") {
+      setLoginErrorForgetPassword(false);
+    }
+
+    if (e.target.name === 'password' || 'confirmPassword') {
+      setNewPasswordBoolean(false);
+    }
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -87,12 +97,37 @@ export default function Home() {
         } else {
           toast("API to connect the form is currenty down!", { type: "warning", className: " !grid !grid-cols-[95%_5%] text-center" });
         }
-      } else if (isForgotPasswordPage) {
-        if(loginData.oldPassword){
-          
-        }
-      } else {
+      } else if (isForgotPasswordPage && !loginErrorForgetPassword) {
+        if (loginData.oldPassword) {
+          const data = await LoginAPI(loginData);
 
+          if (data && loginData.oldPassword !== loginData.password) {
+
+            
+            toast("You've successfully reset your password!", { type: "success", className: " !grid !grid-cols-[95%_5%] text-center" });
+
+            // Reset all form fields
+            setLoginData({
+              email: '',
+              password: '',
+              confirmPassword: '',
+              admin: false,
+              oldPassword: ''
+            });
+            setIsSubmitted(false);
+            setIsForgotPasswordPage(false);
+            setIsLoginPage(true);
+          } else if (data && loginData.oldPassword === loginData.password) {
+            toast("You can't reset your password to your previous password.", { type: "error", className: " !grid !grid-cols-[95%_5%] text-center" });
+            setLoginErrorForgetPassword(true)
+          } else if (data) {
+
+          }
+        } else {
+          toast("Please fill out all required fields.", { type: "error", className: " !grid !grid-cols-[95%_5%] text-center" });
+        }
+      } else if (loginErrorForgetPassword) {
+        toast("You can't reset your password to your previous password.", { type: "error", className: " !grid !grid-cols-[95%_5%] text-center" });
       }
 
     } else {
@@ -184,7 +219,7 @@ export default function Home() {
                   }
 
                   <p className='text-red-600 absolute top-0 right-1'>*</p>
-                  <input placeholder="Email" type="email" autoComplete="email" id="email" name="email" className={`${isLoginPage ? loginError ? "border border-red-500" : "" : !loginData.email.includes('@') && loginData.email.length > 0 ? "border border-red-500" : isSubmitted && loginData.email === '' ? 'border border-red-500 ' : ''} text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12`} value={loginData.email} onChange={updateForm} onFocus={showEmailToolTipTrue} onBlur={showEmailToolTipFalse} />
+                  <input placeholder="Email" type="email" autoComplete="email" id="email" name="email" className={`${isLoginPage ? loginError ? "border border-red-500" : "" : !loginData.email.includes('@') && loginData.email.length > 0 || loginErrorForgetPassword ? "border border-red-500" : isSubmitted && loginData.email === '' ? 'border border-red-500 ' : ''} text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12`} value={loginData.email} onChange={updateForm} onFocus={showEmailToolTipTrue} onBlur={showEmailToolTipFalse} />
 
                 </div>
 
@@ -195,10 +230,8 @@ export default function Home() {
 
                   <img className="hover:cursor-pointer absolute top-3 right-5 aspect-square w-6" src={showOldPassword ? "/eye.svg" : "/eye-slash.svg"} alt="eyeball" onClick={handleShowOldPassword} />
 
-                  <input placeholder="Old Password" type={showOldPassword ? "text" : "password"} id="confirmPassword" name="oldPassword" className={`${(isSubmitted && loginData.oldPassword === '') || oldPasswordBoolean ? 'border border-red-500 ' : ''} text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12 px-12`} value={loginData.oldPassword} onChange={updateForm} />
+                  <input placeholder="Old Password" type={showOldPassword ? "text" : "password"} id="confirmPassword" name="oldPassword" className={`${(isSubmitted && loginData.oldPassword === '') || loginErrorForgetPassword ? 'border border-red-500 ' : ''} text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12 px-12`} value={loginData.oldPassword} onChange={updateForm} />
                 </div>}
-
-
 
                 <div className='flex flex-col relative'>
 
@@ -219,7 +252,7 @@ export default function Home() {
                   <img className="hover:cursor-pointer absolute top-3 right-5 aspect-square w-6" src={showPassword ? "/eye.svg" : "/eye-slash.svg"} alt="eyeball" onClick={handleShowPassword} />
 
                   {/* Password Input Field */}
-                  <input placeholder={isForgotPasswordPage ? "New Password" : "Password"} type={showPassword ? "text" : "password"} id="password" name="password" className={`${isLoginPage ? loginError ? "border border-red-500" : "" : (isSubmitted && loginData.password === '') || (loginData.password !== loginData.confirmPassword) ? 'border border-red-500' : ''} text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12 px-12`} value={loginData.password}
+                  <input placeholder={isForgotPasswordPage ? "New Password" : "Password"} type={showPassword ? "text" : "password"} id="password" name="password" className={`${isLoginPage ? loginError ? "border border-red-500" : "" : (isSubmitted && loginData.password === '') || (loginData.password !== loginData.confirmPassword) || newPasswordBoolean ? 'border border-red-500' : ''} text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12 px-12`} value={loginData.password}
                     pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[?@!#$%^&*])(?!.*[^A-Za-z\d?@!#$%^&*]).{15,}$"
                     onFocus={showPasswordToolTipTrue}
                     onBlur={showPasswordToolTipFalse}
@@ -236,7 +269,7 @@ export default function Home() {
                 {!isLoginPage && <div className='flex flex-col relative'>
                   <p className='text-red-600 absolute top-0 right-1'>*</p>
                   <img className="hover:cursor-pointer absolute top-3 right-5 aspect-square w-6" src={showConfirmPassword ? "/eye.svg" : "/eye-slash.svg"} alt="eyeball" onClick={handleShowConfirmPassword} />
-                  <input placeholder="Re-Type Password" type={showConfirmPassword ? "text" : "password"} id="confirmPassword" name="confirmPassword" className={`${(isSubmitted && loginData.password === '') || (loginData.password !== loginData.confirmPassword) ? 'border border-red-500' : ''} text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12 px-12`} value={loginData.confirmPassword} onChange={updateForm} onFocus={showPasswordToolTipTrue} onBlur={showPasswordToolTipFalse} />
+                  <input placeholder="Re-Type Password" type={showConfirmPassword ? "text" : "password"} id="confirmPassword" name="confirmPassword" className={`${(isSubmitted && loginData.password === '') || (loginData.password !== loginData.confirmPassword) || newPasswordBoolean ? 'border border-red-500' : ''} text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12 px-12`} value={loginData.confirmPassword} onChange={updateForm} onFocus={showPasswordToolTipTrue} onBlur={showPasswordToolTipFalse} />
                 </div>}
 
 
