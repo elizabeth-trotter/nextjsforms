@@ -16,7 +16,7 @@ const ManagementPage = () => {
         }
         return await response.json();
     };
-
+ 
     useEffect(() => {
         fetchUsers().then(setUsers).catch(console.error);
     }, []);
