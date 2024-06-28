@@ -1,4 +1,4 @@
-interface IForm {
+export interface IForm {
     firstname: string,
     lastname: string,
     address: string,
