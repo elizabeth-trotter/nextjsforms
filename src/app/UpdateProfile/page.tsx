@@ -1,3 +1,5 @@
+'use client'
+
 import NavbarComponent from '@/components/NavbarComponent'
 import React from 'react'
 
@@ -5,7 +7,7 @@ const page = () => {
     return (
         <div>
             <NavbarComponent admin={false} />
-            
+
             <main className="min-h-screen w-full bg-[#23527C] flex items-center justify-center">
 
                     <div className="bg-white px-6 py-4">
