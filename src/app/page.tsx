@@ -10,7 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { IoLogoFacebook } from "react-icons/io";
 import FooterComponent from "@/components/FooterComponent/page";
 import { useAppContext } from "@/context/Context";
-import { ICreateAccount } from "@/interfaces/Interface";
+import { ICreateAccount } from "@/Interfaces/Interface";
 
 export default function Home() {
   const pageContext = useAppContext();
@@ -103,7 +103,7 @@ export default function Home() {
 
           if (data && loginData.oldPassword !== loginData.password) {
 
-            
+
             toast("You've successfully reset your password!", { type: "success", className: " !grid !grid-cols-[95%_5%] text-center" });
 
             // Reset all form fields
