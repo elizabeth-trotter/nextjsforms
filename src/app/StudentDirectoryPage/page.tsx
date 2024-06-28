@@ -99,12 +99,12 @@ const page = () => {
     }
   };
 
-  useEffect(() => {
-    const loadAll = async () => {
-      setSeedData(await FetchAllUsers())
-    }
-    loadAll();
-  }, [])
+  // useEffect(() => {
+  //   const loadAll = async () => {
+  //     setSeedData(await FetchAllUsers())
+  //   }
+  //   loadAll();
+  // }, [])
 
 
 
