@@ -8,6 +8,7 @@ import InputMask from 'react-input-mask';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { IoLogoFacebook } from "react-icons/io";
+import FooterComponent from "@/components/FooterComponent/page";
 
 export default function Home() {
   const [loginData, setLoginData] = useState({
@@ -159,7 +160,7 @@ export default function Home() {
 
               </div>
 
-              <div className='flex flex-col relative'>
+                <div className='flex flex-col relative'>
 
                 {
                   // Password Tool Tip
@@ -207,18 +208,20 @@ export default function Home() {
 
               {isLoginPage && <p className="text-sm openSans hover:cursor-pointer text-[#DD8A3E]" onClick={goSignUp}>Sign Up</p>}
 
-            </div>
+              </div>
 
             <div className="flex justify-center mt-6 w-full flex-col">
               <button type="submit" className="bg-[#DD8A3E] hover:brightness-90 p-4 w-full text-white text-sm font-bold tracking-wide" >{!isLoginPage ? "Create Account" : "Login"}</button>
               <p className=" text-red-600 text-xs text-end pt-1 openSans">* fields required</p>
             </div>
 
-          </form>
+            </form>
+          </div>
         </div>
-      </div>
 
 
-    </main>
+      <FooterComponent></FooterComponent>
+      </main>
+
   );
 };
