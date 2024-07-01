@@ -18,6 +18,7 @@ export default function Home() {
   const router = useRouter();
 
   const [loginData, setLoginData] = useState({
+    id: 0,
     email: '',
     password: '',
     confirmPassword: '',
@@ -43,11 +44,12 @@ export default function Home() {
   const [loginError, setLoginError] = useState<boolean>(false);
   const [isForgotPasswordPage, setIsForgotPasswordPage] = useState<boolean>();
   const [loginErrorForgetPassword, setLoginErrorForgetPassword] = useState<boolean>(false);
+  const [signUpEmailError, setSignUpEmailError] = useState<boolean>(false);
 
   const [newPasswordBooleanError, setNewPasswordBooleanError] = useState<boolean>(false);
 
   useEffect(() => {
-    pageContext.logout();
+    sessionStorage.clear();
   }, []);
 
   const updateForm = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,6 +64,7 @@ export default function Home() {
     if (e.target.name === 'password' || 'confirmPassword') {
       setNewPasswordBooleanError(false);
     }
+    setSignUpEmailError(false);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -74,7 +77,7 @@ export default function Home() {
     if (isFilled) {
 
       // Logic For Sign Up Page
-      if (!isLoginPage && !isForgotPasswordPage) {
+      if (!isLoginPage && !isForgotPasswordPage && passwordsMatch) {
         const data = await CreateAccountAPICall(loginData);
         if (data) {
           toast("You've successfully created your account!", { type: "success", className: " !grid !grid-cols-[95%_5%] text-center" });
@@ -84,21 +87,25 @@ export default function Home() {
           setIsForgotPasswordPage(false);
           setIsLoginPage(true);
         } else {
-          toast("API to connect the form is currently down!", { type: "warning", className: " !grid !grid-cols-[95%_5%] text-center" });
+          toast("Sorry that email has been taken!", { type: "warning", className: " !grid !grid-cols-[95%_5%] text-center" });
+          setSignUpEmailError(true);
         }
-
-        // Logic For Login Page
-      } else if (isLoginPage) {
+      } else if (!passwordsMatch && !isLoginPage && !isForgotPasswordPage) {
+        toast("Please make sure your passwords match", { type: "warning", className: " !grid !grid-cols-[95%_5%] text-center" });
+      } 
+      // Logic For Login Page
+      else if (isLoginPage) {
         try {
           const data: IToken = await LoginAPI(loginData);
           if (data.token !== undefined || data.token !== null) {
             toast("You've logged in!", { type: "success", className: " !grid !grid-cols-[95%_5%] text-center" });
 
-            pageContext.setAdmin(data.isAdmin);
-            pageContext.setToken(data.token);
-            pageContext.setId(data.id);
+            // pageContext.setAdmin(data.isAdmin);
+            // pageContext.setToken(data.token);
+            // pageContext.setId(data.id);
+            sessionStorage.setItem("WA-SessionStorage", JSON.stringify(data));
 
-            router.push('/UpdateProfilePage')
+            router.push('/AddFormPage')
           }
         } catch (error) {
           toast("Username or password is incorrect", { type: "warning", className: " !grid !grid-cols-[95%_5%] text-center" });
@@ -113,7 +120,7 @@ export default function Home() {
           try {
             const data: IToken = await LoginAPI({ email: loginData.email, password: loginData.oldPassword });
 
-            if (data.token !== undefined || data.token !== null && loginData.oldPassword !== loginData.password) {
+            if ((data.token !== undefined || data.token !== null) && loginData.oldPassword !== loginData.password) {
               try {
                 const data = await ResetPasswordAPI(loginData.email, loginData.password)
                 toast("You've successfully reset your password!", { type: "success", className: " !grid !grid-cols-[95%_5%] text-center" });
@@ -182,6 +189,7 @@ export default function Home() {
 
   const formReset = () => {
     setLoginData({
+      id: 0,
       email: '',
       password: '',
       confirmPassword: '',
@@ -192,6 +200,7 @@ export default function Home() {
 
   const resetEverything = () => {
     setLoginData({
+      id: 0,
       email: '',
       password: '',
       confirmPassword: '',
@@ -201,6 +210,7 @@ export default function Home() {
     setLoginError(false);
     setLoginErrorForgetPassword(false);
     setNewPasswordBooleanError(false);
+    setSignUpEmailError(false);
   }
 
   const goLogin = () => {
@@ -252,7 +262,7 @@ export default function Home() {
                   }
 
                   <p className='text-red-600 absolute top-0 right-1'>*</p>
-                  <input placeholder="Email" type={isLoginPage || isForgotPasswordPage ? "text" : "email"} autoComplete="email" id="email" name="email" className={`${isLoginPage ? loginError && loginData.email.length === 0 ? "border border-red-500" : "" : !isForgotPasswordPage && !loginData.email.includes('@') && loginData.email.length > 0 || loginErrorForgetPassword ? "border border-red-500" : isSubmitted && loginData.email === '' ? 'border border-red-500 ' : ''} text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12`} value={loginData.email} onChange={updateForm} onFocus={showEmailToolTipTrue} onBlur={showEmailToolTipFalse} />
+                  <input placeholder="Email" type={isLoginPage || isForgotPasswordPage ? "text" : "email"} autoComplete="email" id="email" name="email" className={`${isLoginPage ? loginError || (loginError && loginData.email.length === 0) ? "border border-red-500" : "" : !isForgotPasswordPage && !loginData.email.includes('@') && loginData.email.length > 0 || loginErrorForgetPassword || signUpEmailError ? "border border-red-500" : isSubmitted && loginData.email === '' ? 'border border-red-500 ' : ''} text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12`} value={loginData.email} onChange={updateForm} onFocus={showEmailToolTipTrue} onBlur={showEmailToolTipFalse} />
 
                 </div>
 
@@ -296,7 +306,7 @@ export default function Home() {
                   />}
 
                   {/* Password Input Field for Login Page */}
-                  {isLoginPage && !isForgotPasswordPage && <input placeholder={isForgotPasswordPage ? "New Password" : "Password"} type={showPassword ? "text" : "password"} id="password" name="password" className={`${isLoginPage ? loginError && loginData.password.length === 0 ? "border border-red-500" : "" : (isSubmitted && loginData.password === '') ? 'border border-red-500' : ''} text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12 px-12`} value={loginData.password}
+                  {isLoginPage && !isForgotPasswordPage && <input placeholder={isForgotPasswordPage ? "New Password" : "Password"} type={showPassword ? "text" : "password"} id="password" name="password" className={`${isLoginPage ? loginError || (loginError && loginData.email.length === 0) ? "border border-red-500" : "" : (isSubmitted && loginData.password === '') ? 'border border-red-500' : ''} text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12 px-12`} value={loginData.password}
                     onFocus={showPasswordToolTipTrue}
                     onBlur={showPasswordToolTipFalse}
                     onChange={(e) => {

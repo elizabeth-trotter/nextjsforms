@@ -1,6 +1,8 @@
 export interface ICreateAccount {
+    id: number,
     email: string,
-    password: string
+    password: string,
+    isAdmin: boolean,
 }
 
 export interface IForm {
@@ -30,9 +32,9 @@ export interface ILogin {
 }
 
 export interface IToken {
-    token: string,
-    id: number,
-    isAdmin: boolean
+    token: string | null,
+    id: number | null,
+    isAdmin: boolean | null
 }
 
 export interface IUser {

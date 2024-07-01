@@ -9,7 +9,7 @@ import InputMask from 'react-input-mask';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const UpdateProfilePage = () => {
+const AddFormPage = () => {
     const pageContext = useAppContext();
 
 
@@ -33,6 +33,7 @@ const UpdateProfilePage = () => {
         const month = String(today.getMonth() + 1).padStart(2, '0');
         const day = String(today.getDate()).padStart(2, '0');
         setMaxDate(`${year}-${month}-${day}`);
+        console.log(sessionStorage.getItem("WA-SessionStorage"));
 
     }, []);
 
@@ -165,4 +166,4 @@ const UpdateProfilePage = () => {
     )
 }
 
-export default UpdateProfilePage
+export default AddFormPage
