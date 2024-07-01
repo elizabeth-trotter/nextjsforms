@@ -10,7 +10,8 @@ const ManagementPage = () => {
     const [isEditModalOpen, setEditModalOpen] = useState(false);
     const [currentUser, setCurrentUser] = useState<IForm | null>(null);
 
-    const data = JSON.parse(sessionStorage.getItem("WA-SessionStorage") || "{}")
+    const [data, setData] = useState<any>(null);
+
     const router = useRouter()
 
     const fetchUsers = async () => {
@@ -23,7 +24,8 @@ const ManagementPage = () => {
 
     useEffect(() => {
         fetchUsers().then(setUsers).catch(console.error);
-        console.log(sessionStorage.getItem("WA-SessionStorage"))
+        const session = sessionStorage.getItem("WA-SessionStorage");
+        setData(session ? JSON.parse(session) : null)
     }, []);
 
     const columns: Column<IForm>[] = useMemo(() => [
