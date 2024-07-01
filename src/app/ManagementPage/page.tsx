@@ -11,28 +11,33 @@ const ManagementPage = () => {
     const [isEditModalOpen, setEditModalOpen] = useState(false);
     const [currentUser, setCurrentUser] = useState<IForm | null>(null);
 
-    const data = useAppContext()
-    const router = useRouter()
+    const data = useAppContext();
+    const router = useRouter();
 
     const fetchUsers = async () => {
         const response = await fetch('https://williamform.azurewebsites.net/User/GetAllUsers');
         if (!response.ok) {
             throw new Error('Failed to fetch');
         }
-        return await response.json();
+        const usersData = await response.json();
+        setUsers(usersData);
     };
 
     useEffect(() => {
-        fetchUsers().then(setUsers).catch(console.error);
+        fetchUsers().catch(console.error);
     }, []);
+
+    const handleUserSave = async (updatedUser: IForm) => {
+        await fetchUsers();
+        setCurrentUser(null);
+        setEditModalOpen(false);
+    };
 
     const columns: Column<IForm>[] = useMemo(() => [
         { Header: 'Email', accessor: 'email' },
         { Header: 'First Name', accessor: 'firstName' },
         { Header: 'Last Name', accessor: 'lastName' },
         { Header: 'Date of Birth', accessor: 'dob' },
-        // { Header: 'Address', accessor: 'address' },
-        // { Header: 'Phone Number', accessor: 'phonenumber' },
         {
             Header: 'Actions',
             id: 'actions',
@@ -70,18 +75,14 @@ const ManagementPage = () => {
         setEditModalOpen(true);
     };
 
-    const closeEditModal = () => {
+    const closeEditModal = async () => {
         setEditModalOpen(false);
-    };
-
-    const saveUser = async (user: IForm) => {
-        console.log('Saving user:', user);
-        closeEditModal();
+        setCurrentUser(null);
+        await fetchUsers();
     };
 
     const CheckToken = () => {
-        const data = useAppContext()
-
+        const data = useAppContext();
         let result = false;
 
         if (data.admin != null) {
@@ -93,10 +94,10 @@ const ManagementPage = () => {
 
     if (CheckToken()) {
         if (!data.admin) {
-            return notFound()
+            return notFound();
         }
     } else {
-        router.push('/')
+        router.push('/');
     }
 
     return (
@@ -145,7 +146,7 @@ const ManagementPage = () => {
                     user={currentUser}
                     isOpen={isEditModalOpen}
                     onClose={closeEditModal}
-                    onSave={saveUser}
+                    onSave={handleUserSave}
                 />
             )}
         </div>

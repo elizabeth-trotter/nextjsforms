@@ -4,6 +4,7 @@ export interface ICreateAccount {
 }
 
 export interface IForm {
+    id: number;
     firstName: string;
     lastName: string;
     address: string;
