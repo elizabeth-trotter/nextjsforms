@@ -32,8 +32,8 @@ const ManagementPage = () => {
         { Header: 'First Name', accessor: 'firstname' },
         { Header: 'Last Name', accessor: 'lastname' },
         { Header: 'Date of Birth', accessor: 'dob' },
-        { Header: 'Address', accessor: 'address' },
-        { Header: 'Phone Number', accessor: 'phonenumber' },
+        // { Header: 'Address', accessor: 'address' },
+        // { Header: 'Phone Number', accessor: 'phonenumber' },
         {
             Header: 'Actions',
             id: 'actions',
