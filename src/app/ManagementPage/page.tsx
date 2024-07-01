@@ -3,7 +3,6 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { useTable, useSortBy, Column, Row } from 'react-table';
 import EditUserModal from '@/components/EditUserModal/EditUserModal';
 import { IForm } from '@/Interfaces/Interface';
-import { checkToken } from '@/utils/DataServices/DataService';
 import { notFound, useRouter } from 'next/navigation';
 import { useAppContext } from '@/context/Context';
 
@@ -80,7 +79,19 @@ const ManagementPage = () => {
         closeEditModal();
     };
 
-    if (checkToken()) {
+    const CheckToken = () => {
+        const data = useAppContext()
+
+        let result = false;
+
+        if (data.admin != null) {
+            result = true;
+        }
+
+        return result;
+    }
+
+    if (CheckToken()) {
         if (!data.admin) {
             return notFound()
         }

@@ -72,14 +72,3 @@ export const AddStudentAPI = async (form: IUserForm) => {
       const data = await res.json();
       return data;
 }
-export const checkToken = () => {
-  const data = useAppContext()
-
-  let result = false;
-
-  if(data.admin != null){
-    result = true;
-  }
-
-  return result;
-}
