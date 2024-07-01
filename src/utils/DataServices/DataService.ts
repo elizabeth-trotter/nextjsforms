@@ -3,7 +3,6 @@ import { useAppContext } from "@/context/Context";
 import { useEffect } from "react";
 
 const url = "https://williamform.azurewebsites.net/";
-const data = useAppContext()
 
 export const CreateAccountAPI = async (form: ICreateAccount) => {
   const res = await fetch(url + "User/AddUser", {
@@ -74,6 +73,8 @@ export const AddStudentAPI = async (form: IUserForm) => {
       return data;
 }
 export const checkToken = () => {
+  const data = useAppContext()
+
   let result = false;
 
   if(data.admin != null){
