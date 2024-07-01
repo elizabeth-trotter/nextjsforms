@@ -6,7 +6,7 @@ import React, { useState } from 'react'
 
 
 
-const page = () => {
+const StudentDirectoryPage = () => {
   const [ modal, setModal] = useState(false)
   const [ editModal, setEditModal] = useState(false)
   return (
@@ -94,4 +94,4 @@ const page = () => {
   )
 }
 
-export default page
+export default StudentDirectoryPage
