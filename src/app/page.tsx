@@ -49,7 +49,7 @@ export default function Home() {
   const [newPasswordBooleanError, setNewPasswordBooleanError] = useState<boolean>(false);
 
   useEffect(() => {
-    pageContext.logout();
+    sessionStorage.clear();
   }, []);
 
   const updateForm = (e: React.ChangeEvent<HTMLInputElement>) => {
