@@ -28,6 +28,7 @@ interface IUpdateStudent {
 
 const StudentDirectoryPage = () => {
   const [modal, setModal] = useState(false);
+  const [data, setData]=useState<any>(null);
   const [editModal, setEditModal] = useState(false);
   const [search, setSearch] = useState<string>("");
   const [toggleABC, setToggleABC] = useState(true);
@@ -161,6 +162,9 @@ const StudentDirectoryPage = () => {
 
   useEffect(() => {
     const loadAll = async () => {
+      const session = sessionStorage.getItem("WA-SessionStorage");
+      setData(session ? JSON.parse(session): null);
+
       setSeedData(await FetchAllUsers());
       console.log(await FetchAllUsers());
     };
@@ -179,12 +183,14 @@ const StudentDirectoryPage = () => {
   });
 
   const updateForm = (e: React.ChangeEvent<HTMLInputElement>) => {
+  
+
+
     //passing through its current values, and updating
     setForm({ ...form, [e.target.name]: e.target.value });
     console.log(form);
   };
 
-  const pageContext = useAppContext();
 
   return (
     <div>
@@ -323,115 +329,17 @@ const StudentDirectoryPage = () => {
         </div>
       </div>
 
-      <div
-        className={`flex justify-center items-center bg-[#00000089] h-screen w-screen fixed  ${hideEditModel}`}
-      >
-        <div className={`bg-sky-400   w-[800px] min-h-[400px] `}>
-          <p> Update {currentStudent?.firstName}s information.</p>
-
-          <div className="">
-            <label className="block rounded p-3">First Name</label>
-            <input
-              value={form?.firstName}
-              type="text"
-              placeholder="First Name"
-              name="firstName"
-              className="border rounded p-3"
-              onChange={updateForm}
-            />
-          </div>
-
-          <div className="">
-            <label className="block rounded p-3">Last Name</label>
-            <input
-              type="text"
-              placeholder="Last Name"
-              name="lastName"
-              className="border rounded p-3"
-              onChange={updateForm}
-              value={form?.lastName}
-            />
-          </div>
-
-          <div className="">
-            <label className="block rounded p-3">Address</label>
-            <input
-              type="text"
-              placeholder="Address"
-              name="address"
-              className="border rounded p-3"
-              onChange={updateForm}
-              value={form?.address}
-            />
-          </div>
-
-          <div className="">
-            <label className="block rounded p-3">Phone Number</label>
-            <input
-              type="text"
-              placeholder="Phone Number"
-              name="phoneNumber"
-              className="border rounded p-3"
-              onChange={updateForm}
-              value={form?.phoneNumber}
-            />
-          </div>
-
-          <div className="">
-            <label className="block rounded p-3">Date of Birth</label>
-            <input
-              type="text"
-              placeholder="Date of Birth"
-              name="dob"
-              className="border rounded p-3"
-              onChange={updateForm}
-              value={form?.dob}
-            />
-          </div>
-
-          <div className="">
-            <label className="block rounded p-3">Email</label>
-            <input
-              type="text"
-              placeholder="Email"
-              name="email"
-              className="border rounded p-3"
-              onChange={updateForm}
-              value={form?.email}
-            />
-          </div>
-
-          <button onClick={() => setEditHideModel("hidden")}>cancel</button>
-
-          <button
-            onClick={async () => {
-              setEditHideModel("hidden");
-
-              replaceStudentWithoutRefetching(currentStudent?.id, form);
-              await softDeleteUser({
-                id: form?.id,
-                firstName: form?.firstName,
-                lastName: form?.lastName,
-                address: form?.address,
-                phoneNumber: form?.phoneNumber,
-                dob: form?.dob,
-                email: form?.email,
-                isDeleted: form?.isDeleted,
-              });
-            }}
-          >
-            update
-          </button>
-        </div>
-      </div>
+    
 
       <div
         className={`flex justify-center items-center bg-[#00000089] h-screen w-screen fixed  ${hideModel}`}
       >
-        <div className={`bg-sky-400   w-[800px] h-[400px] `}>
-          <p>Are you sure you want to remove {currentStudent?.firstName}</p>
-          <button onClick={() => setHideModel("hidden")}>cancel</button>
+        <div className={`bg-white p-5`}>
+          <p className="text-center pb-5">Are you sure you want to remove {currentStudent?.firstName}</p>
+          <div className="flex justify-evenly">
+          <button className="text-white w-[100px] h-[50px] font-semibold  bg-[#737375]" onClick={() => setHideModel("hidden")}>CANCEL</button>
           <button
+          className="text-white w-[100px] h-[50px] font-semibold  bg-[#DD8A3E]"
             onClick={async () => {
               setHideModel("hidden");
               removeStudentWithoutRefetching(currentStudent?.id);
@@ -447,12 +355,13 @@ const StudentDirectoryPage = () => {
               });
             }}
           >
-            delete
+            DELETE
           </button>
+          </div>
         </div>
       </div>
 
-      <NavbarComponent admin={pageContext.admin} />
+      <NavbarComponent admin={data !== null && data.isAdmin} />
 
       <div className="flex flex-col items-center   w-fit mx-auto ">
         <div className=" mr-auto ">
@@ -562,7 +471,7 @@ const StudentDirectoryPage = () => {
                               ? student?.phoneNumber
                               : "N/A"}{" "}
                           </td>
-                          <td className=" flex flex-row items-center p-2 gap-2">
+                        {data && data.isAdmin && <td className=" flex flex-row items-center p-2 gap-2">
                             <Image
                               onClick={() => {
                                 setCurrentStudent(student);
@@ -587,7 +496,7 @@ const StudentDirectoryPage = () => {
                               // onClick={}
                               className="cursor-pointer"
                             />
-                          </td>
+                          </td>}
                         </tr>
                       );
                     } else {
@@ -599,18 +508,18 @@ const StudentDirectoryPage = () => {
         </div>
 
         <div className="my-5 flex justify-between w-full ">
-          <Button
-            className=" bg-[#23527C] rounded-none w-24"
+          <button
+            className=" bg-[#23527C] w-[94px] h-[36px] px-[16px] py-[8px] text-white rounded-none "
             onClick={handleBack}
           >
             Back
-          </Button>
-          <Button
-            className=" bg-[#23527C] rounded-none w-24"
+          </button>
+          <button
+            className=" bg-[#23527C]  h-[36px] px-[16px] py-[8px] text-white rounded-none "
             onClick={handleForward}
           >
             Forward
-          </Button>
+          </button>
         </div>
       </div>
 
