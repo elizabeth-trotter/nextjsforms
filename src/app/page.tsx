@@ -1,6 +1,5 @@
 'use client';
 
-
 import PasswordRulesComponent from "@/components/PasswordRulesComponent";
 import { CreateAccountAPI, LoginAPI, ResetPasswordAPI } from "@/utils/DataServices/DataService";
 import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
@@ -179,11 +178,11 @@ export default function Home() {
   };
 
   const handleShowOldPassword = () => {
-    setShowOldPassword(!showOldPassword);
+     setShowOldPassword(!showOldPassword);
   };
 
   const handleShowConfirmPassword = () => {
-    setShowConfirmPassword(!showConfirmPassword);
+     setShowConfirmPassword(!showConfirmPassword);
   };
 
   const goLogin = () => {
