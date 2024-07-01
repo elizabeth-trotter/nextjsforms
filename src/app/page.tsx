@@ -100,12 +100,12 @@ export default function Home() {
           if (data.token !== undefined || data.token !== null) {
             toast("You've logged in!", { type: "success", className: " !grid !grid-cols-[95%_5%] text-center" });
 
-            pageContext.setAdmin(data.isAdmin);
-            pageContext.setToken(data.token);
-            pageContext.setId(data.id);
+            // pageContext.setAdmin(data.isAdmin);
+            // pageContext.setToken(data.token);
+            // pageContext.setId(data.id);
             sessionStorage.setItem("WA-SessionStorage", JSON.stringify(data));
 
-            router.push('/UpdateProfilePage')
+            router.push('/AddFormPage')
           }
         } catch (error) {
           toast("Username or password is incorrect", { type: "warning", className: " !grid !grid-cols-[95%_5%] text-center" });

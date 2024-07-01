@@ -2,6 +2,7 @@
 import FooterComponent from '@/components/FooterComponent/page'
 import NavbarComponent from '@/components/NavbarComponent'
 import { useAppContext } from '@/context/Context'
+import { Button } from 'flowbite-react'
 import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
 
@@ -190,42 +191,42 @@ const StudentDirectoryPage = () => {
             <label className="block rounded p-3">
               First Name
             </label>
-            <input value={form?.firstName} type="text" placeholder="Name" name="firstName" className="border rounded p-3" onChange={updateForm} />
+            <input value={form?.firstName} type="text" placeholder="First Name" name="firstName" className="border rounded p-3" onChange={updateForm} />
           </div>
 
           <div className="">
             <label className="block rounded p-3">
               Last Name
             </label>
-            <input type="text" placeholder="Favorite Food" name="lastName" className="border rounded p-3" onChange={updateForm} value={form?.lastName} />
+            <input type="text" placeholder="Last Name" name="lastName" className="border rounded p-3" onChange={updateForm} value={form?.lastName} />
           </div>
 
           <div className="">
             <label className="block rounded p-3">
               Address
             </label>
-            <input type="text" placeholder="Favorite Food" name="address" className="border rounded p-3" onChange={updateForm} value={form?.address} />
+            <input type="text" placeholder="Address" name="address" className="border rounded p-3" onChange={updateForm} value={form?.address} />
           </div>
 
           <div className="">
             <label className="block rounded p-3">
               Phone Number
             </label>
-            <input type="text" placeholder="Favorite Food" name="phoneNumber" className="border rounded p-3" onChange={updateForm} value={form?.phoneNumber} />
+            <input type="text" placeholder="Phone Number" name="phoneNumber" className="border rounded p-3" onChange={updateForm} value={form?.phoneNumber} />
           </div>
 
           <div className="">
             <label className="block rounded p-3">
               Date of Birth
             </label>
-            <input type="text" placeholder="Favorite Food" name="dob" className="border rounded p-3" onChange={updateForm} value={form?.dob} />
+            <input type="text" placeholder="Date of Birth" name="dob" className="border rounded p-3" onChange={updateForm} value={form?.dob} />
           </div>
 
           <div className="">
             <label className="block rounded p-3">
               Email
             </label>
-            <input type="text" placeholder="Favorite Food" name="email" className="border rounded p-3" onChange={updateForm} value={form?.email} />
+            <input type="text" placeholder="Email" name="email" className="border rounded p-3" onChange={updateForm} value={form?.email} />
           </div>
 
 
@@ -284,7 +285,7 @@ const StudentDirectoryPage = () => {
       <div className='flex flex-col items-center   w-fit mx-auto '>
 
         <div className=' mr-auto '>
-          <input onChange={(e) => { setSearch(e.target.value) }} type="text" className='border' />
+          <input onChange={(e) => { setSearch(e.target.value) }} type="text" className='border my-5 me-5' />
           <select onChange={(e) => { setChooseSearch(e.target.value) }}>
             <option value="firstName">firstname</option>
             <option value="lastName">lastname</option>
@@ -298,12 +299,12 @@ const StudentDirectoryPage = () => {
           <table className=' border border-black '>
             <thead className='text-white text-[20px] bg-[#23527C] gap-2  '>
               <tr>
-                <th className=' py-2 text-start font-normal  overflow-hidden px-2  ' onClick={() => { SortByAlpha("firstName") }}>First Name</th>
-                <th className=' text-start  font-normal  overflow-hidden px-2 ' onClick={() => { SortByAlpha("firstName") }}>Last Name</th>
-                <th className=' text-start  font-normal  overflow-hidden px-2 ' onClick={() => { SortByDate() }}>Date of Birth</th>
-                <th className=' text-start  font-normal  overflow-hidden px-2 ' >Address</th>
-                <th className=' text-start  font-normal  overflow-hidden px-2' onClick={() => { SortByAlpha("email") }}>Email</th>
-                <th className=' text-start  font-normal  overflow-hidden px-2 '>Phone Number</th>
+                <th className=' py-2 text-start font-normal  overflow-hidden px-2 w-48 ' onClick={() => { SortByAlpha("firstName") }}>First Name</th>
+                <th className=' text-start  font-normal  overflow-hidden px-2 w-48' onClick={() => { SortByAlpha("firstName") }}>Last Name</th>
+                <th className=' text-start  font-normal  overflow-hidden px-2 w-48' onClick={() => { SortByDate() }}>Date of Birth</th>
+                <th className=' text-start  font-normal  overflow-hidden px-2 w-48' >Address</th>
+                <th className=' text-start  font-normal  overflow-hidden px-2 w-80' onClick={() => { SortByAlpha("email") }}>Email</th>
+                <th className=' text-start  font-normal  overflow-hidden px-2 w-48'>Phone Number</th>
                 <th className=' font-normal w-20'></th>
               </tr>
             </thead>
@@ -365,9 +366,9 @@ const StudentDirectoryPage = () => {
 
         </div>
 
-        <div className=' '>
-          <button onClick={handleBack} >Back</button>
-          <button onClick={handleForward}>forward</button>
+        <div className='my-5 flex justify-between w-full '>
+          <Button className=' bg-[#23527C] rounded-none w-24' onClick={handleBack} >Back</Button>
+          <Button className=' bg-[#23527C] rounded-none w-24' onClick={handleForward}>Forward</Button>
         </div>
 
       </div>
