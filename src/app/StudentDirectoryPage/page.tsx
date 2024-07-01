@@ -43,219 +43,219 @@ const page = () => {
   const [seedData, setSeedData] = useState<IStudentData[] | any>(
 
     //test
-    [
-      {
+    // [
+    //   {
 
-        id: 1,
-        firstName: "John",
-        lastName: "Smith",
-        email: "john.smith@gmail.com",
-        address: "John's house",
-        phoneNumber: "(211)-444-4444",
-        dob: "01-20-2000",
-        isDeleted: false,
-      },
-      {
-        id: 2,
-        firstName: "Alice",
-        lastName: "Johnson",
-        email: "alice.johnson@gmail.com",
-        address: "Alice's apartment",
-        phoneNumber: "(212)-555-5555",
-        dob: "08-30-1992",
-        isDeleted: false,
-      },
-      {
-        id: 3,
-        firstName: "Bob",
-        lastName: "Brown",
-        email: "bob.brown@gmail.com",
-        address: "Bob's condo",
-        phoneNumber: "(213)-666-6666",
-        dob: "03-12-1985",
-        isDeleted: false,
-      },
-      {
-        id: 4,
-        firstName: "Charlie",
-        lastName: "Davis",
-        email: "charlie.davis@gmail.com",
-        address: "Charlie's townhouse",
-        phoneNumber: "(214)-777-7777",
-        dob: "11-23-1978",
-        isDeleted: false,
-      },
-      {
-        id: 5,
-        firstName: "Charlie",
-        lastName: "Davis",
-        email: "charlie.davis@gmail.com",
-        address: "Charlie's townhouse",
-        phoneNumber: "(214)-777-7777",
-        dob: "11-23-1978",
-        isDeleted: false,
-      },
-      {
-        id: 6,
-        firstName: "Charlie",
-        lastName: "Davis",
-        email: "charlie.davis@gmail.com",
-        address: "Charlie's townhouse",
-        phoneNumber: "(214)-777-7777",
-        dob: "11-23-1978",
-        isDeleted: false,
-      },
-      {
-        id: 7,
-        firstName: "Charlie",
-        lastName: "Davis",
-        email: "charlie.davis@gmail.com",
-        address: "Charlie's townhouse",
-        phoneNumber: "(214)-777-7777",
-        dob: "11-23-1978",
-        isDeleted: false,
-      },
-      {
-        id: 8,
-        firstName: "Charlie",
-        lastName: "Davis",
-        email: "charlie.davis@gmail.com",
-        address: "Charlie's townhouse",
-        phoneNumber: "(214)-777-7777",
-        dob: "11-23-1978",
-        isDeleted: false,
-      },
-      {
-        id: 9,
-        firstName: "Charlie",
-        lastName: "Davis",
-        email: "charlie.davis@gmail.com",
-        address: "Charlie's townhouse",
-        phoneNumber: "(214)-777-7777",
-        dob: "11-23-1978",
-        isDeleted: false,
-      },
-      {
-        id: 10,
-        firstName: "Charlie",
-        lastName: "Davis",
-        email: "charlie.davis@gmail.com",
-        address: "Charlie's townhouse",
-        phoneNumber: "(214)-777-7777",
-        dob: "11-23-1978",
-        isDeleted: false,
-      },
-      {
-        id: 11,
-        firstName: "Charlie",
-        lastName: "Davis",
-        email: "charlie.davis@gmail.com",
-        address: "Charlie's townhouse",
-        phoneNumber: "(214)-777-7777",
-        dob: "11-23-1978",
-        isDeleted: false,
-      },
-      {
-        id: 12,
-        firstName: "Charlie",
-        lastName: "Davis",
-        email: "charlie.davis@gmail.com",
-        address: "Charlie's townhouse",
-        phoneNumber: "(214)-777-7777",
-        dob: "11-23-1978",
-        isDeleted: false,
-      },
-      {
-        id: 13,
-        firstName: "Charlie",
-        lastName: "Davis",
-        email: "charlie.davis@gmail.com",
-        address: "Charlie's townhouse",
-        phoneNumber: "(214)-777-7777",
-        dob: "11-23-1978",
-        isDeleted: false,
-      },
-      {
-        id: 14,
-        firstName: "Charlie",
-        lastName: "Davis",
-        email: "charlie.davis@gmail.com",
-        address: "Charlie's townhouse",
-        phoneNumber: "(214)-777-7777",
-        dob: "11-23-1978",
-        isDeleted: false,
-      },
-      {
-        id: 15,
-        firstName: "Charlie",
-        lastName: "Davis",
-        email: "charlie.davis@gmail.com",
-        address: "Charlie's townhouse",
-        phoneNumber: "(214)-777-7777",
-        dob: "11-23-1978",
-        isDeleted: false,
-      },
-      {
-        id: 16,
-        firstName: "Charlie",
-        lastName: "Davis",
-        email: "charlie.davis@gmail.com",
-        address: "Charlie's townhouse",
-        phoneNumber: "(214)-777-7777",
-        dob: "11-23-1978",
-        isDeleted: false,
-      },
-      {
-        id: 17,
-        firstName: "Charlie",
-        lastName: "Davis",
-        email: "charlie.davis@gmail.com",
-        address: "Charlie's townhouse",
-        phoneNumber: "(214)-777-7777",
-        dob: "11-23-1978",
-        isDeleted: false,
-      },
-      {
-        id: 18,
-        firstName: "Charlie",
-        lastName: "Davis",
-        email: "charlie.davis@gmail.com",
-        address: "Charlie's townhouse",
-        phoneNumber: "(214)-777-7777",
-        dob: "11-23-1978",
-        isDeleted: false,
-      },
-      {
-        id: 19,
-        firstName: "Charlie",
-        lastName: "Davis",
-        email: "charlie.davis@gmail.com",
-        address: "Charlie's townhouse",
-        phoneNumber: "(214)-777-7777",
-        dob: "11-23-1978",
-        isDeleted: false,
-      },
-      {
-        id: 20,
-        firstName: "Charlie",
-        lastName: "Davis",
-        email: "charlie.davis@gmail.com",
-        address: "Charlie's townhouse",
-        phoneNumber: "(214)-777-7777",
-        dob: "11-23-1978",
-        isDeleted: false,
-      },
-      {
-        id: 21,
-        firstName: "Charlie",
-        lastName: "Davis",
-        email: "charlie.davis@gmail.com",
-        address: "Charlie's townhouse",
-        phoneNumber: "(214)-777-7777",
-        dob: "11-23-1978",
-        isDeleted: false,
-      },
-    ]
+    //     id: 1,
+    //     firstName: "John",
+    //     lastName: "Smith",
+    //     email: "john.smith@gmail.com",
+    //     address: "John's house",
+    //     phoneNumber: "(211)-444-4444",
+    //     dob: "01-20-2000",
+    //     isDeleted: false,
+    //   },
+    //   {
+    //     id: 2,
+    //     firstName: "Alice",
+    //     lastName: "Johnson",
+    //     email: "alice.johnson@gmail.com",
+    //     address: "Alice's apartment",
+    //     phoneNumber: "(212)-555-5555",
+    //     dob: "08-30-1992",
+    //     isDeleted: false,
+    //   },
+    //   {
+    //     id: 3,
+    //     firstName: "Bob",
+    //     lastName: "Brown",
+    //     email: "bob.brown@gmail.com",
+    //     address: "Bob's condo",
+    //     phoneNumber: "(213)-666-6666",
+    //     dob: "03-12-1985",
+    //     isDeleted: false,
+    //   },
+    //   {
+    //     id: 4,
+    //     firstName: "Charlie",
+    //     lastName: "Davis",
+    //     email: "charlie.davis@gmail.com",
+    //     address: "Charlie's townhouse",
+    //     phoneNumber: "(214)-777-7777",
+    //     dob: "11-23-1978",
+    //     isDeleted: false,
+    //   },
+    //   {
+    //     id: 5,
+    //     firstName: "Charlie",
+    //     lastName: "Davis",
+    //     email: "charlie.davis@gmail.com",
+    //     address: "Charlie's townhouse",
+    //     phoneNumber: "(214)-777-7777",
+    //     dob: "11-23-1978",
+    //     isDeleted: false,
+    //   },
+    //   {
+    //     id: 6,
+    //     firstName: "Charlie",
+    //     lastName: "Davis",
+    //     email: "charlie.davis@gmail.com",
+    //     address: "Charlie's townhouse",
+    //     phoneNumber: "(214)-777-7777",
+    //     dob: "11-23-1978",
+    //     isDeleted: false,
+    //   },
+    //   {
+    //     id: 7,
+    //     firstName: "Charlie",
+    //     lastName: "Davis",
+    //     email: "charlie.davis@gmail.com",
+    //     address: "Charlie's townhouse",
+    //     phoneNumber: "(214)-777-7777",
+    //     dob: "11-23-1978",
+    //     isDeleted: false,
+    //   },
+    //   {
+    //     id: 8,
+    //     firstName: "Charlie",
+    //     lastName: "Davis",
+    //     email: "charlie.davis@gmail.com",
+    //     address: "Charlie's townhouse",
+    //     phoneNumber: "(214)-777-7777",
+    //     dob: "11-23-1978",
+    //     isDeleted: false,
+    //   },
+    //   {
+    //     id: 9,
+    //     firstName: "Charlie",
+    //     lastName: "Davis",
+    //     email: "charlie.davis@gmail.com",
+    //     address: "Charlie's townhouse",
+    //     phoneNumber: "(214)-777-7777",
+    //     dob: "11-23-1978",
+    //     isDeleted: false,
+    //   },
+    //   {
+    //     id: 10,
+    //     firstName: "Charlie",
+    //     lastName: "Davis",
+    //     email: "charlie.davis@gmail.com",
+    //     address: "Charlie's townhouse",
+    //     phoneNumber: "(214)-777-7777",
+    //     dob: "11-23-1978",
+    //     isDeleted: false,
+    //   },
+    //   {
+    //     id: 11,
+    //     firstName: "Charlie",
+    //     lastName: "Davis",
+    //     email: "charlie.davis@gmail.com",
+    //     address: "Charlie's townhouse",
+    //     phoneNumber: "(214)-777-7777",
+    //     dob: "11-23-1978",
+    //     isDeleted: false,
+    //   },
+    //   {
+    //     id: 12,
+    //     firstName: "Charlie",
+    //     lastName: "Davis",
+    //     email: "charlie.davis@gmail.com",
+    //     address: "Charlie's townhouse",
+    //     phoneNumber: "(214)-777-7777",
+    //     dob: "11-23-1978",
+    //     isDeleted: false,
+    //   },
+    //   {
+    //     id: 13,
+    //     firstName: "Charlie",
+    //     lastName: "Davis",
+    //     email: "charlie.davis@gmail.com",
+    //     address: "Charlie's townhouse",
+    //     phoneNumber: "(214)-777-7777",
+    //     dob: "11-23-1978",
+    //     isDeleted: false,
+    //   },
+    //   {
+    //     id: 14,
+    //     firstName: "Charlie",
+    //     lastName: "Davis",
+    //     email: "charlie.davis@gmail.com",
+    //     address: "Charlie's townhouse",
+    //     phoneNumber: "(214)-777-7777",
+    //     dob: "11-23-1978",
+    //     isDeleted: false,
+    //   },
+    //   {
+    //     id: 15,
+    //     firstName: "Charlie",
+    //     lastName: "Davis",
+    //     email: "charlie.davis@gmail.com",
+    //     address: "Charlie's townhouse",
+    //     phoneNumber: "(214)-777-7777",
+    //     dob: "11-23-1978",
+    //     isDeleted: false,
+    //   },
+    //   {
+    //     id: 16,
+    //     firstName: "Charlie",
+    //     lastName: "Davis",
+    //     email: "charlie.davis@gmail.com",
+    //     address: "Charlie's townhouse",
+    //     phoneNumber: "(214)-777-7777",
+    //     dob: "11-23-1978",
+    //     isDeleted: false,
+    //   },
+    //   {
+    //     id: 17,
+    //     firstName: "Charlie",
+    //     lastName: "Davis",
+    //     email: "charlie.davis@gmail.com",
+    //     address: "Charlie's townhouse",
+    //     phoneNumber: "(214)-777-7777",
+    //     dob: "11-23-1978",
+    //     isDeleted: false,
+    //   },
+    //   {
+    //     id: 18,
+    //     firstName: "Charlie",
+    //     lastName: "Davis",
+    //     email: "charlie.davis@gmail.com",
+    //     address: "Charlie's townhouse",
+    //     phoneNumber: "(214)-777-7777",
+    //     dob: "11-23-1978",
+    //     isDeleted: false,
+    //   },
+    //   {
+    //     id: 19,
+    //     firstName: "Charlie",
+    //     lastName: "Davis",
+    //     email: "charlie.davis@gmail.com",
+    //     address: "Charlie's townhouse",
+    //     phoneNumber: "(214)-777-7777",
+    //     dob: "11-23-1978",
+    //     isDeleted: false,
+    //   },
+    //   {
+    //     id: 20,
+    //     firstName: "Charlie",
+    //     lastName: "Davis",
+    //     email: "charlie.davis@gmail.com",
+    //     address: "Charlie's townhouse",
+    //     phoneNumber: "(214)-777-7777",
+    //     dob: "11-23-1978",
+    //     isDeleted: false,
+    //   },
+    //   {
+    //     id: 21,
+    //     firstName: "Charlie",
+    //     lastName: "Davis",
+    //     email: "charlie.davis@gmail.com",
+    //     address: "Charlie's townhouse",
+    //     phoneNumber: "(214)-777-7777",
+    //     dob: "11-23-1978",
+    //     isDeleted: false,
+    //   },
+    // ]
   );
 
   const handleForward = () => {
@@ -365,14 +365,14 @@ const page = () => {
     }
   };
 
-  // useEffect(() => {
-  //   const loadAll = async () => {
-  //     setSeedData(await FetchAllUsers())
-  //     console.log(await FetchAllUsers())
+  useEffect(() => {
+    const loadAll = async () => {
+      setSeedData(await FetchAllUsers())
+      console.log(await FetchAllUsers())
 
-  //   }
-  //   loadAll();
-  // }, [])
+    }
+    loadAll();
+  }, [])
 
   const [form, setForm] = useState<any>({
     id: 0,
@@ -454,14 +454,14 @@ const page = () => {
             )
             await softDeleteUser(
               {
-                id: currentStudent?.id,
-                firstName: currentStudent?.firstName,
-                lastName: currentStudent?.lastName,
-                address: currentStudent?.address,
-                phoneNumber: currentStudent?.phoneNumber,
-                dob: currentStudent?.dob,
-                email: currentStudent?.email,
-                isDeleted: currentStudent?.isDeleted
+                id: form?.id,
+                firstName: form?.firstName,
+                lastName: form?.lastName,
+                address: form?.address,
+                phoneNumber: form?.phoneNumber,
+                dob: form?.dob,
+                email: form?.email,
+                isDeleted: form?.isDeleted
               }
             )
           }}>update</button>
@@ -508,16 +508,16 @@ const page = () => {
             <option value="address">address</option>
           </select>
         </div>
-        <div className='min-h-[510px]'>
+        <div className='min-h-[510px] w-full'>
           <table className=' border border-black '>
-            <thead className='text-white text-2xl bg-[#23527C] gap-2  '>
+            <thead className='text-white text-[20px] bg-[#23527C] gap-2  '>
               <tr>
-                <th className=' py-2 text-start font-normal w-48' onClick={() => { SortByAlpha("firstName") }}>First Name</th>
-                <th className=' text-start  font-normal w-48' onClick={() => { SortByAlpha("firstName") }}>Last Name</th>
-                <th className=' text-start  font-normal w-48' onClick={() => { SortByDate() }}>Date of Birth</th>
-                <th className=' text-start  font-normal w-48' >Address</th>
-                <th className=' text-start  font-normal w-80' onClick={() => { SortByAlpha("email") }}>Email</th>
-                <th className=' text-start  font-normal w-48'>Phone Number</th>
+                <th className=' py-2 text-start font-normal  overflow-hidden px-2  ' onClick={() => { SortByAlpha("firstName") }}>First Name</th>
+                <th className=' text-start  font-normal  overflow-hidden px-2 ' onClick={() => { SortByAlpha("firstName") }}>Last Name</th>
+                <th className=' text-start  font-normal  overflow-hidden px-2 ' onClick={() => { SortByDate() }}>Date of Birth</th>
+                <th className=' text-start  font-normal  overflow-hidden px-2 ' >Address</th>
+                <th className=' text-start  font-normal  overflow-hidden px-2' onClick={() => { SortByAlpha("email") }}>Email</th>
+                <th className=' text-start  font-normal  overflow-hidden px-2 '>Phone Number</th>
                 <th className=' font-normal w-20'></th>
               </tr>
             </thead>
@@ -532,13 +532,13 @@ const page = () => {
                     let hide = ""
                     return <tr key={idx} className={` h-[45px] ${idx % 2 == 0 ? "" : "bg-white"}  ${hide}`}>
 
-                      <td className=' px-2 w-48'> {student.firstName ? student.firstName : "N/A"} </td>
-                      <td className=' px-2 w-48'>{student.lastName ? student.lastName : "N/A"}  </td>
-                      <td className=' px-2 w-48'>  {student?.dob ? student?.dob : "N/A"} </td>
-                      <td className=' px-2 w-48'>{student?.address ? student?.address : "N/A"} </td>
-                      <td className='   px-2 w-80'>{student?.email ? student?.email : "N/A"} </td>
-                      <td className=' px-2 w-48'>{student?.phoneNumber ? student?.phoneNumber : "N/A"} </td>
-                      <td className='flex flex-row items-center p-2 gap-2'>
+                      <td className='  overflow-hidden px-2'> {student.firstName ? student.firstName : "N/A"} </td>
+                      <td className='  overflow-hidden px-2'>{student.lastName ? student.lastName : "N/A"}  </td>
+                      <td className='  overflow-hidden px-2'>  {student?.dob ? student?.dob : "N/A"} </td>
+                      <td className='  overflow-hidden px-2'>{student?.address ? student?.address : "N/A"} </td>
+                      <td className='  overflow-hidden px-2  '>{student?.email ? student?.email : "N/A"} </td>
+                      <td className='  overflow-hidden px-2'>{student?.phoneNumber ? student?.phoneNumber : "N/A"} </td>
+                      <td className=' flex flex-row items-center p-2 gap-2'>
                         <Image
                           onClick={() => {
                             setCurrentStudent(student)
@@ -574,10 +574,13 @@ const page = () => {
               }
             </tbody>
           </table>
+
+
+
         </div>
 
-        <div className=' mr-auto mt-auto'>
-          <button onClick={handleBack} >back</button>
+        <div className=' '>
+          <button onClick={handleBack} >Back</button>
           <button onClick={handleForward}>forward</button>
         </div>
 
