@@ -108,10 +108,10 @@ export default function Home() {
       }
 
       // Logic For Forgot Password Page
-       else if (isForgotPasswordPage && !loginErrorForgetPassword) {
+      else if (isForgotPasswordPage && !loginErrorForgetPassword) {
         if (loginData.oldPassword) {
           try {
-            const data: IToken = await LoginAPI({email: loginData.email, password: loginData.oldPassword});
+            const data: IToken = await LoginAPI({ email: loginData.email, password: loginData.oldPassword });
 
             if (data.token !== undefined || data.token !== null && loginData.oldPassword !== loginData.password) {
               try {
@@ -173,11 +173,11 @@ export default function Home() {
   };
 
   const handleShowOldPassword = () => {
-     setShowOldPassword(!showOldPassword);
+    setShowOldPassword(!showOldPassword);
   };
 
   const handleShowConfirmPassword = () => {
-     setShowConfirmPassword(!showConfirmPassword);
+    setShowConfirmPassword(!showConfirmPassword);
   };
 
   const formReset = () => {
@@ -229,13 +229,13 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen w-full bg-[#23527C]">
+    <div className="min-h-screen w-full bg-[#23527C] flex flex-col justify-between">
       <main className="flex items-center justify-center">
         <ToastContainer />
-          <div className="flex items-center flex-col">
-            <img className="w-[230px] p-5 mb-4" src="/WA-Logo.png" alt="William's Act Logo" />
-            <div className="bg-white px-6 py-4 sm:min-w-[350px] sm:max-w-[538px] max-w-[288px] mb-12">
-              <h1 className="text-center text-[34px] text-black mb-6 robotoCondensed font-light ">{!isForgotPasswordPage ? "USER" : ""} <strong className="font-bold">{isLoginPage ? "LOGIN" : isForgotPasswordPage ? "RESET PASSWORD" : "SIGN UP"}</strong></h1>
+        <div className="flex items-center flex-col">
+          <img className="w-[230px] p-5 mb-4" src="/WA-Logo.png" alt="William's Act Logo" />
+          <div className="bg-white px-6 py-4 sm:min-w-[350px] sm:max-w-[538px] max-w-[288px] mb-12">
+            <h1 className="text-center text-[34px] text-black mb-6 robotoCondensed font-light ">{!isForgotPasswordPage ? "USER" : ""} <strong className="font-bold">{isLoginPage ? "LOGIN" : isForgotPasswordPage ? "RESET PASSWORD" : "SIGN UP"}</strong></h1>
 
             <form onSubmit={handleSubmit} className="openSans font-semibold">
               <div className="gap-x-6 gap-y-4 ">
@@ -256,13 +256,13 @@ export default function Home() {
 
                 </div>
 
-                  {isForgotPasswordPage && (
-                    <div className='flex flex-col relative'>
-                      <p className='text-red-600 absolute top-0 right-1'>*</p>
-                      <img className="hover:cursor-pointer absolute top-3 right-5 aspect-square w-6" src={showOldPassword ? "/eye.svg" : "/eye-slash.svg"} alt="eyeball" onClick={handleShowOldPassword} />
-                      <input placeholder="Old Password" type={showOldPassword ? "text" : "password"} id="confirmPassword" name="oldPassword" className={`${(isSubmitted && loginData.oldPassword === '') || loginErrorForgetPassword ? 'border border-red-500 ' : ''} text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12 px-12`} value={loginData.oldPassword} onChange={updateForm} />
-                    </div>
-                  )}
+                {isForgotPasswordPage && (
+                  <div className='flex flex-col relative'>
+                    <p className='text-red-600 absolute top-0 right-1'>*</p>
+                    <img className="hover:cursor-pointer absolute top-3 right-5 aspect-square w-6" src={showOldPassword ? "/eye.svg" : "/eye-slash.svg"} alt="eyeball" onClick={handleShowOldPassword} />
+                    <input placeholder="Old Password" type={showOldPassword ? "text" : "password"} id="confirmPassword" name="oldPassword" className={`${(isSubmitted && loginData.oldPassword === '') || loginErrorForgetPassword ? 'border border-red-500 ' : ''} text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12 px-12`} value={loginData.oldPassword} onChange={updateForm} />
+                  </div>
+                )}
 
                 <div className='flex flex-col relative'>
 
@@ -295,7 +295,7 @@ export default function Home() {
                     }}
                   />}
 
-                    {/* Password Input Field for Login Page */}
+                  {/* Password Input Field for Login Page */}
                   {isLoginPage && !isForgotPasswordPage && <input placeholder={isForgotPasswordPage ? "New Password" : "Password"} type={showPassword ? "text" : "password"} id="password" name="password" className={`${isLoginPage ? loginError && loginData.password.length === 0 ? "border border-red-500" : "" : (isSubmitted && loginData.password === '') ? 'border border-red-500' : ''} text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12 px-12`} value={loginData.password}
                     onFocus={showPasswordToolTipTrue}
                     onBlur={showPasswordToolTipFalse}
@@ -316,28 +316,28 @@ export default function Home() {
                   <input placeholder="Re-Type Password" type={showConfirmPassword ? "text" : "password"} id="confirmPassword" name="confirmPassword" className={`${(isSubmitted && loginData.password === '') || (loginData.password !== loginData.confirmPassword) || newPasswordBooleanError || !/^(?=.*[A-Z])(?=.*\d)(?=.*[?@!#$%^&*])(?!.*[^A-Za-z\d?@!#$%^&*]).{15,}$/.test(loginData.password) && loginData.password.length > 0 ? 'border border-red-500' : ''} text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12 px-12`} value={loginData.confirmPassword} onChange={updateForm} onFocus={showPasswordToolTipTrue} onBlur={showPasswordToolTipFalse} />
                 </div>}
 
-                  {!isLoginPage && !isForgotPasswordPage && (
-                    <select onChange={(e) => handleSelect(e)} className="w-full text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12">
-                      <option value="user">User</option>
-                      <option value="admin">Admin</option>
-                    </select>
-                  )}
+                {!isLoginPage && !isForgotPasswordPage && (
+                  <select onChange={(e) => handleSelect(e)} className="w-full text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12">
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                  </select>
+                )}
 
-                  <div className="flex justify-between">
-                    {!isLoginPage && <p className="text-sm openSans hover:cursor-pointer text-[#DD8A3E]" onClick={goLogin}>Login</p>}
-                    {isLoginPage && !isForgotPasswordPage && <p className="text-sm openSans hover:cursor-pointer text-[#DD8A3E]" onClick={goSignUp}>Sign Up</p>}
-                    {!isForgotPasswordPage && <p className="text-sm openSans hover:cursor-pointer text-[#DD8A3E]" onClick={goForgotPassword}>Forgot Password</p>}
-                  </div>
+                <div className="flex justify-between">
+                  {!isLoginPage && <p className="text-sm openSans hover:cursor-pointer text-[#DD8A3E]" onClick={goLogin}>Login</p>}
+                  {isLoginPage && !isForgotPasswordPage && <p className="text-sm openSans hover:cursor-pointer text-[#DD8A3E]" onClick={goSignUp}>Sign Up</p>}
+                  {!isForgotPasswordPage && <p className="text-sm openSans hover:cursor-pointer text-[#DD8A3E]" onClick={goForgotPassword}>Forgot Password</p>}
                 </div>
+              </div>
 
-                <div className="flex justify-center mt-6 w-full flex-col">
-                  <button type="submit" className="bg-[#DD8A3E] hover:brightness-90 p-4 w-full text-white text-sm font-bold tracking-wide">{!isLoginPage ? isForgotPasswordPage ? "Reset Password" : "CreateAccount" : "Login"}</button>
-                  <p className="text-red-600 text-xs text-end pt-1 openSans">* fields required</p>
-                </div>
-              </form>
-            </div>
+              <div className="flex justify-center mt-6 w-full flex-col">
+                <button type="submit" className="bg-[#DD8A3E] hover:brightness-90 p-4 w-full text-white text-sm font-bold tracking-wide">{!isLoginPage ? isForgotPasswordPage ? "Reset Password" : "CreateAccount" : "Login"}</button>
+                <p className="text-red-600 text-xs text-end pt-1 openSans">* fields required</p>
+              </div>
+            </form>
           </div>
-        
+        </div>
+
       </main>
       <FooterComponent />
     </div>
