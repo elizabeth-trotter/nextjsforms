@@ -82,8 +82,7 @@ const ManagementPage = () => {
     };
 
     const CheckToken = () => {
-        const data = JSON.parse(sessionStorage.getItem("WA-SessionStorage") || "{}")
-
+        
         let result = false;
 
         if (data.token != null) {
