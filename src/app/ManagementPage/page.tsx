@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useTable, useSortBy, Column, Row } from 'react-table';
 import EditUserModal from '@/components/EditUserModal/EditUserModal';
-import { IForm, IToken } from '@/Interfaces/Interface';
+import { IForm } from '@/Interfaces/Interface';
 import { notFound, useRouter } from 'next/navigation';
 
 const ManagementPage = () => {
@@ -24,7 +24,7 @@ const ManagementPage = () => {
     };
 
     useEffect(() => {
-        fetchUsers().then(setUsers).catch(console.error);
+        fetchUsers().catch(console.error);
         const session = sessionStorage.getItem("WA-SessionStorage");
         setData(session ? JSON.parse(session) : null)
     }, []);
@@ -84,7 +84,6 @@ const ManagementPage = () => {
     };
 
     const CheckToken = () => {
-
         let result = false;
 
         if (data != null && data.token != null) {
