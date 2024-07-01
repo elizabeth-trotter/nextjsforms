@@ -1,9 +1,11 @@
 "use client";
+import { IToken } from "@/Interfaces/Interface";
 import FooterComponent from "@/components/FooterComponent/page";
 import NavbarComponent from "@/components/NavbarComponent";
 import { useAppContext } from "@/context/Context";
 import { Button } from "flowbite-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import InputMask from "react-input-mask";
 
@@ -28,7 +30,7 @@ interface IUpdateStudent {
 
 const StudentDirectoryPage = () => {
   const [modal, setModal] = useState(false);
-  const [data, setData]=useState<any>(null);
+  const [data, setData] = useState<any>(null);
   const [editModal, setEditModal] = useState(false);
   const [search, setSearch] = useState<string>("");
   const [toggleABC, setToggleABC] = useState(true);
@@ -41,6 +43,8 @@ const StudentDirectoryPage = () => {
   const [hideEditModel, setEditHideModel] = useState("hidden");
 
   const [seedData, setSeedData] = useState<IStudentData[] | any>();
+
+  const router = useRouter()
 
   const handleForward = () => {
     if (seedData.length > endCut) {
@@ -161,15 +165,22 @@ const StudentDirectoryPage = () => {
   };
 
   useEffect(() => {
-    const loadAll = async () => {
-      const session = sessionStorage.getItem("WA-SessionStorage");
-      setData(session ? JSON.parse(session): null);
+    const session = sessionStorage.getItem("WA-SessionStorage");
+    setData(session ? JSON.parse(session) : null);
+    CheckToken(session ? JSON.parse(session) : null)
 
+    const loadAll = async () => {
       setSeedData(await FetchAllUsers());
       console.log(await FetchAllUsers());
     };
     loadAll();
   }, []);
+
+  const CheckToken = (data: IToken | null) => {
+    if ((data !== null && data.token === null) || data === null) {
+      router.push('/')
+    }
+  }
 
   const [form, setForm] = useState<any>({
     id: 0,
@@ -183,7 +194,7 @@ const StudentDirectoryPage = () => {
   });
 
   const updateForm = (e: React.ChangeEvent<HTMLInputElement>) => {
-  
+
 
 
     //passing through its current values, and updating
@@ -251,12 +262,11 @@ const StudentDirectoryPage = () => {
               </label>
               <div className="flex flex-col relative">
                 <InputMask
-                  className={`${
-                    /\([0-9]{3}\)-[0-9]{3}-[0-9]{4}/.test(form?.phoneNumber) ===
+                  className={`${/\([0-9]{3}\)-[0-9]{3}-[0-9]{4}/.test(form?.phoneNumber) ===
                       false && form?.phoneNumber.length > 0
                       ? "border border-red-500"
                       : ""
-                  } border w-full text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12 px-12`}
+                    } border w-full text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12 px-12`}
                   placeholder="(xxx)-xxx-xxxx"
                   autoComplete="tel"
                   mask="(999)-999-9999"
@@ -329,7 +339,7 @@ const StudentDirectoryPage = () => {
         </div>
       </div>
 
-    
+
 
       <div
         className={`flex justify-center items-center bg-[#00000089] h-screen w-screen fixed  ${hideModel}`}
@@ -337,26 +347,26 @@ const StudentDirectoryPage = () => {
         <div className={`bg-white p-5`}>
           <p className="text-center pb-5">Are you sure you want to remove {currentStudent?.firstName}</p>
           <div className="flex justify-evenly">
-          <button className="text-white w-[100px] h-[50px] font-semibold  bg-[#737375]" onClick={() => setHideModel("hidden")}>CANCEL</button>
-          <button
-          className="text-white w-[100px] h-[50px] font-semibold  bg-[#DD8A3E]"
-            onClick={async () => {
-              setHideModel("hidden");
-              removeStudentWithoutRefetching(currentStudent?.id);
-              await softDeleteUser({
-                id: currentStudent?.id,
-                firstName: currentStudent?.firstName,
-                lastName: currentStudent?.lastName,
-                address: currentStudent?.address,
-                phoneNumber: currentStudent?.phoneNumber,
-                dob: currentStudent?.dob,
-                email: currentStudent?.email,
-                isDeleted: true,
-              });
-            }}
-          >
-            DELETE
-          </button>
+            <button className="text-white w-[100px] h-[50px] font-semibold  bg-[#737375]" onClick={() => setHideModel("hidden")}>CANCEL</button>
+            <button
+              className="text-white w-[100px] h-[50px] font-semibold  bg-[#DD8A3E]"
+              onClick={async () => {
+                setHideModel("hidden");
+                removeStudentWithoutRefetching(currentStudent?.id);
+                await softDeleteUser({
+                  id: currentStudent?.id,
+                  firstName: currentStudent?.firstName,
+                  lastName: currentStudent?.lastName,
+                  address: currentStudent?.address,
+                  phoneNumber: currentStudent?.phoneNumber,
+                  dob: currentStudent?.dob,
+                  email: currentStudent?.email,
+                  isDeleted: true,
+                });
+              }}
+            >
+              DELETE
+            </button>
           </div>
         </div>
       </div>
@@ -445,9 +455,8 @@ const StudentDirectoryPage = () => {
                       return (
                         <tr
                           key={idx}
-                          className={` h-[45px] ${
-                            idx % 2 == 0 ? "" : "bg-white"
-                          }  ${hide}`}
+                          className={` h-[45px] ${idx % 2 == 0 ? "" : "bg-white"
+                            }  ${hide}`}
                         >
                           <td className="  overflow-hidden px-2">
                             {" "}
@@ -471,7 +480,7 @@ const StudentDirectoryPage = () => {
                               ? student?.phoneNumber
                               : "N/A"}{" "}
                           </td>
-                        {data && data.isAdmin && <td className=" flex flex-row items-center p-2 gap-2">
+                          {data && data.isAdmin && <td className=" flex flex-row items-center p-2 gap-2">
                             <Image
                               onClick={() => {
                                 setCurrentStudent(student);

@@ -34,15 +34,15 @@ const NavbarComponent = (props: { admin: boolean }) => {
     // </nav>
     <Navbar className='bg-[#737375] p-0'>
 
-      <Navbar.Brand className='p-0 lg:-ms-20 -ms-0'>
+      <Navbar.Brand className='p-0 '>
         <img className="w-20 p-4" src="/WA-Logo.png" alt="William's Act Logo" />
       </Navbar.Brand>
 
       <Navbar.Toggle className='bg-white me-2' />
 
-      <Navbar.Collapse className='xl:-me-16 -me-3 p-0'>
-        <Navbar.Link className={`${!props.admin ? 'hidden' : 'block'} hover:cursor-pointer font-bold text-white flex items-center freakingFlowbite`} onClick={() => router.push('/ManagementPage')}>
-          <p className='pt-2'>
+      <Navbar.Collapse className='p-0'>
+        <Navbar.Link className='hover:cursor-pointer font-bold text-white flex items-center freakingFlowbite' onClick={() => router.push('/ManagementPage')}>
+          <p className={`${!props.admin ? 'hidden' : 'block'} pt-2 `}>
             User Management
           </p>
         </Navbar.Link>
@@ -51,7 +51,7 @@ const NavbarComponent = (props: { admin: boolean }) => {
             Student Directory
           </p>
         </Navbar.Link>
-        <Navbar.Link onClick={() => router.push('/UpdateProfilePage')} className='hover:cursor-pointer text-white flex items-center freakingFlowbite'>
+        <Navbar.Link onClick={() => router.push('/AddFormPage')} className='hover:cursor-pointer text-white flex items-center freakingFlowbite'>
           <p className='pt-2'>
             Submit Form
           </p>

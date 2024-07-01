@@ -100,11 +100,7 @@ export default function Home() {
           if (data.token !== undefined || data.token !== null) {
             toast("You've logged in!", { type: "success", className: " !grid !grid-cols-[95%_5%] text-center" });
 
-            // pageContext.setAdmin(data.isAdmin);
-            // pageContext.setToken(data.token);
-            // pageContext.setId(data.id);
             sessionStorage.setItem("WA-SessionStorage", JSON.stringify(data));
-
             router.push('/AddFormPage')
           }
         } catch (error) {
@@ -239,12 +235,12 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen w-full bg-[#23527C] flex flex-col justify-between">
+    <div className="min-h-screen w-full bg-[#23527C] flex flex-col justify-between pt-10">
       <main className="flex items-center justify-center">
         <ToastContainer />
         <div className="flex items-center flex-col">
           <img className="w-[230px] p-5 mb-4" src="/WA-Logo.png" alt="William's Act Logo" />
-          <div className="bg-white px-6 py-4 sm:min-w-[350px] sm:max-w-[538px] max-w-[288px] mb-12">
+          <div className="bg-white px-6 py-4 sm:min-w-[350px] sm:max-w-[538px] max-w-[288px] mb-16">
             <h1 className="text-center text-[34px] text-black mb-6 robotoCondensed font-light ">{!isForgotPasswordPage ? "USER" : ""} <strong className="font-bold">{isLoginPage ? "LOGIN" : isForgotPasswordPage ? "RESET PASSWORD" : "SIGN UP"}</strong></h1>
 
             <form onSubmit={handleSubmit} className="openSans font-semibold">

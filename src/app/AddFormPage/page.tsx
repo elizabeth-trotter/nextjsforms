@@ -1,17 +1,20 @@
 'use client'
 
 
+import { IToken } from "@/Interfaces/Interface";
+import FooterComponent from "@/components/FooterComponent/page";
 import NavbarComponent from "@/components/NavbarComponent";
 import { useAppContext } from "@/context/Context";
 import { AddStudentAPI } from "@/utils/DataServices/DataService";
+import { notFound, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import InputMask from 'react-input-mask';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const AddFormPage = () => {
-    const pageContext = useAppContext();
-
+    const [data, setData] = useState<any>(null);
+    const router = useRouter();
 
     const [formData, setFormData] = useState({
         id: 0,
@@ -27,15 +30,24 @@ const AddFormPage = () => {
     const [maxDate, setMaxDate] = useState('');
 
     useEffect(() => {
+        const session = sessionStorage.getItem('WA-SessionStorage');
+
+        setData(session ? JSON.parse(session) : null);
+
+        CheckToken(session ? JSON.parse(session) : null);
 
         const today = new Date();
         const year = today.getFullYear();
         const month = String(today.getMonth() + 1).padStart(2, '0');
         const day = String(today.getDate()).padStart(2, '0');
         setMaxDate(`${year}-${month}-${day}`);
-        console.log(sessionStorage.getItem("WA-SessionStorage"));
-
     }, []);
+
+    const CheckToken = (data: IToken | null) => {
+        if ((data !== null && data.token === null) || data === null) {
+            router.push('/')
+        }
+    }
 
     const updateForm = (e: React.ChangeEvent<HTMLInputElement>) => {
         // Pass through current values and update
@@ -89,9 +101,9 @@ const AddFormPage = () => {
 
     return (
         <div>
-            <NavbarComponent admin={pageContext.admin} />
+            <NavbarComponent admin={data && data.isAdmin} />
 
-            <main className="min-h-screen w-full bg-[#23527C] flex items-center justify-center">
+            <main className="py-40 w-full bg-[#23527C] flex items-center justify-center">
                 <ToastContainer />
 
                 <div className="px-6 py-4">
@@ -160,8 +172,9 @@ const AddFormPage = () => {
                     </div>
                 </div>
 
-
             </main>
+
+            <FooterComponent />
         </div>
     )
 }

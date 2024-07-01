@@ -1,9 +1,10 @@
 'use client'
-import React, { useEffect, useState, useMemo } from 'react'; 
+import React, { useEffect, useState, useMemo } from 'react';
 import { useTable, useSortBy, Column, Row } from 'react-table';
 import EditUserModal from '@/components/EditUserModal/EditUserModal'; // EditUserModal component
-import { IForm } from '@/Interfaces/Interface'; 
+import { IForm, IToken } from '@/Interfaces/Interface';
 import { notFound, useRouter } from 'next/navigation';
+import NavbarComponent from '@/components/NavbarComponent';
 
 const ManagementPage = () => {
     // State to store user data
@@ -29,9 +30,11 @@ const ManagementPage = () => {
 
     // useEffect hook to fetch users and session data when the component mounts
     useEffect(() => {
-        fetchUsers().catch(console.error); // Fetch users and handle any errors
         const session = sessionStorage.getItem("WA-SessionStorage"); // Get session data from sessionStorage
         setData(session ? JSON.parse(session) : null); // Parse and set session data
+        CheckToken(session ? JSON.parse(session) : null);
+        
+        fetchUsers().catch(console.error); // Fetch users and handle any errors
     }, []);
 
     // Function to handle saving a user
@@ -95,76 +98,66 @@ const ManagementPage = () => {
     };
 
     // Function to check if the user has a valid token
-    const CheckToken = () => {
-        let result = false;
-
-        if (data != null && data.token != null) {
-            result = true; // Token is valid
+    const CheckToken = (data: IToken | null) => {
+        if ((data != null && data.token === null || !data?.isAdmin) || data === null) {
+            return notFound();
         }
-
-        return result;
-    };
-
-    // If the user does not have a valid token or is not an admin, redirect or show not found
-    if (CheckToken()) {
-        if (data != null && !data.isAdmin) {
-            return notFound(); // Show not found if the user is not an admin
-        }
-    } else {
-        router.push('/'); // Redirect to home if the token is invalid
     }
 
     return (
-        <div className="container mx-auto p-4">
-            <h1 className="text-2xl font-bold mb-4">User Management</h1>
-            <table {...getTableProps()} className="min-w-full bg-white border border-gray-200">
-                <thead className="bg-gray-100">
-                    {headerGroups.map(headerGroup => (
-                        <tr {...headerGroup.getHeaderGroupProps()} key={headerGroup.id}>
-                            {headerGroup.headers.map(column => (
-                                <th
-                                    {...column.getHeaderProps(column.getSortByToggleProps())}
-                                    key={column.id}
-                                    className="px-4 py-2 border-b border-gray-200 text-left text-gray-600 text-sm font-medium"
-                                >
-                                    {column.render('Header')}
-                                    <span>
-                                        {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
-                                    </span>
-                                </th>
-                            ))}
-                        </tr>
-                    ))}
-                </thead>
-                <tbody {...getTableBodyProps()}>
-                    {rows.map(row => {
-                        prepareRow(row);
-                        return (
-                            <tr {...row.getRowProps()} key={row.id} className="hover:bg-gray-50">
-                                {row.cells.map(cell => (
-                                    <td
-                                        {...cell.getCellProps()}
-                                        key={cell.column.id}
-                                        className="px-4 py-2 border-b border-gray-200 text-gray-700"
+        <>
+            <NavbarComponent admin={data && data.isAdmin} />
+            <div className="container mx-auto p-4">
+                <h1 className="text-2xl font-bold mb-4">User Management</h1>
+                <table {...getTableProps()} className="min-w-full bg-white border border-gray-200">
+                    <thead className="bg-gray-100">
+                        {headerGroups.map(headerGroup => (
+                            <tr {...headerGroup.getHeaderGroupProps()} key={headerGroup.id}>
+                                {headerGroup.headers.map(column => (
+                                    <th
+                                        {...column.getHeaderProps(column.getSortByToggleProps())}
+                                        key={column.id}
+                                        className="px-4 py-2 border-b border-gray-200 text-left text-gray-600 text-sm font-medium"
                                     >
-                                        {cell.render('Cell')}
-                                    </td>
+                                        {column.render('Header')}
+                                        <span>
+                                            {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
+                                        </span>
+                                    </th>
                                 ))}
                             </tr>
-                        );
-                    })}
-                </tbody>
-            </table>
-            {currentUser && (
-                <EditUserModal
-                    user={currentUser}
-                    isOpen={isEditModalOpen}
-                    onClose={closeEditModal}
-                    onSave={handleUserSave}
-                />
-            )}
-        </div>
+                        ))}
+                    </thead>
+                    <tbody {...getTableBodyProps()}>
+                        {rows.map(row => {
+                            prepareRow(row);
+                            return (
+                                <tr {...row.getRowProps()} key={row.id} className="hover:bg-gray-50">
+                                    {row.cells.map(cell => (
+                                        <td
+                                            {...cell.getCellProps()}
+                                            key={cell.column.id}
+                                            className="px-4 py-2 border-b border-gray-200 text-gray-700"
+                                        >
+                                            {cell.render('Cell')}
+                                        </td>
+                                    ))}
+                                </tr>
+                            );
+                        })}
+                    </tbody>
+                </table>
+                {currentUser && (
+                    <EditUserModal
+                        user={currentUser}
+                        isOpen={isEditModalOpen}
+                        onClose={closeEditModal}
+                        onSave={handleUserSave}
+                    />
+                )}
+            </div>
+        </>
     );
-};
+}
 
 export default ManagementPage;
