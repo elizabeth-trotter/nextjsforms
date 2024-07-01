@@ -331,7 +331,7 @@ export default function Home() {
               </div>
 
               <div className="flex justify-center mt-6 w-full flex-col">
-                <button type="submit" className="bg-[#DD8A3E] hover:brightness-90 p-4 w-full text-white text-sm font-bold tracking-wide">{!isLoginPage ? isForgotPasswordPage ? "Reset Password" : "CreateAccount" : "Login"}</button>
+                <button type="submit" className="bg-[#DD8A3E] hover:brightness-90 p-4 w-full text-white text-sm font-bold tracking-wide">{!isLoginPage ? isForgotPasswordPage ? "Reset Password" : "Create Account" : "Login"}</button>
                 <p className="text-red-600 text-xs text-end pt-1 openSans">* fields required</p>
               </div>
             </form>
