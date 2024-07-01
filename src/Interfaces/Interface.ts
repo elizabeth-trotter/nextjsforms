@@ -1,11 +1,16 @@
 export interface ICreateAccount {
+    id: number,
     email: string,
-    password: string
+    password: string,
+    firstname: string,
+    lastname: string,
+    dob: string,
+    isAdmin: boolean,
 }
 
 export interface IForm {
-    firstName: string;
-    lastName: string;
+    firstname: string;
+    lastname: string;
     address: string;
     phonenumber: string;
     email: string;

@@ -18,8 +18,12 @@ export default function Home() {
   const router = useRouter();
 
   const [loginData, setLoginData] = useState({
+    id: 0,
     email: '',
     password: '',
+    firstname: '',
+    lastname: '',
+    dob: '',
     confirmPassword: '',
     isAdmin: false,
     oldPassword: ''
@@ -182,8 +186,12 @@ export default function Home() {
 
   const formReset = () => {
     setLoginData({
+      id: 0,
       email: '',
       password: '',
+      firstname: '',
+      lastname: '',
+      dob: '',
       confirmPassword: '',
       isAdmin: false,
       oldPassword: ''
@@ -192,8 +200,12 @@ export default function Home() {
 
   const resetEverything = () => {
     setLoginData({
+      id: 0,
       email: '',
       password: '',
+      firstname: '',
+      lastname: '',
+      dob: '',
       confirmPassword: '',
       isAdmin: false,
       oldPassword: ''
