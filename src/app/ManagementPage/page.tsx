@@ -23,8 +23,8 @@ const ManagementPage = () => {
 
     const columns: Column<IForm>[] = useMemo(() => [
         { Header: 'Email', accessor: 'email' },
-        { Header: 'First Name', accessor: 'firstname' },
-        { Header: 'Last Name', accessor: 'lastname' },
+        { Header: 'First Name', accessor: 'firstName' },
+        { Header: 'Last Name', accessor: 'lastName' },
         { Header: 'Date of Birth', accessor: 'dob' },
         // { Header: 'Address', accessor: 'address' },
         // { Header: 'Phone Number', accessor: 'phonenumber' },
