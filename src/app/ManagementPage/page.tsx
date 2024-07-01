@@ -2,16 +2,15 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useTable, useSortBy, Column, Row } from 'react-table';
 import EditUserModal from '@/components/EditUserModal/EditUserModal';
-import { IForm } from '@/Interfaces/Interface';
+import { IForm, IToken } from '@/Interfaces/Interface';
 import { notFound, useRouter } from 'next/navigation';
-import { useAppContext } from '@/context/Context';
 
 const ManagementPage = () => {
     const [users, setUsers] = useState<IForm[]>([]);
     const [isEditModalOpen, setEditModalOpen] = useState(false);
     const [currentUser, setCurrentUser] = useState<IForm | null>(null);
 
-    const data = useAppContext()
+    const data = JSON.parse(sessionStorage.getItem("WA-SessionStorage") || "{}")
     const router = useRouter()
 
     const fetchUsers = async () => {
@@ -24,6 +23,7 @@ const ManagementPage = () => {
 
     useEffect(() => {
         fetchUsers().then(setUsers).catch(console.error);
+        console.log(sessionStorage.getItem("WA-SessionStorage"))
     }, []);
 
     const columns: Column<IForm>[] = useMemo(() => [
@@ -80,11 +80,11 @@ const ManagementPage = () => {
     };
 
     const CheckToken = () => {
-        const data = useAppContext()
+        const data = JSON.parse(sessionStorage.getItem("WA-SessionStorage") || "{}")
 
         let result = false;
 
-        if (data.admin != null) {
+        if (data.token != null) {
             result = true;
         }
 
@@ -92,7 +92,7 @@ const ManagementPage = () => {
     }
 
     if (CheckToken()) {
-        if (!data.admin) {
+        if (!data.isAdmin) {
             return notFound()
         }
     } else {

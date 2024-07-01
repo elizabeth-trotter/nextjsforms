@@ -105,7 +105,7 @@ export default function Home() {
             pageContext.setId(data.id);
             sessionStorage.setItem("WA-SessionStorage", JSON.stringify(data));
 
-            router.push('/UpdateProfilePage')
+            router.push('/AddFormPage')
           }
         } catch (error) {
           toast("Username or password is incorrect", { type: "warning", className: " !grid !grid-cols-[95%_5%] text-center" });

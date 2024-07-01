@@ -9,7 +9,7 @@ import InputMask from 'react-input-mask';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const UpdateProfilePage = () => {
+const AddFormPage = () => {
     const pageContext = useAppContext();
 
 
@@ -166,4 +166,4 @@ const UpdateProfilePage = () => {
     )
 }
 
-export default UpdateProfilePage
+export default AddFormPage

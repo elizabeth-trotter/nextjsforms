@@ -18,7 +18,7 @@ const NavbarComponent = (props: { admin: boolean }) => {
                 <p onClick={() => router.push('/StudentDirectoryPage')} className='hover:cursor-pointer'>
                     Student Directory
                 </p>
-                <p onClick={() => router.push('/UpdateProfilePage')} className='hover:cursor-pointer'>
+                <p onClick={() => router.push('/AddFormPage')} className='hover:cursor-pointer'>
                     Submit Form
                 </p>
 
