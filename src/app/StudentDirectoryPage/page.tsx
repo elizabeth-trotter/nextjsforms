@@ -27,7 +27,7 @@ interface IUpdateStudent {
 
 
 
-const page = () => {
+const StudentDirectoryPage = () => {
   const [modal, setModal] = useState(false)
   const [editModal, setEditModal] = useState(false)
   const [search, setSearch] = useState<string>("");
@@ -598,4 +598,4 @@ const page = () => {
   )
 }
 
-export default page
+export default StudentDirectoryPage
