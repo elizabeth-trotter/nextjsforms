@@ -82,10 +82,10 @@ const ManagementPage = () => {
     };
 
     const CheckToken = () => {
-        
+
         let result = false;
 
-        if (data.token != null) {
+        if (data != null && data.token != null) {
             result = true;
         }
 
@@ -93,7 +93,7 @@ const ManagementPage = () => {
     }
 
     if (CheckToken()) {
-        if (!data.isAdmin) {
+        if (data != null && !data.isAdmin) {
             return notFound()
         }
     } else {
