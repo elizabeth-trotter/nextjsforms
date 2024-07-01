@@ -1,6 +1,7 @@
 'use client'
 import FooterComponent from '@/components/FooterComponent/page'
 import NavbarComponent from '@/components/NavbarComponent'
+import { useAppContext } from '@/context/Context'
 import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
 
@@ -175,6 +176,7 @@ const StudentDirectoryPage = () => {
     console.log(form)
   }
 
+  const pageContext = useAppContext();
 
   return (
     <div>
@@ -277,7 +279,7 @@ const StudentDirectoryPage = () => {
       </div>
 
 
-      <NavbarComponent admin={true} />
+      <NavbarComponent admin={pageContext.admin} />
 
       <div className='flex flex-col items-center   w-fit mx-auto '>
 
