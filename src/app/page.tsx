@@ -21,9 +21,6 @@ export default function Home() {
     id: 0,
     email: '',
     password: '',
-    firstname: '',
-    lastname: '',
-    dob: '',
     confirmPassword: '',
     isAdmin: false,
     oldPassword: ''
@@ -117,7 +114,7 @@ export default function Home() {
           try {
             const data: IToken = await LoginAPI({ email: loginData.email, password: loginData.oldPassword });
 
-            if (data.token !== undefined || data.token !== null && loginData.oldPassword !== loginData.password) {
+            if ((data.token !== undefined || data.token !== null) && loginData.oldPassword !== loginData.password) {
               try {
                 const data = await ResetPasswordAPI(loginData.email, loginData.password)
                 toast("You've successfully reset your password!", { type: "success", className: " !grid !grid-cols-[95%_5%] text-center" });
@@ -189,9 +186,6 @@ export default function Home() {
       id: 0,
       email: '',
       password: '',
-      firstname: '',
-      lastname: '',
-      dob: '',
       confirmPassword: '',
       isAdmin: false,
       oldPassword: ''
@@ -203,9 +197,6 @@ export default function Home() {
       id: 0,
       email: '',
       password: '',
-      firstname: '',
-      lastname: '',
-      dob: '',
       confirmPassword: '',
       isAdmin: false,
       oldPassword: ''

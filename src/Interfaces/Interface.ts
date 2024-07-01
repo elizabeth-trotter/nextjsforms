@@ -2,9 +2,6 @@ export interface ICreateAccount {
     id: number,
     email: string,
     password: string,
-    firstname: string,
-    lastname: string,
-    dob: string,
     isAdmin: boolean,
 }
 
