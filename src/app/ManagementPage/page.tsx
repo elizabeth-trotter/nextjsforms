@@ -3,11 +3,16 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { useTable, useSortBy, Column, Row } from 'react-table';
 import EditUserModal from '@/components/EditUserModal/EditUserModal';
 import { IForm } from '@/Interfaces/Interface';
+import { notFound, useRouter } from 'next/navigation';
+import { useAppContext } from '@/context/Context';
 
 const ManagementPage = () => {
     const [users, setUsers] = useState<IForm[]>([]);
     const [isEditModalOpen, setEditModalOpen] = useState(false);
     const [currentUser, setCurrentUser] = useState<IForm | null>(null);
+
+    const data = useAppContext()
+    const router = useRouter()
 
     const fetchUsers = async () => {
         const response = await fetch('https://williamform.azurewebsites.net/User/GetAllUsers');
@@ -16,7 +21,7 @@ const ManagementPage = () => {
         }
         return await response.json();
     };
- 
+
     useEffect(() => {
         fetchUsers().then(setUsers).catch(console.error);
     }, []);
@@ -33,13 +38,13 @@ const ManagementPage = () => {
             id: 'actions',
             Cell: ({ row }: { row: Row<IForm> }) => (
                 <div className="flex space-x-2">
-                    <button 
+                    <button
                         className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700"
                         onClick={() => openEditModal(row.original)}
                     >
                         Edit
                     </button>
-                    <button 
+                    <button
                         className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-700"
                         onClick={() => console.log('Delete', row.original)}
                     >
@@ -74,6 +79,26 @@ const ManagementPage = () => {
         closeEditModal();
     };
 
+    const CheckToken = () => {
+        const data = useAppContext()
+
+        let result = false;
+
+        if (data.admin != null) {
+            result = true;
+        }
+
+        return result;
+    }
+
+    if (CheckToken()) {
+        if (!data.admin) {
+            return notFound()
+        }
+    } else {
+        router.push('/')
+    }
+
     return (
         <div className="container mx-auto p-4">
             <h1 className="text-2xl font-bold mb-4">User Management</h1>
@@ -82,9 +107,9 @@ const ManagementPage = () => {
                     {headerGroups.map(headerGroup => (
                         <tr {...headerGroup.getHeaderGroupProps()} key={headerGroup.id}>
                             {headerGroup.headers.map(column => (
-                                <th 
-                                    {...column.getHeaderProps(column.getSortByToggleProps())} 
-                                    key={column.id} 
+                                <th
+                                    {...column.getHeaderProps(column.getSortByToggleProps())}
+                                    key={column.id}
                                     className="px-4 py-2 border-b border-gray-200 text-left text-gray-600 text-sm font-medium"
                                 >
                                     {column.render('Header')}
@@ -102,9 +127,9 @@ const ManagementPage = () => {
                         return (
                             <tr {...row.getRowProps()} key={row.id} className="hover:bg-gray-50">
                                 {row.cells.map(cell => (
-                                    <td 
-                                        {...cell.getCellProps()} 
-                                        key={cell.column.id} 
+                                    <td
+                                        {...cell.getCellProps()}
+                                        key={cell.column.id}
                                         className="px-4 py-2 border-b border-gray-200 text-gray-700"
                                     >
                                         {cell.render('Cell')}
