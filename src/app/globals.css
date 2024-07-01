@@ -73,3 +73,11 @@ button[aria-disabled="true"] {
 .openSans {
   font-family: Open-Sans;
 }
+
+.freakingFlowbite:hover{
+  color: white !important;
+}
+
+.hoverBtn:hover{
+  background-color:#DD8A3E !important;
+}
