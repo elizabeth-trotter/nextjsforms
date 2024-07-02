@@ -54,15 +54,6 @@ const ManagementPage = () => {
 
     const router = useRouter();
 
-    // const fetchUsers = async () => {
-    //     const response = await fetch('https://williamform.azurewebsites.net/User/GetAllUsers');
-    //     if (!response.ok) {
-    //         throw new Error('Failed to fetch');
-    //     }
-    //     const usersData = await response.json();
-    //     setUsers(usersData);
-    // };
-
     const handleForward = () => {
         if (seedData.length > endCut) {
             setStartCut(startCut + 10);
@@ -374,10 +365,28 @@ const ManagementPage = () => {
                         <table className=' border border-black w-full'>
                             <thead className='text-white text-[20px] bg-[#23527C] gap-2  '>
                                 <tr>
-                                    <th className=' text-start  font-normal  overflow-hidden px-2 min-w-80' onClick={() => { SortByAlpha("email") }}>Email</th>
-                                    <th className=' py-2 text-start font-normal  overflow-hidden px-2 min-w-48 ' onClick={() => { SortByAlpha("firstName") }}>First Name</th>
-                                    <th className=' text-start  font-normal  overflow-hidden px-2 min-w-48' onClick={() => { SortByAlpha("lastName") }}>Last Name</th>
-                                    <th className=' text-start  font-normal  overflow-hidden px-2 min-w-48' onClick={() => { SortByDate() }}>Date of Birth</th>
+                                    <th className='py-2 text-[16px] text-start font-normal overflow-hidden px-2 min-w-48 ' onClick={() => { SortByAlpha("email") }}>
+                                        <div className="flex items-center gap-1 w-fit hover:cursor-pointer">
+                                            <p className="w-fit">Email</p>
+                                            <img src="/sortArrows.png" alt="Sort Arrows" className="h-[20px] w-[20px]" />
+                                        </div>
+                                    </th>
+                                    <th className=' py-2  text-[16px] text-start font-normal overflow-hidden px-2 min-w-48 ' onClick={() => { SortByAlpha("firstName") }}>
+                                        <div className="flex items-center gap-1 w-fit hover:cursor-pointer">
+                                            <p className="w-fit">First Name</p>
+                                            <img src="/sortArrows.png" alt="Sort Arrows" className="h-[20px] w-[20px]" />
+                                        </div>
+                                    </th>
+                                    <th className='py-2  text-[16px] text-start font-normal overflow-hidden px-2 min-w-48' onClick={() => { SortByAlpha("lastName") }}>
+                                        <div className="flex items-center gap-1 w-fit hover:cursor-pointer">
+                                            <p className="w-fit">Last Name</p>
+                                            <img src="/sortArrows.png" alt="Sort Arrows" className="h-[20px] w-[20px]" />
+                                        </div>
+                                    </th>
+                                    <th className='py-2  text-[16px] text-start font-normal overflow-hidden px-2 min-w-48 ' onClick={() => { SortByDate() }}>      <div className="flex items-center gap-1 w-fit hover:cursor-pointer">
+                                        <p className="w-fit">Date of Birth</p>
+                                        <img src="/sortArrows.png" alt="Sort Arrows" className="h-[20px] w-[20px]" />
+                                    </div></th>
                                     <th className=' font-normal min-w-20'></th>
                                 </tr>
                             </thead>
@@ -385,7 +394,7 @@ const ManagementPage = () => {
                             <tbody className=" ">
                                 {
                                     seedData && seedData.slice(startCut, endCut).map((student: IStudentData | any, idx: number) => {
-                                        
+
                                         if (student[chooseSearch]?.toLocaleLowerCase().includes(search.toLocaleLowerCase())) {
                                             let hide = ""
                                             return <tr key={idx} className={`h-[45px] ${idx % 2 == 0 ? "" : "bg-white"}  ${hide}`}>
@@ -411,11 +420,11 @@ const ManagementPage = () => {
                                                             setForm(student)
                                                             setCurrentStudent(student)
                                                             setEditHideModel("block")
-                                                            if(student.firstName === 'N/A'){
+                                                            if (student.firstName === 'N/A') {
                                                                 setResetFirst('')
-                                                            }if(student.Lastname === 'N/A'){
+                                                            } if (student.Lastname === 'N/A') {
                                                                 setResetLast('')
-                                                            }if(student.dob === 'N/A'){
+                                                            } if (student.dob === 'N/A') {
                                                                 setResetDob('')
                                                             }
                                                         }}
@@ -433,7 +442,7 @@ const ManagementPage = () => {
                                         }
 
                                     })
-                                    
+
                                 }
                             </tbody>
                         </table>

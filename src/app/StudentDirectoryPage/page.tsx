@@ -582,7 +582,7 @@ const StudentDirectoryPage = () => {
               onClick={handleForward}
               disabled={pageNumber === Math.ceil(seedData?.length / 10)}
             >
-              Forward
+              Next
             </button>
           </div>
         </div>
