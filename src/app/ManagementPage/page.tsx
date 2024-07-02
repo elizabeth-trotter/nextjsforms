@@ -46,6 +46,9 @@ const ManagementPage = () => {
     const [currentStudent, setCurrentStudent] = useState<IStudentData>();
     const [hideModel, setHideModel] = useState("hidden");
     const [hideEditModel, setEditHideModel] = useState("hidden");
+    const [resetFirst, setResetFirst] = useState('')
+    const [resetLast, setResetLast] = useState('')
+    const [resetDob, setResetDob] = useState('')
 
     const [seedData, setSeedData] = useState<IStudentData[] | any>();
 
@@ -221,7 +224,7 @@ const ManagementPage = () => {
                             <label className=" w-fill rounded font-normal text-slate-600">
                                 Email
                                 <input
-                                    autoComplete='on'
+                                    autoComplete='off'
                                     placeholder="First Name"
                                     type="text"
                                     name="email"
@@ -238,13 +241,13 @@ const ManagementPage = () => {
                         <label className=" w-fill rounded font-normal text-slate-600">
                             First Name
                             <input
-                                autoComplete='on'
+                                autoComplete='off'
                                 placeholder="First Name"
                                 type="text"
                                 name="firstName"
                                 maxLength={100}
                                 className="border w-full text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12 px-12"
-                                value={form?.firstName}
+                                value={form?.firstName ? form?.firstName : resetFirst}
                                 onChange={updateForm}
                             />
                         </label>
@@ -254,13 +257,13 @@ const ManagementPage = () => {
                         <label className=" w-fill rounded font-normal text-slate-600">
                             Last Name
                             <input
-                                autoComplete='on'
+                                autoComplete='off'
                                 placeholder="Last Name"
                                 type="text"
                                 name="lastName"
                                 maxLength={100}
                                 className="border w-full text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12 px-12"
-                                value={form?.lastName}
+                                value={form?.lastName ? form?.lastName : resetLast}
                                 onChange={updateForm}
                             />
                         </label>
@@ -270,12 +273,12 @@ const ManagementPage = () => {
                         <label className=" w-fill rounded font-normal text-slate-600">
                             Date of Birth
                             <input
-                                autoComplete='on'
+                                autoComplete='off'
                                 placeholder="Date of Birth"
                                 type="date"
                                 name="dob"
                                 className="border text-center bg-[#ECF0F1] w-full p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12"
-                                value={form?.dob}
+                                value={form?.dob ? form?.dob : resetDob}
                                 onChange={updateForm}
                             />
                         </label>
@@ -382,9 +385,7 @@ const ManagementPage = () => {
                             <tbody className=" ">
                                 {
                                     seedData && seedData.slice(startCut, endCut).map((student: IStudentData | any, idx: number) => {
-
-
-
+                                        
                                         if (student[chooseSearch]?.toLocaleLowerCase().includes(search.toLocaleLowerCase())) {
                                             let hide = ""
                                             return <tr key={idx} className={`h-[45px] ${idx % 2 == 0 ? "" : "bg-white"}  ${hide}`}>
@@ -410,7 +411,13 @@ const ManagementPage = () => {
                                                             setForm(student)
                                                             setCurrentStudent(student)
                                                             setEditHideModel("block")
-
+                                                            if(student.firstName === 'N/A'){
+                                                                setResetFirst('')
+                                                            }if(student.Lastname === 'N/A'){
+                                                                setResetLast('')
+                                                            }if(student.dob === 'N/A'){
+                                                                setResetDob('')
+                                                            }
                                                         }}
                                                         src="/Edit.png"
                                                         alt='"Edit'
@@ -426,6 +433,7 @@ const ManagementPage = () => {
                                         }
 
                                     })
+                                    
                                 }
                             </tbody>
                         </table>
