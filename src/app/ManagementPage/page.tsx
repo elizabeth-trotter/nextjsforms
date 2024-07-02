@@ -144,18 +144,22 @@ const ManagementPage = () => {
     }
 
     const SortByAlpha = (selectedField: string) => {
-        if (seedData && toggleABC) {
+        if (seedData) {
             const sorted = [...seedData].sort((a, b) => {
-                if (a[selectedField] < b[selectedField]) { return -1; }
-                if (a[selectedField] > b[selectedField]) { return 1; }
-                return 0;
-            });
-            setSeedData(sorted);
-            setToggleABC(!toggleABC);
-        } else if (seedData && !toggleABC) {
-            const sorted = [...seedData].sort((a, b) => {
-                if (a[selectedField] > b[selectedField]) { return -1; }
-                if (a[selectedField] < b[selectedField]) { return 1; }
+                const fieldA = a[selectedField]?.toLowerCase() || '';
+                const fieldB = b[selectedField]?.toLowerCase() || '';
+
+                if (fieldA === '' && fieldB === '') return 0;
+                if (fieldA === '') return 1;
+                if (fieldB === '') return -1;
+
+                if (toggleABC) {
+                    if (fieldA < fieldB) return -1;
+                    if (fieldA > fieldB) return 1;
+                } else {
+                    if (fieldA > fieldB) return -1;
+                    if (fieldA < fieldB) return 1;
+                }
                 return 0;
             });
             setSeedData(sorted);
@@ -164,24 +168,26 @@ const ManagementPage = () => {
     }
 
     const SortByDate = () => {
-        if (seedData && toggleABC) {
+        if (seedData) {
             const sorted = [...seedData].sort((a, b) => {
-                const dateA = new Date(a.dob).getTime();
-                const dateB = new Date(b.dob).getTime();
-                return dateA - dateB;
-            });
-            setSeedData(sorted);
-            setToggleABC(!toggleABC);
-        } else if (seedData && !toggleABC) {
-            const sorted = [...seedData].sort((a, b) => {
-                const dateA = new Date(a.dob).getTime();
-                const dateB = new Date(b.dob).getTime();
-                return dateB - dateA;
+                const dateA = new Date(a.dob || '').getTime();
+                const dateB = new Date(b.dob || '').getTime();
+
+                if (!a.dob && !b.dob) return 0;
+                if (!a.dob) return 1;
+                if (!b.dob) return -1;
+
+                if (toggleABC) {
+                    return dateA - dateB;
+                } else {
+                    return dateB - dateA;
+                }
             });
             setSeedData(sorted);
             setToggleABC(!toggleABC);
         }
     };
+
 
     const [form, setForm] = useState<any>({
         id: 0,
@@ -206,7 +212,42 @@ const ManagementPage = () => {
         }
     }
 
-    const pageContext = useAppContext();
+    const [currentSortField, setCurrentSortField] = useState<string>('email|alpha');
+
+    const sortData = (field: string, type: 'alpha' | 'date') => {
+        if (seedData) {
+            const sorted = [...seedData].sort((a, b) => {
+                if (type === 'alpha') {
+                    const fieldA = a[field]?.toLowerCase() || '';
+                    const fieldB = b[field]?.toLowerCase() || '';
+
+                    if (fieldA === '' && fieldB === '') return 0;
+                    if (fieldA === '') return 1;
+                    if (fieldB === '') return -1;
+
+                    if (fieldA < fieldB) return -1;
+                    if (fieldA > fieldB) return 1;
+                } else if (type === 'date') {
+                    const dateA = new Date(a[field] || '').getTime();
+                    const dateB = new Date(b[field] || '').getTime();
+
+                    if (!a[field] && !b[field]) return 0;
+                    if (!a[field]) return 1;
+                    if (!b[field]) return -1;
+
+                    return dateA - dateB;
+                }
+                return 0;
+            });
+            setSeedData(sorted);
+        }
+    };
+
+    const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const [field, type] = e.target.value.split('|');
+        setCurrentSortField(field);
+        sortData(field, type as 'alpha' | 'date');
+    };
 
     return (
         <div>
@@ -355,17 +396,15 @@ const ManagementPage = () => {
 
             <NavbarComponent admin={data && data.isAdmin} />
 
-            <div className='flex flex-col items-center w-screen mx-auto lg:w-[95%]'>
+            <div className='flex flex-col items-center xl:w-[1396px] w-[96%] mx-auto overflow-auto'>
 
                 <div className=' mr-auto '>
                     <input name='searchBar' onChange={(e) => { setSearch(e.target.value) }} type="text" className='border md:my-5 mt-5 lg:me-3 md:w-[50%] w-[100%]' />
-                    <select name='sortBy' onChange={(e) => { setChooseSearch(e.target.value) }} className='sm:w-[40%] w-full md:mb-0 mb-5'>
-                        <option value="email">Email</option>
-                        <option value="firstName">Firstname</option>
-                        <option value="lastName">Lastname</option>
-                        <option value="dob">Date Of Birth</option>
-                        <option value="phoneNumber">Phone Number</option>
-                        <option value="address">Address</option>
+                    <select name='sortBy' onChange={handleSortChange} className='sm:w-[40%] w-full md:mb-0 mb-5'>
+                        <option value="email|alpha">Email</option>
+                        <option value="firstName|alpha">Firstname</option>
+                        <option value="lastName|alpha">Lastname</option>
+                        <option value="dob|date">Date Of Birth</option>
                     </select>
                 </div>
 
@@ -374,10 +413,28 @@ const ManagementPage = () => {
                         <table className=' border border-black w-full'>
                             <thead className='text-white text-[20px] bg-[#23527C] gap-2  '>
                                 <tr>
-                                    <th className=' text-start  font-normal  overflow-hidden px-2 min-w-80' onClick={() => { SortByAlpha("email") }}>Email</th>
-                                    <th className=' py-2 text-start font-normal  overflow-hidden px-2 min-w-48 ' onClick={() => { SortByAlpha("firstName") }}>First Name</th>
-                                    <th className=' text-start  font-normal  overflow-hidden px-2 min-w-48' onClick={() => { SortByAlpha("lastName") }}>Last Name</th>
-                                    <th className=' text-start  font-normal  overflow-hidden px-2 min-w-48' onClick={() => { SortByDate() }}>Date of Birth</th>
+                                    <th className='py-2 text-[16px] text-start font-normal overflow-hidden px-2 min-w-48 ' onClick={() => { SortByAlpha("email") }}>
+                                        <div className="flex items-center gap-1 w-fit hover:cursor-pointer">
+                                            <p className="w-fit">Email</p>
+                                            <img src="/sortArrows.png" alt="Sort Arrows" className="h-[20px] w-[20px]" />
+                                        </div>
+                                    </th>
+                                    <th className=' py-2  text-[16px] text-start font-normal overflow-hidden px-2 min-w-48 ' onClick={() => { SortByAlpha("firstName") }}>
+                                        <div className="flex items-center gap-1 w-fit hover:cursor-pointer">
+                                            <p className="w-fit">First Name</p>
+                                            <img src="/sortArrows.png" alt="Sort Arrows" className="h-[20px] w-[20px]" />
+                                        </div>
+                                    </th>
+                                    <th className='py-2  text-[16px] text-start font-normal overflow-hidden px-2 min-w-48' onClick={() => { SortByAlpha("lastName") }}>
+                                        <div className="flex items-center gap-1 w-fit hover:cursor-pointer">
+                                            <p className="w-fit">Last Name</p>
+                                            <img src="/sortArrows.png" alt="Sort Arrows" className="h-[20px] w-[20px]" />
+                                        </div>
+                                    </th>
+                                    <th className='py-2  text-[16px] text-start font-normal overflow-hidden px-2 min-w-48 ' onClick={() => { SortByDate() }}>      <div className="flex items-center gap-1 w-fit hover:cursor-pointer">
+                                        <p className="w-fit">Date of Birth</p>
+                                        <img src="/sortArrows.png" alt="Sort Arrows" className="h-[20px] w-[20px]" />
+                                    </div></th>
                                     <th className=' font-normal min-w-20'></th>
                                 </tr>
                             </thead>
@@ -385,8 +442,8 @@ const ManagementPage = () => {
                             <tbody className=" ">
                                 {
                                     seedData && seedData.slice(startCut, endCut).map((student: IStudentData | any, idx: number) => {
-                                        
-                                        if (student[chooseSearch]?.toLocaleLowerCase().includes(search.toLocaleLowerCase())) {
+
+                                        if (student[chooseSearch]?.toLowerCase().includes(search.toLowerCase())) {
                                             let hide = ""
                                             return <tr key={idx} className={`h-[45px] ${idx % 2 == 0 ? "" : "bg-white"}  ${hide}`}>
 
@@ -411,11 +468,11 @@ const ManagementPage = () => {
                                                             setForm(student)
                                                             setCurrentStudent(student)
                                                             setEditHideModel("block")
-                                                            if(student.firstName === 'N/A'){
+                                                            if (student.firstName === 'N/A') {
                                                                 setResetFirst('')
-                                                            }if(student.Lastname === 'N/A'){
+                                                            } if (student.Lastname === 'N/A') {
                                                                 setResetLast('')
-                                                            }if(student.dob === 'N/A'){
+                                                            } if (student.dob === 'N/A') {
                                                                 setResetDob('')
                                                             }
                                                         }}
@@ -433,16 +490,26 @@ const ManagementPage = () => {
                                         }
 
                                     })
-                                    
+
                                 }
                             </tbody>
                         </table>
                     </div>
                 </div>
 
-                <div className='my-5 flex justify-between w-full '>
-                    <Button className=' bg-[#23527C] rounded-none w-24' onClick={handleBack} >Back</Button>
-                    <Button className=' bg-[#23527C] rounded-none w-24' onClick={handleForward}>Forward</Button>
+                <div className="my-5 flex max-w-[1396px] px-5 xl:px-0 justify-between w-full ">
+                    <button
+                        className=" bg-[#23527C] w-[94px] h-[36px] px-[16px] py-[8px] text-white rounded-none "
+                        onClick={handleBack}
+                    >
+                        Back
+                    </button>
+                    <button
+                        className=" bg-[#23527C] h-[36px] px-[16px] py-[8px] text-white rounded-none "
+                        onClick={handleForward}
+                    >
+                        Forward
+                    </button>
                 </div>
 
             </div>
