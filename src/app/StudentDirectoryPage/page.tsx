@@ -148,60 +148,44 @@ const StudentDirectoryPage = () => {
   };
 
   const SortByAlpha = (selectedField: string) => {
-    if (seedData && toggleABC) {
+    if (seedData) {
       const sorted = [...seedData].sort((a, b) => {
-        if (
-          a[selectedField][0].toLowerCase() <
-          b[selectedField][0].toLowerCase()
-        ) {
-          return -1;
-        }
-        if (
-          a[selectedField][0].toLowerCase() >
-          b[selectedField][0].toLowerCase()
-        ) {
-          return 1;
-        }
-        return 0;
-        
-      });
-      setSeedData(sorted);
-      setToggleABC(!toggleABC);
-    } else if (seedData && !toggleABC) {
-      const sorted = [...seedData].sort((a, b) => {
-        if (
-          a[selectedField][0].toLowerCase() >
-          b[selectedField][0].toLowerCase()
-        ) {
-          return -1;
-        }
-        if (
-          a[selectedField][0].toLowerCase() <
-          b[selectedField][0].toLowerCase()
-        ) {
-          return 1;
+        const fieldA = a[selectedField]?.toLowerCase() || '';
+        const fieldB = b[selectedField]?.toLowerCase() || '';
+
+        if (fieldA === '' && fieldB === '') return 0;
+        if (fieldA === '') return 1;
+        if (fieldB === '') return -1;
+
+        if (toggleABC) {
+          if (fieldA < fieldB) return -1;
+          if (fieldA > fieldB) return 1;
+        } else {
+          if (fieldA > fieldB) return -1;
+          if (fieldA < fieldB) return 1;
         }
         return 0;
       });
       setSeedData(sorted);
       setToggleABC(!toggleABC);
     }
-  };
+  }
 
   const SortByDate = () => {
-    if (seedData && toggleABC) {
+    if (seedData) {
       const sorted = [...seedData].sort((a, b) => {
-        const dateA = new Date(a.dob).getTime();
-        const dateB = new Date(b.dob).getTime();
-        return dateA - dateB;
-      });
-      setSeedData(sorted);
-      setToggleABC(!toggleABC);
-    } else if (seedData && !toggleABC) {
-      const sorted = [...seedData].sort((a, b) => {
-        const dateA = new Date(a.dob).getTime();
-        const dateB = new Date(b.dob).getTime();
-        return dateB - dateA;
+        const dateA = new Date(a.dob || '').getTime();
+        const dateB = new Date(b.dob || '').getTime();
+
+        if (!a.dob && !b.dob) return 0;
+        if (!a.dob) return 1;
+        if (!b.dob) return -1;
+
+        if (toggleABC) {
+          return dateA - dateB;
+        } else {
+          return dateB - dateA;
+        }
       });
       setSeedData(sorted);
       setToggleABC(!toggleABC);
@@ -310,12 +294,11 @@ const StudentDirectoryPage = () => {
               </label>
               <div className="flex flex-col relative">
                 <InputMask
-                  className={`${
-                    /\([0-9]{3}\)-[0-9]{3}-[0-9]{4}/.test(form?.phoneNumber) ===
-                      false && form?.phoneNumber.length > 0
-                      ? "border border-red-500 "
-                      : ""
-                  } border w-full text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-8 px-2`}
+                  className={`${/\([0-9]{3}\)-[0-9]{3}-[0-9]{4}/.test(form?.phoneNumber) ===
+                    false && form?.phoneNumber.length > 0
+                    ? "border border-red-500 "
+                    : ""
+                    } border w-full text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-8 px-2`}
                   placeholder="(xxx)-xxx-xxxx"
                   autoComplete="tel"
                   mask="(999)-999-9999"
@@ -466,8 +449,8 @@ const StudentDirectoryPage = () => {
                       }}
                     >
                       <div className="flex items-center gap-1">
-                      <p className=" hover:cursor-pointer w-fit"> First Name</p>
-                      <img src="/sortArrows.png" alt="Sort Arrows" className="hover:cursor-pointer h-[20px] w-[20px]" />
+                        <p className="hover:cursor-pointer w-fit"> First Name</p>
+                        <img src="/sortArrows.png" alt="Sort Arrows" className="hover:cursor-pointer h-[20px] w-[20px]" />
                       </div>
                     </th>
                     <th
@@ -477,8 +460,8 @@ const StudentDirectoryPage = () => {
                       }}
                     >
                       <div className="flex items-center gap-1">
-                      <p className=" hover:cursor-pointer w-fit"> Last Name</p>
-                      <img src="/sortArrows.png" alt="Sort Arrows" className="hover:cursor-pointer h-[20px] w-[20px]" />
+                        <p className="hover:cursor-pointer w-fit"> Last Name</p>
+                        <img src="/sortArrows.png" alt="Sort Arrows" className="hover:cursor-pointer h-[20px] w-[20px]" />
                       </div>
                     </th>
                     <th
@@ -488,8 +471,8 @@ const StudentDirectoryPage = () => {
                       }}
                     >
                       <div className="flex items-center gap-1">
-                      <p className=" hover:cursor-pointer w-fit"> Date of Birth</p>
-                      <img src="/sortArrows.png" alt="Sort Arrows" className="hover:cursor-pointer h-[20px] w-[20px]" />
+                        <p className=" hover:cursor-pointer w-fit"> Date of Birth</p>
+                        <img src="/sortArrows.png" alt="Sort Arrows" className="hover:cursor-pointer h-[20px] w-[20px]" />
                       </div>
                     </th>
                     <th className=" text-[16px] text-start font-normal overflow-hidden px-2 min-w-48">
@@ -501,10 +484,14 @@ const StudentDirectoryPage = () => {
                         SortByAlpha("email");
                       }}
                     >
-                      Email
+                      <div className="flex items-center gap-1">
+                        <p className=" hover:cursor-pointer w-fit">Email</p>
+                        <img src="/sortArrows.png" alt="Sort Arrows" className="hover:cursor-pointer h-[20px] w-[20px]" />
+                      </div>
+                      
                     </th>
                     <th className=" text-[16px] text-start font-normal overflow-hidden px-2 min-w-48">
-                      <p className=" hover:cursor-pointer w-fit">
+                      <p className="w-fit">
                         Phone Number
                       </p>
                     </th>
@@ -520,9 +507,8 @@ const StudentDirectoryPage = () => {
                         return (
                           <tr
                             key={idx}
-                            className={` h-[45px] ${
-                              idx % 2 == 0 ? "" : "bg-white"
-                            }  `}
+                            className={` h-[45px] ${idx % 2 == 0 ? "" : "bg-white"
+                              }  `}
                           >
                             <td className="overflow-hidden px-2 min-w-48">
                               {student.firstName ? student.firstName : "N/A"}
