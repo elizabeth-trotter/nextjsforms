@@ -3,10 +3,12 @@
 import { useRouter } from 'next/navigation'
 import React from 'react'
 import { Navbar } from "flowbite-react";
+import { useAppContext } from '@/context/Context';
 
 const NavbarComponent = (props: { admin: boolean }) => {
 
-  const router = useRouter()
+  const router = useRouter();
+  const pageContext = useAppContext();
 
   return (
     <Navbar className='bg-[#737375] p-0'>
@@ -34,7 +36,7 @@ const NavbarComponent = (props: { admin: boolean }) => {
           </p>
         </Navbar.Link>
         <Navbar.Link className="md:bg-[#DD8A3E] hover:brightness-90 text-white md:text-sm font-bold tracking-wide hoverBtn freakingFlowbite hover:cursor-pointer border-none"
-          onClick={() => router.push('/')}>
+          onClick={() => {router.push('/'); pageContext.setLoginCount(1)}}>
           <p className='py-2 md:p-2'>
             Sign Out
           </p>

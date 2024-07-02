@@ -49,6 +49,7 @@ const ManagementPage = () => {
     const [resetFirst, setResetFirst] = useState('')
     const [resetLast, setResetLast] = useState('')
     const [resetDob, setResetDob] = useState('')
+    const [pageNumber, setPageNumber] = useState(1);
 
     const [seedData, setSeedData] = useState<IStudentData[] | any>();
 
@@ -58,14 +59,16 @@ const ManagementPage = () => {
         if (seedData.length > endCut) {
             setStartCut(startCut + 10);
             setEndCut(endCut + 10);
+            setPageNumber(pageNumber + 1);
         }
-    }
+    };
     const handleBack = () => {
         if (startCut > 0) {
             setStartCut(startCut - 10);
             setEndCut(endCut - 10);
+            setPageNumber(pageNumber - 1);
         }
-    }
+    };
 
     const FetchAllUsers = async () => {
         const res = await fetch("https://williamform.azurewebsites.net/User/GetAllUsers");
@@ -390,8 +393,12 @@ const ManagementPage = () => {
             <div className='flex flex-col items-center xl:w-[1396px] w-[96%] mx-auto overflow-auto'>
 
                 <div className=' mr-auto '>
-                    <input name='searchBar' onChange={(e) => { setSearch(e.target.value) }} type="text" className='border md:my-5 mt-5 lg:me-3 md:w-[50%] w-[100%]' />
-                    <select name='sortBy' onChange={handleSortChange} className='sm:w-[40%] w-full md:mb-0 mb-5'>
+                    <input name='searchBar'
+                        onChange={(e) => { setSearch(e.target.value) }}
+                        type="text"
+                        className='border md:my-5 mt-5 sm:me-3 md:w-[50%] w-[100%]'
+                        placeholder='Search' />
+                    <select name='sortBy' onChange={handleSortChange} className='sm:w-[40%] mt-3 w-full md:mb-0 mb-5'>
                         <option value="email|alpha">Email</option>
                         <option value="firstName|alpha">Firstname</option>
                         <option value="lastName|alpha">Lastname</option>
@@ -399,7 +406,7 @@ const ManagementPage = () => {
                     </select>
                 </div>
 
-                <div className='flex lg:justify-center overflow-auto w-full'>
+                <div className='flex lg:justify-center overflow-auto w-full mt-5'>
                     <div className='min-h-[510px] w-full'>
                         <table className=' border border-black w-full'>
                             <thead className='text-white text-[20px] bg-[#23527C] gap-2  '>
@@ -488,18 +495,22 @@ const ManagementPage = () => {
                     </div>
                 </div>
 
-                <div className="my-5 flex max-w-[1396px] px-5 xl:px-0 justify-between w-full ">
+                <div className="my-5 flex max-w-[1396px] px-5 xl:px-0  justify-center gap-3  md:gap-10 items-center  w-full ">
                     <button
-                        className=" bg-[#23527C] w-[94px] h-[36px] px-[16px] py-[8px] text-white rounded-none "
+                        className=" bg-[#23527C] w-[94px] h-[36px] px-[16px] py-[8px] text-white rounded-none flex items-center justify-center"
                         onClick={handleBack}
+                        disabled={pageNumber == 1}
                     >
                         Back
                     </button>
+
+                    <p>{`Page ${pageNumber}`}</p>
                     <button
-                        className=" bg-[#23527C] h-[36px] px-[16px] py-[8px] text-white rounded-none "
+                        className=" bg-[#23527C] w-[94px] h-[36px] px-[16px] py-[8px] text-white rounded-none flex items-center justify-center"
                         onClick={handleForward}
+                        disabled={pageNumber === Math.ceil(seedData?.length / 10)}
                     >
-                        Forward
+                        Next
                     </button>
                 </div>
 
