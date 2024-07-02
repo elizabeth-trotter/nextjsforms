@@ -218,63 +218,67 @@ const ManagementPage = () => {
                     </p>
                     <div className=" grid gap-x-10 md:gap-y-2 grid-cols-1">
                         <div className=" mx-auto w-full">
-                            <label className=" w-fit rounded font-normal text-slate-600">
+                            <label className=" w-fill rounded font-normal text-slate-600">
                                 Email
+                                <input
+                                    autoComplete='on'
+                                    placeholder="First Name"
+                                    type="text"
+                                    name="email"
+                                    maxLength={100}
+                                    className="border w-full text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12 px-12"
+                                    value={form?.email}
+                                    onChange={updateForm}
+                                />
                             </label>
-                            <input
-                                placeholder="First Name"
-                                type="text"
-                                name="email"
-                                maxLength={100}
-                                className="border w-full text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12 px-12"
-                                value={form?.email}
-                                onChange={updateForm}
-                            />
                         </div>
                     </div>
 
                     <div className=" mx-auto w-full">
-                        <label className=" w-fit rounded font-normal text-slate-600">
+                        <label className=" w-fill rounded font-normal text-slate-600">
                             First Name
+                            <input
+                                autoComplete='on'
+                                placeholder="First Name"
+                                type="text"
+                                name="firstName"
+                                maxLength={100}
+                                className="border w-full text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12 px-12"
+                                value={form?.firstName}
+                                onChange={updateForm}
+                            />
                         </label>
-                        <input
-                            placeholder="First Name"
-                            type="text"
-                            name="firstName"
-                            maxLength={100}
-                            className="border w-full text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12 px-12"
-                            value={form?.firstName}
-                            onChange={updateForm}
-                        />
                     </div>
 
                     <div className=" mx-auto w-full">
-                        <label className=" w-fit rounded font-normal text-slate-600">
+                        <label className=" w-fill rounded font-normal text-slate-600">
                             Last Name
+                            <input
+                                autoComplete='on'
+                                placeholder="Last Name"
+                                type="text"
+                                name="lastName"
+                                maxLength={100}
+                                className="border w-full text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12 px-12"
+                                value={form?.lastName}
+                                onChange={updateForm}
+                            />
                         </label>
-                        <input
-                            placeholder="Last Name"
-                            type="text"
-                            name="lastName"
-                            maxLength={100}
-                            className="border w-full text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12 px-12"
-                            value={form?.lastName}
-                            onChange={updateForm}
-                        />
                     </div>
 
                     <div className=" mx-auto w-full ">
-                        <label className=" w-fit rounded font-normal text-slate-600">
+                        <label className=" w-fill rounded font-normal text-slate-600">
                             Date of Birth
+                            <input
+                                autoComplete='on'
+                                placeholder="Date of Birth"
+                                type="date"
+                                name="dob"
+                                className="border text-center bg-[#ECF0F1] w-full p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12"
+                                value={form?.dob}
+                                onChange={updateForm}
+                            />
                         </label>
-                        <input
-                            placeholder="Date of Birth"
-                            type="date"
-                            name="dob"
-                            className="border text-center bg-[#ECF0F1] w-full p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12"
-                            value={form?.dob}
-                            onChange={updateForm}
-                        />
                     </div>
 
                     <div className=" flex justify-end gap-x-5  mt-2 md:mt-6  ">
@@ -351,8 +355,8 @@ const ManagementPage = () => {
             <div className='flex flex-col items-center w-screen mx-auto lg:w-[95%]'>
 
                 <div className=' mr-auto '>
-                    <input onChange={(e) => { setSearch(e.target.value) }} type="text" className='border md:my-5 mt-5 lg:me-3 md:w-[50%] w-[100%]' />
-                    <select onChange={(e) => { setChooseSearch(e.target.value) }} className='sm:w-[40%] w-full md:mb-0 mb-5'>
+                    <input name='searchBar' onChange={(e) => { setSearch(e.target.value) }} type="text" className='border md:my-5 mt-5 lg:me-3 md:w-[50%] w-[100%]' />
+                    <select name='sortBy' onChange={(e) => { setChooseSearch(e.target.value) }} className='sm:w-[40%] w-full md:mb-0 mb-5'>
                         <option value="email">Email</option>
                         <option value="firstName">Firstname</option>
                         <option value="lastName">Lastname</option>
