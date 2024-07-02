@@ -345,11 +345,11 @@ const ManagementPage = () => {
 
             <NavbarComponent admin={pageContext.admin} />
 
-            <div className='flex flex-col items-center w-fit mx-auto '>
+            <div className='flex flex-col items-center w-screen mx-auto lg:w-[95%]'>
 
                 <div className=' mr-auto '>
-                    <input onChange={(e) => { setSearch(e.target.value) }} type="text" className='border my-5 me-5' />
-                    <select onChange={(e) => { setChooseSearch(e.target.value) }}>
+                    <input onChange={(e) => { setSearch(e.target.value) }} type="text" className='border md:my-5 mt-5 lg:me-3 md:w-[50%] w-[100%]' />
+                    <select onChange={(e) => { setChooseSearch(e.target.value) }} className='sm:w-[40%] w-full md:mb-0 mb-5'>
                         <option value="email">Email</option>
                         <option value="firstName">Firstname</option>
                         <option value="lastName">Lastname</option>
@@ -358,71 +358,71 @@ const ManagementPage = () => {
                         <option value="address">Address</option>
                     </select>
                 </div>
-                <div className='min-h-[510px] w-full'>
-                    <table className=' border border-black'>
-                        <thead className='text-white text-[20px] bg-[#23527C] gap-2  '>
-                            <tr>
-                                <th className=' text-start  font-normal  overflow-hidden px-2 w-80' onClick={() => { SortByAlpha("email") }}>Email</th>
-                                <th className=' py-2 text-start font-normal  overflow-hidden px-2 w-48 ' onClick={() => { SortByAlpha("firstName") }}>First Name</th>
-                                <th className=' text-start  font-normal  overflow-hidden px-2 w-48' onClick={() => { SortByAlpha("lastName") }}>Last Name</th>
-                                <th className=' text-start  font-normal  overflow-hidden px-2 w-48' onClick={() => { SortByDate() }}>Date of Birth</th>
-                                <th className=' font-normal w-20'></th>
-                            </tr>
-                        </thead>
 
-                        <tbody className=" ">
-                            {
-                                seedData && seedData.slice(startCut, endCut).map((student: IStudentData | any, idx: number) => {
+                <div className='flex lg:justify-center overflow-auto w-full'>
+                    <div className='min-h-[510px] w-full'>
+                        <table className=' border border-black w-full'>
+                            <thead className='text-white text-[20px] bg-[#23527C] gap-2  '>
+                                <tr>
+                                    <th className=' text-start  font-normal  overflow-hidden px-2 min-w-80' onClick={() => { SortByAlpha("email") }}>Email</th>
+                                    <th className=' py-2 text-start font-normal  overflow-hidden px-2 min-w-48 ' onClick={() => { SortByAlpha("firstName") }}>First Name</th>
+                                    <th className=' text-start  font-normal  overflow-hidden px-2 min-w-48' onClick={() => { SortByAlpha("lastName") }}>Last Name</th>
+                                    <th className=' text-start  font-normal  overflow-hidden px-2 min-w-48' onClick={() => { SortByDate() }}>Date of Birth</th>
+                                    <th className=' font-normal min-w-20'></th>
+                                </tr>
+                            </thead>
 
-
-
-                                    if (student[chooseSearch]?.toLocaleLowerCase().includes(search.toLocaleLowerCase())) {
-                                        let hide = ""
-                                        return <tr key={idx} className={` h-[45px] ${idx % 2 == 0 ? "" : "bg-white"}  ${hide}`}>
-
-                                            <td className='  overflow-hidden px-2'> {student.email ? student.email : "N/A"} </td>
-                                            <td className='  overflow-hidden px-2  '>{student?.firstName ? student?.firstName : "N/A"} </td>
-                                            <td className='  overflow-hidden px-2'>{student.lastName ? student.lastName : "N/A"}  </td>
-                                            <td className='  overflow-hidden px-2'>  {student?.dob ? student?.dob : "N/A"} </td>
-                                            <td className=' flex flex-row items-center p-2 gap-2'>
-                                                <Image
-                                                    onClick={() => {
-                                                        setCurrentStudent(student)
-                                                        setHideModel("block")
-                                                    }}
-                                                    src="/Trash.png"
-                                                    alt="Delete"
-                                                    width={30}
-                                                    height={30}
-                                                    className='cursor-pointer'
-                                                />
-                                                <Image
-                                                    onClick={() => {
-                                                        setForm(student)
-                                                        setCurrentStudent(student)
-                                                        setEditHideModel("block")
-
-                                                    }}
-                                                    src="/Edit.png"
-                                                    alt='"Edit'
-                                                    width={25}
-                                                    height={25}
-                                                    // onClick={}
-                                                    className='cursor-pointer'
-                                                />
-                                            </td>
-                                        </tr>
-                                    } else {
-                                        return null
-                                    }
-
-                                })
-                            }
-                        </tbody>
-                    </table>
+                            <tbody className=" ">
+                                {
+                                    seedData && seedData.slice(startCut, endCut).map((student: IStudentData | any, idx: number) => {
 
 
 
+                                        if (student[chooseSearch]?.toLocaleLowerCase().includes(search.toLocaleLowerCase())) {
+                                            let hide = ""
+                                            return <tr key={idx} className={`h-[45px] ${idx % 2 == 0 ? "" : "bg-white"}  ${hide}`}>
+
+                                                <td className='overflow-hidden px-2'>{student.email ? student.email : "N/A"}</td>
+                                                <td className='overflow-hidden px-2'>{student?.firstName ? student?.firstName : "N/A"}</td>
+                                                <td className='overflow-hidden px-2'>{student.lastName ? student.lastName : "N/A"}</td>
+                                                <td className='overflow-hidden px-2'>{student?.dob ? student?.dob : "N/A"} </td>
+                                                <td className='flex flex-row items-center p-2 gap-2'>
+                                                    <Image
+                                                        onClick={() => {
+                                                            setCurrentStudent(student)
+                                                            setHideModel("block")
+                                                        }}
+                                                        src="/Trash.png"
+                                                        alt="Delete"
+                                                        width={30}
+                                                        height={30}
+                                                        className='cursor-pointer'
+                                                    />
+                                                    <Image
+                                                        onClick={() => {
+                                                            setForm(student)
+                                                            setCurrentStudent(student)
+                                                            setEditHideModel("block")
+
+                                                        }}
+                                                        src="/Edit.png"
+                                                        alt='"Edit'
+                                                        width={25}
+                                                        height={25}
+                                                        // onClick={}
+                                                        className='cursor-pointer'
+                                                    />
+                                                </td>
+                                            </tr>
+                                        } else {
+                                            return null
+                                        }
+
+                                    })
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
                 <div className='my-5 flex justify-between w-full '>

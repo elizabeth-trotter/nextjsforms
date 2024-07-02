@@ -36,11 +36,12 @@ const StudentDirectoryPage = () => {
   const [toggleABC, setToggleABC] = useState(true);
   const [toggleLoad, setToggleLoad] = useState(true);
   const [chooseSearch, setChooseSearch] = useState("firstName");
-  const [startCut, setStartCut] = useState(0);
-  const [endCut, setEndCut] = useState(10);
+  const [startCut, setStartCut] = useState<number>(0);
+  const [endCut, setEndCut] = useState<number>(10);
   const [currentStudent, setCurrentStudent] = useState<IStudentData>();
   const [hideModel, setHideModel] = useState("hidden");
   const [hideEditModel, setEditHideModel] = useState("hidden");
+  const [saveArr, setSaveArr] = useState<IStudentData[] | any>();
 
   const [seedData, setSeedData] = useState<IStudentData[] | any>();
 
@@ -119,10 +120,16 @@ const StudentDirectoryPage = () => {
   const SortByAlpha = (selectedField: string) => {
     if (seedData && toggleABC) {
       const sorted = [...seedData].sort((a, b) => {
-        if (a[selectedField] < b[selectedField]) {
+        if (
+          a[selectedField][0].toLocaleLowerCase() <
+          b[selectedField][0].toLocaleLowerCase()
+        ) {
           return -1;
         }
-        if (a[selectedField] > b[selectedField]) {
+        if (
+          a[selectedField][0].toLocaleLowerCase() >
+          b[selectedField][0].toLocaleLowerCase()
+        ) {
           return 1;
         }
         return 0;
@@ -131,10 +138,16 @@ const StudentDirectoryPage = () => {
       setToggleABC(!toggleABC);
     } else if (seedData && !toggleABC) {
       const sorted = [...seedData].sort((a, b) => {
-        if (a[selectedField] > b[selectedField]) {
+        if (
+          a[selectedField][0].toLocaleLowerCase() >
+          b[selectedField][0].toLocaleLowerCase()
+        ) {
           return -1;
         }
-        if (a[selectedField] < b[selectedField]) {
+        if (
+          a[selectedField][0].toLocaleLowerCase() <
+          b[selectedField][0].toLocaleLowerCase()
+        ) {
           return 1;
         }
         return 0;
@@ -170,8 +183,9 @@ const StudentDirectoryPage = () => {
     CheckToken(session ? JSON.parse(session) : null);
 
     const loadAll = async () => {
-      setSeedData(await FetchAllUsers());
-      console.log(await FetchAllUsers());
+      let copyArr = await FetchAllUsers();
+      setSeedData(copyArr);
+      setSaveArr(copyArr);
     };
     loadAll();
   }, []);
@@ -180,6 +194,15 @@ const StudentDirectoryPage = () => {
     if ((data !== null && data.token === null) || data === null) {
       router.push("/");
     }
+  };
+
+  const handleSearch = (e: any) => {
+    const copyArr = saveArr.filter((student: IStudentData | any) =>
+      student?.[chooseSearch]
+        ?.toLocaleLowerCase()
+        .includes(e.toLocaleLowerCase())
+    );
+    setSeedData(copyArr);
   };
 
   const [form, setForm] = useState<any>({
@@ -379,7 +402,7 @@ const StudentDirectoryPage = () => {
           <div className=" mr-auto xl:px-0 px-5">
             <input
               onChange={(e) => {
-                setSearch(e.target.value);
+                handleSearch(e.target.value);
               }}
               type="text"
               className="border my-5 me-5"
@@ -397,8 +420,9 @@ const StudentDirectoryPage = () => {
               <option value="address">Address</option>
             </select>
           </div>
+
           <div className="w-screen overflow-x-auto flex px-5 xl:px-0 xl:justify-center mt-5">
-            <div className="min-h-[510px] ">
+            <div className="min-h-[510px] max-w-[1396px] ">
               <table className=" border border-black ">
                 <thead className="text-white text-[20px] bg-[#23527C] gap-2">
                   <tr>
@@ -408,15 +432,15 @@ const StudentDirectoryPage = () => {
                         SortByAlpha("firstName");
                       }}
                     >
-                      First Name
+                      <p className=" hover:cursor-pointer w-fit"> First Name</p>
                     </th>
                     <th
                       className="text-start font-normal overflow-hidden px-2 min-w-48"
                       onClick={() => {
-                        SortByAlpha("firstName");
+                        SortByAlpha("lastName");
                       }}
                     >
-                      Last Name
+                      <p className=" hover:cursor-pointer w-fit">Last Name</p>
                     </th>
                     <th
                       className="text-start font-normal overflow-hidden px-2 min-w-48"
@@ -424,7 +448,9 @@ const StudentDirectoryPage = () => {
                         SortByDate();
                       }}
                     >
-                      Date of Birth
+                      <p className=" hover:cursor-pointer w-fit">
+                        Date of Birth
+                      </p>
                     </th>
                     <th className="text-start font-normal overflow-hidden px-2 min-w-48">
                       Address
@@ -438,7 +464,9 @@ const StudentDirectoryPage = () => {
                       Email
                     </th>
                     <th className="text-start font-normal overflow-hidden px-2 min-w-48">
-                      Phone Number
+                      <p className=" hover:cursor-pointer w-fit">
+                        Phone Number
+                      </p>
                     </th>
                     <th className="font-normal min-w-20"></th>
                   </tr>
@@ -449,71 +477,62 @@ const StudentDirectoryPage = () => {
                     seedData
                       .slice(startCut, endCut)
                       .map((student: IStudentData | any, idx: number) => {
-                        if (
-                          student[chooseSearch]
-                            ?.toLocaleLowerCase()
-                            .includes(search.toLocaleLowerCase())
-                        ) {
-                          let hide = "";
-                          return (
-                            <tr
-                              key={idx}
-                              className={` h-[45px] ${
-                                idx % 2 == 0 ? "" : "bg-white"
-                              }  ${hide}`}
-                            >
-                              <td className="overflow-hidden px-2">
-                                {student.firstName ? student.firstName : "N/A"}
+                        return (
+                          <tr
+                            key={idx}
+                            className={` h-[45px] ${
+                              idx % 2 == 0 ? "" : "bg-white"
+                            }  `}
+                          >
+                            <td className="overflow-hidden px-2">
+                              {student.firstName ? student.firstName : "N/A"}
+                            </td>
+                            <td className="overflow-hidden px-2">
+                              {student.lastName ? student.lastName : "N/A"}
+                            </td>
+                            <td className="overflow-hidden px-2">
+                              {student?.dob ? student?.dob : "N/A"}
+                            </td>
+                            <td className=" overflow-hidden px-2">
+                              {student?.address ? student?.address : "N/A"}
+                            </td>
+                            <td className="overflow-hidden px-2">
+                              {student?.email ? student?.email : "N/A"}
+                            </td>
+                            <td className="overflow-hidden px-2">
+                              {student?.phoneNumber
+                                ? student?.phoneNumber
+                                : "N/A"}
+                            </td>
+                            {data && data.isAdmin && (
+                              <td className=" flex flex-row items-center p-2 gap-2">
+                                <Image
+                                  onClick={() => {
+                                    setCurrentStudent(student);
+                                    setHideModel("block");
+                                  }}
+                                  src="/Trash.png"
+                                  alt="Delete"
+                                  width={30}
+                                  height={30}
+                                  className="cursor-pointer"
+                                />
+                                <Image
+                                  onClick={() => {
+                                    setForm(student);
+                                    setCurrentStudent(student);
+                                    setEditHideModel("block");
+                                  }}
+                                  src="/Edit.png"
+                                  alt='"Edit'
+                                  width={25}
+                                  height={25}
+                                  className="cursor-pointer"
+                                />
                               </td>
-                              <td className="overflow-hidden px-2">
-                                {student.lastName ? student.lastName : "N/A"}
-                              </td>
-                              <td className="overflow-hidden px-2">
-                                {student?.dob ? student?.dob : "N/A"}
-                              </td>
-                              <td className=" overflow-hidden px-2">
-                                {student?.address ? student?.address : "N/A"}
-                              </td>
-                              <td className="overflow-hidden px-2">
-                                {student?.email ? student?.email : "N/A"}
-                              </td>
-                              <td className="overflow-hidden px-2">
-                                {student?.phoneNumber
-                                  ? student?.phoneNumber
-                                  : "N/A"}
-                              </td>
-                              {data && data.isAdmin && (
-                                <td className=" flex flex-row items-center p-2 gap-2">
-                                  <Image
-                                    onClick={() => {
-                                      setCurrentStudent(student);
-                                      setHideModel("block");
-                                    }}
-                                    src="/Trash.png"
-                                    alt="Delete"
-                                    width={30}
-                                    height={30}
-                                    className="cursor-pointer"
-                                  />
-                                  <Image
-                                    onClick={() => {
-                                      setForm(student);
-                                      setCurrentStudent(student);
-                                      setEditHideModel("block");
-                                    }}
-                                    src="/Edit.png"
-                                    alt='"Edit'
-                                    width={25}
-                                    height={25}
-                                    className="cursor-pointer"
-                                  />
-                                </td>
-                              )}
-                            </tr>
-                          );
-                        } else {
-                          return null;
-                        }
+                            )}
+                          </tr>
+                        );
                       })}
                 </tbody>
               </table>
