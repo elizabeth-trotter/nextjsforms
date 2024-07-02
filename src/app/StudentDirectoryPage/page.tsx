@@ -8,6 +8,8 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import InputMask from "react-input-mask";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface IStudentData {
   id: number;
@@ -113,6 +115,7 @@ const StudentDirectoryPage = () => {
 
     if (!res.ok) {
       const message = "An error has Occurred " + res.status;
+      toast("Your update or delete was unsuccessful", { type: "error", className: " !grid !grid-cols-[95%_5%] text-center" });
       throw new Error(message);
     }
 
@@ -238,6 +241,7 @@ const StudentDirectoryPage = () => {
 
   return (
     <div className={` ${noScroll}`}>
+      <ToastContainer/>
       <div
         className={`  flex justify-center items-center bg-[#00000089] h-full w-screen fixed ${hideEditModel} `}
       >
@@ -356,7 +360,8 @@ const StudentDirectoryPage = () => {
                 setNoScroll("h-full");
 
                 replaceStudentWithoutRefetching(currentStudent?.id, form);
-                await softDeleteUser({
+                try {
+                  await softDeleteUser({
                   id: form?.id,
                   firstName: form?.firstName,
                   lastName: form?.lastName,
@@ -366,6 +371,11 @@ const StudentDirectoryPage = () => {
                   email: form?.email,
                   isDeleted: form?.isDeleted,
                 });
+                toast("Your update was successful!", { type: "success", className: " !grid !grid-cols-[95%_5%] text-center" });
+                } catch (error) {
+                  toast("Your update was unsuccessful!", { type: "warning", className: " !grid !grid-cols-[95%_5%] text-center" });
+                }
+                
               }}
             >
               UPDATE
@@ -397,7 +407,8 @@ const StudentDirectoryPage = () => {
                 setNoScroll("h-full");
 
                 removeStudentWithoutRefetching(currentStudent?.id);
-                await softDeleteUser({
+                try {
+                  await softDeleteUser({
                   id: currentStudent?.id,
                   firstName: currentStudent?.firstName,
                   lastName: currentStudent?.lastName,
@@ -407,6 +418,11 @@ const StudentDirectoryPage = () => {
                   email: currentStudent?.email,
                   isDeleted: true,
                 });
+                toast("Your delete was successful!", { type: "success", className: " !grid !grid-cols-[95%_5%] text-center" });
+                } catch (error) {
+                  toast("Your delete was unsuccessful!", { type: "warning", className: " !grid !grid-cols-[95%_5%] text-center" });
+                }
+                
               }}
             >
               DELETE

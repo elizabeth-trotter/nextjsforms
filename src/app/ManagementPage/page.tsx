@@ -9,6 +9,8 @@ import Image from 'next/image';
 import FooterComponent from "@/components/FooterComponent/page";
 import { useAppContext } from '@/context/Context';
 import InputMask from "react-input-mask";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface IStudentData {
     id: number,
@@ -245,6 +247,7 @@ const ManagementPage = () => {
 
     return (
         <div>
+            <ToastContainer />
 
             <div
                 className={`flex justify-center md:items-center  bg-[#00000089] h-full w-screen fixed ${hideEditModel} `}
@@ -333,16 +336,22 @@ const ManagementPage = () => {
                                 setEditHideModel("hidden");
 
                                 replaceStudentWithoutRefetching(currentStudent?.id, form);
-                                await softDeleteUser({
-                                    id: form?.id,
-                                    firstName: form?.firstName,
-                                    lastName: form?.lastName,
-                                    address: form?.address,
-                                    phoneNumber: form?.phoneNumber,
-                                    dob: form?.dob,
-                                    email: form?.email,
-                                    isDeleted: form?.isDeleted,
-                                });
+
+                                try {
+                                    await softDeleteUser({
+                                        id: form?.id,
+                                        firstName: form?.firstName,
+                                        lastName: form?.lastName,
+                                        address: form?.address,
+                                        phoneNumber: form?.phoneNumber,
+                                        dob: form?.dob,
+                                        email: form?.email,
+                                        isDeleted: form?.isDeleted,
+                                    });
+                                    toast("Your update was successful!", { type: "success", className: " !grid !grid-cols-[95%_5%] text-center" });
+                                } catch (error) {
+                                    toast("Your update was unsuccessful!", { type: "warning", className: " !grid !grid-cols-[95%_5%] text-center" });
+                                }
                             }}
                         >
                             UPDATE
@@ -370,16 +379,22 @@ const ManagementPage = () => {
                             onClick={async () => {
                                 setHideModel("hidden");
                                 removeStudentWithoutRefetching(currentStudent?.id);
-                                await softDeleteUser({
-                                    id: currentStudent?.id,
-                                    firstName: currentStudent?.firstName,
-                                    lastName: currentStudent?.lastName,
-                                    address: currentStudent?.address,
-                                    phoneNumber: currentStudent?.phoneNumber,
-                                    dob: currentStudent?.dob,
-                                    email: currentStudent?.email,
-                                    isDeleted: true,
-                                });
+                                try {
+                                    await softDeleteUser({
+                                        id: currentStudent?.id,
+                                        firstName: currentStudent?.firstName,
+                                        lastName: currentStudent?.lastName,
+                                        address: currentStudent?.address,
+                                        phoneNumber: currentStudent?.phoneNumber,
+                                        dob: currentStudent?.dob,
+                                        email: currentStudent?.email,
+                                        isDeleted: true,
+                                    });
+                                    toast("Your delete was successful!", { type: "success", className: " !grid !grid-cols-[95%_5%] text-center" });
+                                } catch (error) {
+                                    toast("Your delete was unsuccessful!", { type: "warning", className: " !grid !grid-cols-[95%_5%] text-center" });
+                                }
+
                             }}
                         >
                             DELETE
