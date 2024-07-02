@@ -179,8 +179,8 @@ const AddFormPage = () => {
 
                                     <div className='flex flex-col relative'>
                                         <InputMask className={`${/\([0-9]{3}\)-[0-9]{3}-[0-9]{4}/.test(formData.phonenumber) === false && formData.phonenumber.length > 0 ?
-                                            "border border-red-500" : ""}
-                                              text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12 `}
+                                            "border border-red-500" : "border-zinc-500"}
+                                              text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12 border `}
                                             placeholder="(xxx)-xxx-xxxx" autoComplete="tel" mask="(999)-999-9999" value={formData.phonenumber} onChange={updateForm} id="phonenumber" name="phonenumber"></InputMask>
                                     </div>
 
