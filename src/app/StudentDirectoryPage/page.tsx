@@ -419,15 +419,15 @@ const StudentDirectoryPage = () => {
 
       <div>
         <div className="flex flex-col items-center w-[96%] mx-auto overflow-auto">
-          <div className=" md:mr-auto xl:px-0 px-5">
+          <div className=" md:mr-auto xl:px-0">
             <input
               placeholder="Search"
               onChange={handleInputChange}
               value={inputValue}
               type={inputValidation}
-              className="border my-5 w-[150px]  mr-2 lg:me-5"
-            />
-            <select onChange={handleSelectChange} value={chooseSearch}>
+              className='border md:my-5 mt-5 sm:me-3 sm:w-[50%] w-[100%]'
+              />
+            <select onChange={handleSelectChange} value={chooseSearch} className="sm:w-[40%] mt-3 w-full md:mb-0 mb-5">
               <option value="firstName">First Name</option>
               <option value="lastName">Last Name</option>
               <option value="dob">Date of Birth</option>
