@@ -41,22 +41,52 @@ const StudentDirectoryPage = () => {
   const [currentStudent, setCurrentStudent] = useState<IStudentData>();
   const [hideModel, setHideModel] = useState("hidden");
   const [hideEditModel, setEditHideModel] = useState("hidden");
+  const [noScroll, setNoScroll] = useState("");
   const [saveArr, setSaveArr] = useState<IStudentData[] | any>();
+  const [pageNumber, setPageNumber] = useState(1);
+  const [inputValue, setInputValue] = useState("");
+  const [inputValidation, setInputValidation] = useState("text");
 
   const [seedData, setSeedData] = useState<IStudentData[] | any>();
 
   const router = useRouter();
 
+  const handleInputChange = (e: any) => {
+    const { value } = e.target;
+    switch (chooseSearch) {
+      case "phoneNumber":
+        setInputValue(value.replace(/[^0-9]/g, ""));
+        handleSearch(value);
+        break;
+      case "email":
+        setInputValue(value);
+        handleSearch(value);
+        break;
+      default:
+        setInputValue(value);
+        handleSearch(value);
+        break;
+    }
+  };
+
+  const handleSelectChange = (e: any) => {
+    setChooseSearch(e.target.value);
+    setInputValue("");
+    setInputValidation(e.target.value === "phoneNumber" ? "tel" : "text");
+  };
+
   const handleForward = () => {
     if (seedData.length > endCut) {
       setStartCut(startCut + 10);
       setEndCut(endCut + 10);
+      setPageNumber(pageNumber + 1);
     }
   };
   const handleBack = () => {
     if (startCut > 0) {
       setStartCut(startCut - 10);
       setEndCut(endCut - 10);
+      setPageNumber(pageNumber - 1);
     }
   };
 
@@ -118,59 +148,44 @@ const StudentDirectoryPage = () => {
   };
 
   const SortByAlpha = (selectedField: string) => {
-    if (seedData && toggleABC) {
+    if (seedData) {
       const sorted = [...seedData].sort((a, b) => {
-        if (
-          a[selectedField][0].toLocaleLowerCase() <
-          b[selectedField][0].toLocaleLowerCase()
-        ) {
-          return -1;
-        }
-        if (
-          a[selectedField][0].toLocaleLowerCase() >
-          b[selectedField][0].toLocaleLowerCase()
-        ) {
-          return 1;
-        }
-        return 0;
-      });
-      setSeedData(sorted);
-      setToggleABC(!toggleABC);
-    } else if (seedData && !toggleABC) {
-      const sorted = [...seedData].sort((a, b) => {
-        if (
-          a[selectedField][0].toLocaleLowerCase() >
-          b[selectedField][0].toLocaleLowerCase()
-        ) {
-          return -1;
-        }
-        if (
-          a[selectedField][0].toLocaleLowerCase() <
-          b[selectedField][0].toLocaleLowerCase()
-        ) {
-          return 1;
+        const fieldA = a[selectedField]?.toLowerCase() || '';
+        const fieldB = b[selectedField]?.toLowerCase() || '';
+
+        if (fieldA === '' && fieldB === '') return 0;
+        if (fieldA === '') return 1;
+        if (fieldB === '') return -1;
+
+        if (toggleABC) {
+          if (fieldA < fieldB) return -1;
+          if (fieldA > fieldB) return 1;
+        } else {
+          if (fieldA > fieldB) return -1;
+          if (fieldA < fieldB) return 1;
         }
         return 0;
       });
       setSeedData(sorted);
       setToggleABC(!toggleABC);
     }
-  };
+  }
 
   const SortByDate = () => {
-    if (seedData && toggleABC) {
+    if (seedData) {
       const sorted = [...seedData].sort((a, b) => {
-        const dateA = new Date(a.dob).getTime();
-        const dateB = new Date(b.dob).getTime();
-        return dateA - dateB;
-      });
-      setSeedData(sorted);
-      setToggleABC(!toggleABC);
-    } else if (seedData && !toggleABC) {
-      const sorted = [...seedData].sort((a, b) => {
-        const dateA = new Date(a.dob).getTime();
-        const dateB = new Date(b.dob).getTime();
-        return dateB - dateA;
+        const dateA = new Date(a.dob || '').getTime();
+        const dateB = new Date(b.dob || '').getTime();
+
+        if (!a.dob && !b.dob) return 0;
+        if (!a.dob) return 1;
+        if (!b.dob) return -1;
+
+        if (toggleABC) {
+          return dateA - dateB;
+        } else {
+          return dateB - dateA;
+        }
       });
       setSeedData(sorted);
       setToggleABC(!toggleABC);
@@ -199,8 +214,8 @@ const StudentDirectoryPage = () => {
   const handleSearch = (e: any) => {
     const copyArr = saveArr.filter((student: IStudentData | any) =>
       student?.[chooseSearch]
-        ?.toLocaleLowerCase()
-        .includes(e.toLocaleLowerCase())
+        ?.toLowerCase()
+        .includes(e.toLowerCase())
     );
     setSeedData(copyArr);
   };
@@ -217,21 +232,20 @@ const StudentDirectoryPage = () => {
   });
 
   const updateForm = (e: React.ChangeEvent<HTMLInputElement>) => {
-    //passing through its current values, and updating
     setForm({ ...form, [e.target.name]: e.target.value });
     console.log(form);
   };
 
   return (
-    <div>
+    <div className={` ${noScroll}`}>
       <div
-        className={`flex justify-center md:items-center bg-[#00000089] h-full w-screen fixed ${hideEditModel} `}
+        className={`  flex justify-center items-center bg-[#00000089] h-full w-screen fixed ${hideEditModel} `}
       >
         <div className={`bg-white mt-4 p-[24px] relative h-fit `}>
           <p className=" text-[20px] md:text-[30px] text-center mb-2 md:mb-6 font-bold">
             UPDATE {currentStudent?.firstName.toUpperCase()}S INFORMATION
           </p>
-          <div className=" grid gap-x-10 md:gap-y-2 grid-cols-1 md:grid-cols-2">
+          <div className=" grid gap-x-10 md:gap-y-2 grid-cols-2">
             <div className=" mx-auto w-full">
               <label className=" w-fit rounded font-normal text-slate-600">
                 First Name
@@ -240,7 +254,7 @@ const StudentDirectoryPage = () => {
                 placeholder="First Name"
                 type="text"
                 name="firstName"
-                className="border w-full text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-8 px-12"
+                className="border w-full text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-8 px-2"
                 value={form?.firstName}
                 onChange={updateForm}
               />
@@ -254,7 +268,7 @@ const StudentDirectoryPage = () => {
                 placeholder="Last Name"
                 type="text"
                 name="lastName"
-                className="border w-full text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-8 px-12"
+                className="border w-full text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-8 px-2"
                 value={form?.lastName}
                 onChange={updateForm}
               />
@@ -268,7 +282,7 @@ const StudentDirectoryPage = () => {
                 placeholder="Address"
                 type="text"
                 name="address"
-                className="border w-full text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-8 px-12"
+                className="border w-full text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-8 px-2"
                 value={form?.address}
                 onChange={updateForm}
               />
@@ -280,12 +294,11 @@ const StudentDirectoryPage = () => {
               </label>
               <div className="flex flex-col relative">
                 <InputMask
-                  className={`${
-                    /\([0-9]{3}\)-[0-9]{3}-[0-9]{4}/.test(form?.phoneNumber) ===
-                      false && form?.phoneNumber.length > 0
-                      ? "border border-red-500"
-                      : ""
-                  } border w-full text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-8 px-12`}
+                  className={`${/\([0-9]{3}\)-[0-9]{3}-[0-9]{4}/.test(form?.phoneNumber) ===
+                    false && form?.phoneNumber.length > 0
+                    ? "border border-red-500 "
+                    : ""
+                    } border w-full text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-8 px-2`}
                   placeholder="(xxx)-xxx-xxxx"
                   autoComplete="tel"
                   mask="(999)-999-9999"
@@ -319,7 +332,7 @@ const StudentDirectoryPage = () => {
                 placeholder="First Name"
                 type="text"
                 name="email"
-                className="border w-full text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-8 px-12"
+                className="border w-full text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-8 px-2"
                 value={form?.email}
                 onChange={updateForm}
               />
@@ -329,7 +342,9 @@ const StudentDirectoryPage = () => {
           <div className=" flex justify-end gap-x-5 mt-2 md:mt-6">
             <button
               className=" text-white w-[100px] h-[40px] font-semibold bg-[#737375]"
-              onClick={() => setEditHideModel("hidden")}
+              onClick={() => {
+                setEditHideModel("hidden"), setNoScroll(" h-full");
+              }}
             >
               CANCEL
             </button>
@@ -338,6 +353,7 @@ const StudentDirectoryPage = () => {
               className=" text-white w-[100px] h-[40px] font-semibold bg-[#DD8A3E]"
               onClick={async () => {
                 setEditHideModel("hidden");
+                setNoScroll("h-full");
 
                 replaceStudentWithoutRefetching(currentStudent?.id, form);
                 await softDeleteUser({
@@ -368,7 +384,9 @@ const StudentDirectoryPage = () => {
           <div className="flex justify-evenly">
             <button
               className="text-white w-[100px] h-[50px] font-semibold bg-[#737375]"
-              onClick={() => setHideModel("hidden ")}
+              onClick={() => {
+                setHideModel("hidden "), setNoScroll(" h-full");
+              }}
             >
               CANCEL
             </button>
@@ -376,6 +394,8 @@ const StudentDirectoryPage = () => {
               className="text-white w-[100px] h-[50px] font-semibold bg-[#DD8A3E]"
               onClick={async () => {
                 setHideModel("hidden");
+                setNoScroll("h-full");
+
                 removeStudentWithoutRefetching(currentStudent?.id);
                 await softDeleteUser({
                   id: currentStudent?.id,
@@ -398,20 +418,16 @@ const StudentDirectoryPage = () => {
       <NavbarComponent admin={data !== null && data.isAdmin} />
 
       <div>
-        <div className="flex flex-col items-center w-fit max-w-[1396px] mx-auto over">
-          <div className=" mr-auto xl:px-0 px-5">
+        <div className="flex flex-col items-center w-fit max-w-[1396px] mx-auto">
+          <div className=" md:mr-auto xl:px-0 px-5">
             <input
-              onChange={(e) => {
-                handleSearch(e.target.value);
-              }}
-              type="text"
-              className="border my-5 me-5"
+              placeholder="Search"
+              onChange={handleInputChange}
+              value={inputValue}
+              type={inputValidation}
+              className="border my-5 w-[150px]  mr-2 lg:me-5"
             />
-            <select
-              onChange={(e) => {
-                setChooseSearch(e.target.value);
-              }}
-            >
+            <select onChange={handleSelectChange} value={chooseSearch}>
               <option value="firstName">First Name</option>
               <option value="lastName">Last Name</option>
               <option value="dob">Date of Birth</option>
@@ -427,44 +443,55 @@ const StudentDirectoryPage = () => {
                 <thead className="text-white text-[20px] bg-[#23527C] gap-2">
                   <tr>
                     <th
-                      className="py-2 text-start font-normal overflow-hidden px-2 min-w-48 "
+                      className="py-2  text-[16px] text-start font-normal overflow-hidden px-2 min-w-48 "
                       onClick={() => {
                         SortByAlpha("firstName");
                       }}
                     >
-                      <p className=" hover:cursor-pointer w-fit"> First Name</p>
+                      <div className="flex items-center gap-1 w-fit hover:cursor-pointer">
+                        <p className="w-fit"> First Name</p>
+                        <img src="/sortArrows.png" alt="Sort Arrows" className="h-[20px] w-[20px]" />
+                      </div>
                     </th>
                     <th
-                      className="text-start font-normal overflow-hidden px-2 min-w-48"
+                      className=" text-[16px] text-start font-normal overflow-hidden px-2 min-w-48"
                       onClick={() => {
                         SortByAlpha("lastName");
                       }}
                     >
-                      <p className=" hover:cursor-pointer w-fit">Last Name</p>
+                      <div className="flex items-center gap-1 w-fit hover:cursor-pointer">
+                        <p className="w-fit"> Last Name</p>
+                        <img src="/sortArrows.png" alt="Sort Arrows" className="h-[20px] w-[20px]" />
+                      </div>
                     </th>
                     <th
-                      className="text-start font-normal overflow-hidden px-2 min-w-48"
+                      className=" text-[16px] text-start font-normal overflow-hidden px-2 min-w-48"
                       onClick={() => {
                         SortByDate();
                       }}
                     >
-                      <p className=" hover:cursor-pointer w-fit">
-                        Date of Birth
-                      </p>
+                      <div className="flex items-center gap-1 w-fit hover:cursor-pointer">
+                        <p className="w-fit"> Date of Birth</p>
+                        <img src="/sortArrows.png" alt="Sort Arrows" className="h-[20px] w-[20px]" />
+                      </div>
                     </th>
-                    <th className="text-start font-normal overflow-hidden px-2 min-w-48">
+                    <th className=" text-[16px] text-start font-normal overflow-hidden px-2 min-w-48">
                       Address
                     </th>
                     <th
-                      className="text-start font-normal overflow-hidden px-2 w-80"
+                      className=" text-[16px] text-start font-normal overflow-hidden px-2 w-80"
                       onClick={() => {
                         SortByAlpha("email");
                       }}
                     >
-                      Email
+                      <div className="flex items-center gap-1 w-fit hover:cursor-pointer">
+                        <p className=" w-fit">Email</p>
+                        <img src="/sortArrows.png" alt="Sort Arrows" className="h-[20px] w-[20px]" />
+                      </div>
+                      
                     </th>
-                    <th className="text-start font-normal overflow-hidden px-2 min-w-48">
-                      <p className=" hover:cursor-pointer w-fit">
+                    <th className=" text-[16px] text-start font-normal overflow-hidden px-2 min-w-48">
+                      <p className="w-fit">
                         Phone Number
                       </p>
                     </th>
@@ -480,26 +507,25 @@ const StudentDirectoryPage = () => {
                         return (
                           <tr
                             key={idx}
-                            className={` h-[45px] ${
-                              idx % 2 == 0 ? "" : "bg-white"
-                            }  `}
+                            className={` h-[45px] ${idx % 2 == 0 ? "" : "bg-white"
+                              }  `}
                           >
-                            <td className="overflow-hidden px-2">
+                            <td className="overflow-hidden px-2 min-w-48">
                               {student.firstName ? student.firstName : "N/A"}
                             </td>
-                            <td className="overflow-hidden px-2">
+                            <td className="overflow-hidden px-2 min-w-48">
                               {student.lastName ? student.lastName : "N/A"}
                             </td>
-                            <td className="overflow-hidden px-2">
+                            <td className="overflow-hidden px-2 min-w-48">
                               {student?.dob ? student?.dob : "N/A"}
                             </td>
-                            <td className=" overflow-hidden px-2">
+                            <td className=" overflow-hidden px-2 min-w-80">
                               {student?.address ? student?.address : "N/A"}
                             </td>
-                            <td className="overflow-hidden px-2">
+                            <td className="overflow-hidden px-2 min-w-48">
                               {student?.email ? student?.email : "N/A"}
                             </td>
-                            <td className="overflow-hidden px-2">
+                            <td className="overflow-hidden px-2 min-w-48">
                               {student?.phoneNumber
                                 ? student?.phoneNumber
                                 : "N/A"}
@@ -510,6 +536,7 @@ const StudentDirectoryPage = () => {
                                   onClick={() => {
                                     setCurrentStudent(student);
                                     setHideModel("block");
+                                    setNoScroll("no-doc-scroll");
                                   }}
                                   src="/Trash.png"
                                   alt="Delete"
@@ -522,6 +549,7 @@ const StudentDirectoryPage = () => {
                                     setForm(student);
                                     setCurrentStudent(student);
                                     setEditHideModel("block");
+                                    setNoScroll("no-doc-scroll");
                                   }}
                                   src="/Edit.png"
                                   alt='"Edit'
@@ -539,18 +567,22 @@ const StudentDirectoryPage = () => {
             </div>
           </div>
 
-          <div className="my-5 flex max-w-[1396px] px-5 xl:px-0 justify-between w-full ">
+          <div className="my-5 flex max-w-[1396px] px-5 xl:px-0  justify-center gap-3  md:gap-10 items-center  w-full ">
             <button
-              className=" bg-[#23527C] w-[94px] h-[36px] px-[16px] py-[8px] text-white rounded-none "
+              className=" bg-[#23527C] w-[94px] h-[36px] px-[16px] py-[8px] text-white rounded-none flex items-center justify-center"
               onClick={handleBack}
+              disabled={pageNumber == 1}
             >
               Back
             </button>
+
+            <p>{`Page ${pageNumber}`}</p>
             <button
-              className=" bg-[#23527C] h-[36px] px-[16px] py-[8px] text-white rounded-none "
+              className=" bg-[#23527C] w-[94px] h-[36px] px-[16px] py-[8px] text-white rounded-none flex items-center justify-center"
               onClick={handleForward}
+              disabled={pageNumber === Math.ceil(seedData?.length / 10)}
             >
-              Forward
+              Next
             </button>
           </div>
         </div>

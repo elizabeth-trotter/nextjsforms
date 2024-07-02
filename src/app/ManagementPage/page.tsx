@@ -54,15 +54,6 @@ const ManagementPage = () => {
 
     const router = useRouter();
 
-    // const fetchUsers = async () => {
-    //     const response = await fetch('https://williamform.azurewebsites.net/User/GetAllUsers');
-    //     if (!response.ok) {
-    //         throw new Error('Failed to fetch');
-    //     }
-    //     const usersData = await response.json();
-    //     setUsers(usersData);
-    // };
-
     const handleForward = () => {
         if (seedData.length > endCut) {
             setStartCut(startCut + 10);
@@ -443,7 +434,7 @@ const ManagementPage = () => {
                                 {
                                     seedData && seedData.slice(startCut, endCut).map((student: IStudentData | any, idx: number) => {
 
-                                        if (student[chooseSearch]?.toLowerCase().includes(search.toLowerCase())) {
+                                        if (student[chooseSearch]?.toLocaleLowerCase().includes(search.toLocaleLowerCase())) {
                                             let hide = ""
                                             return <tr key={idx} className={`h-[45px] ${idx % 2 == 0 ? "" : "bg-white"}  ${hide}`}>
 
