@@ -569,7 +569,7 @@ const StudentDirectoryPage = () => {
 
           <div className="my-5 flex max-w-[1396px] px-5 xl:px-0  justify-center gap-3  md:gap-10 items-center  w-full ">
             <button
-              className=" bg-[#23527C] w-[94px] h-[36px] px-[16px] py-[8px] text-white rounded-none "
+              className=" bg-[#23527C] w-[94px] h-[36px] px-[16px] py-[8px] text-white rounded-none flex items-center justify-center"
               onClick={handleBack}
               disabled={pageNumber == 1}
             >
@@ -578,7 +578,7 @@ const StudentDirectoryPage = () => {
 
             <p>{`Page ${pageNumber}`}</p>
             <button
-              className=" bg-[#23527C] h-[36px] px-[16px] py-[8px] text-white rounded-none "
+              className=" bg-[#23527C] w-[94px] h-[36px] px-[16px] py-[8px] text-white rounded-none flex items-center justify-center"
               onClick={handleForward}
               disabled={pageNumber === Math.ceil(seedData?.length / 10)}
             >
