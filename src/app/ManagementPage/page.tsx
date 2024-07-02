@@ -214,7 +214,7 @@ const ManagementPage = () => {
                 <div className={`bg-white p-[24px] relative   h-fit `}>
                     <p className=" text-[20px] md:text-[30px] text-center mb-2 md:mb-6 font-bold">
                         {" "}
-                        UPDATE {currentStudent?.email.toUpperCase()}S <br /> INFORMATION
+                        UPDATE USER INFORMATION
                     </p>
                     <div className=" grid gap-x-10 md:gap-y-2 grid-cols-1">
                         <div className=" mx-auto w-full">
@@ -225,6 +225,7 @@ const ManagementPage = () => {
                                 placeholder="First Name"
                                 type="text"
                                 name="email"
+                                maxLength={100}
                                 className="border w-full text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12 px-12"
                                 value={form?.email}
                                 onChange={updateForm}
@@ -240,6 +241,7 @@ const ManagementPage = () => {
                             placeholder="First Name"
                             type="text"
                             name="firstName"
+                            maxLength={100}
                             className="border w-full text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12 px-12"
                             value={form?.firstName}
                             onChange={updateForm}
@@ -254,6 +256,7 @@ const ManagementPage = () => {
                             placeholder="Last Name"
                             type="text"
                             name="lastName"
+                            maxLength={100}
                             className="border w-full text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12 px-12"
                             value={form?.lastName}
                             onChange={updateForm}
