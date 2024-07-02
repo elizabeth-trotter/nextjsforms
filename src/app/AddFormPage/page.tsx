@@ -100,17 +100,16 @@ const AddFormPage = () => {
 
 
     return (
-        <div>
+        <div className="min-h-screen bg-[#23527C] flex flex-col justify-between">
             <NavbarComponent admin={data && data.isAdmin} />
 
-            <main className="py-40 w-full bg-[#23527C] flex items-center justify-center">
+            <main className="w-full bg-[#23527C] flex items-center justify-center">
                 <ToastContainer />
 
                 <div className="px-6 py-4">
-                    <h1 className="text-center text-[34px] mb-6 robotoCondensed font-bold text-white"></h1>
 
                     <div className="flex items-center flex-col">
-                        <div className="bg-white px-6 py-4 sm:min-w-[538px] sm:max-w-[538px] max-w-[288px] mb-12">
+                        <div className="bg-white px-6 py-4 sm:min-w-[538px] sm:max-w-[538px] max-w-[288px] my-8">
                             <h1 className="text-center text-[34px] text-black mb-6 robotoCondensed font-light "><strong className="font-bold">ADD STUDENT</strong></h1>
 
                             <form onSubmit={handleSubmit} className="openSans font-semibold">
@@ -118,7 +117,11 @@ const AddFormPage = () => {
 
                                     <div className='flex flex-col relative'>
                                         <p className='text-red-600 absolute top-0 right-1'>*</p>
-                                        <input placeholder="First Name" type="text" id="firstName" name="firstName" className={`${isSubmitted && formData.firstname === '' ? 'border border-red-500 text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12' : 'text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12 focus:!border-none focus:!ring-transparent active:!ring-transparent active:!border-none !border-none'}`} value={formData.firstname} minLength={2} maxLength={100}
+                                        <input placeholder="First Name" type="text" id="firstName" name="firstName"
+                                            className={`${isSubmitted && formData.firstname === '' ?
+                                                'border border-red-500' : ''} text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E]
+                                                 focus:rounded-none h-12 focus:!border-none focus:!ring-transparent active:!ring-transparent active:!border-none`}
+                                            value={formData.firstname} minLength={2} maxLength={100}
                                             onChange={(e) => {
                                                 const { value } = e.target;
                                                 // Remove any characters that are not in the allowed set
@@ -130,7 +133,12 @@ const AddFormPage = () => {
 
                                     <div className='flex flex-col relative'>
                                         <p className='text-red-600 absolute top-0 right-1'>*</p>
-                                        <input placeholder="Last Name" type="text" id="lastName" name="lastName" className={`${isSubmitted && formData.lastname === '' ? 'border border-red-500 text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12' : 'text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12 focus:!border-none focus:!ring-transparent active:!ring-transparent active:!border-none !border-none'}`} value={formData.lastname} minLength={2} maxLength={100}
+                                        <input placeholder="Last Name" type="text" id="lastName" name="lastName"
+                                            className={`${isSubmitted && formData.lastname === '' ?
+                                                'border border-red-500' : ''}
+                                                text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] 
+                                                focus:rounded-none h-12 focus:!border-none focus:!ring-transparent active:!ring-transparent active:!border-none`}
+                                            value={formData.lastname} minLength={2} maxLength={100}
                                             onChange={(e) => {
                                                 const { value } = e.target;
                                                 // Remove any characters that are not in the allowed set
@@ -142,28 +150,44 @@ const AddFormPage = () => {
 
                                     <div className='flex flex-col relative'>
                                         <p className='text-red-600 absolute top-0 right-1'>*</p>
-                                        <input placeholder="Email" type="email" autoComplete="email" id="email" name="email" className={`${isSubmitted && formData.email === '' ? 'border border-red-500 text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12' : 'text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12 focus:!border-none focus:!ring-transparent active:!ring-transparent active:!border-none !border-none'}`} value={formData.email} onChange={updateForm} />
+                                        <input placeholder="Email" type="email" autoComplete="email" id="email" name="email"
+                                            className={`${isSubmitted && formData.email === '' ?
+                                                'border border-red-500 ' : ''}
+                                               text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none
+                                                h-12 focus:!border-none focus:!ring-transparent active:!ring-transparent active:!border-none`}
+                                            value={formData.email} onChange={updateForm} />
                                     </div>
 
                                     <div className='flex flex-col relative'>
                                         <p className='text-red-600 absolute top-0 right-1'>*</p>
 
-                                        <input placeholder="Birthdate" type="date" id="dob" name="dob" className={`${isSubmitted && formData.dob === '' ? 'border border-red-500 text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12' : 'text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12 focus:!border-none focus:!ring-transparent active:!ring-transparent active:!border-none !border-none'}`} value={formData.dob} onChange={updateForm} max={maxDate} />
+                                        <input placeholder="Birthdate" type="date" id="dob" name="dob"
+                                            className={`${isSubmitted && formData.dob === '' ?
+                                                'border border-red-500 ' : ''}
+                                                text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none
+                                                 h-12 focus:!border-none focus:!ring-transparent active:!ring-transparent active:!border-none`}
+                                            value={formData.dob} onChange={updateForm} max={maxDate} />
                                     </div>
 
                                     <div className='flex flex-col relative'>
 
-                                        <input className="text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12 focus:!border-none focus:!ring-transparent active:!ring-transparent active:!border-none !border-none " placeholder="Address" type="text" autoComplete="street-address" id="address" name="address" value={formData.address} onChange={updateForm} maxLength={100} />
+                                        <input className="text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E]
+                                         focus:rounded-none h-12 focus:!border-none focus:!ring-transparent active:!ring-transparent active:!border-none"
+                                            placeholder="Address" type="text" autoComplete="street-address" id="address" name="address" value={formData.address}
+                                            onChange={updateForm} maxLength={100} />
                                     </div>
 
                                     <div className='flex flex-col relative'>
-                                        <InputMask className={`${/\([0-9]{3}\)-[0-9]{3}-[0-9]{4}/.test(formData.phonenumber) === false && formData.phonenumber.length > 0 ? "border border-red-500" : ""} text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12 `} placeholder="(xxx)-xxx-xxxx" autoComplete="tel" mask="(999)-999-9999" value={formData.phonenumber} onChange={updateForm} id="phonenumber" name="phonenumber"></InputMask>
+                                        <InputMask className={`${/\([0-9]{3}\)-[0-9]{3}-[0-9]{4}/.test(formData.phonenumber) === false && formData.phonenumber.length > 0 ?
+                                            "border border-red-500" : ""}
+                                              text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12 `}
+                                            placeholder="(xxx)-xxx-xxxx" autoComplete="tel" mask="(999)-999-9999" value={formData.phonenumber} onChange={updateForm} id="phonenumber" name="phonenumber"></InputMask>
                                     </div>
 
                                 </div>
 
                                 <div className="flex justify-center mt-6 w-full flex-col">
-                                    <button type="submit" className="bg-[#DD8A3E] hover:brightness-90 p-4 w-full text-white text-sm font-bold tracking-wide" >Update</button>
+                                    <button type="submit" className="bg-[#DD8A3E] hover:brightness-90 p-4 w-full text-white text-sm font-bold tracking-wide">Update</button>
                                     <p className=" text-red-600 text-xs text-end pt-1 openSans">* fields required</p>
                                 </div>
 
