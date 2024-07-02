@@ -100,10 +100,10 @@ const AddFormPage = () => {
 
 
     return (
-        <div className="min-h-screen bg-[#23527C]">
+        <div className="min-h-screen bg-[#23527C] flex flex-col justify-between">
             <NavbarComponent admin={data && data.isAdmin} />
 
-            <main className="sm:py-40 w-full bg-[#23527C] flex items-center justify-center">
+            <main className="w-full bg-[#23527C] flex items-center justify-center">
                 <ToastContainer />
 
                 <div className="px-6 py-4">
