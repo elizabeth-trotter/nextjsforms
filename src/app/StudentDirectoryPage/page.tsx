@@ -448,9 +448,9 @@ const StudentDirectoryPage = () => {
                         SortByAlpha("firstName");
                       }}
                     >
-                      <div className="flex items-center gap-1">
-                        <p className="hover:cursor-pointer w-fit"> First Name</p>
-                        <img src="/sortArrows.png" alt="Sort Arrows" className="hover:cursor-pointer h-[20px] w-[20px]" />
+                      <div className="flex items-center gap-1 w-fit hover:cursor-pointer">
+                        <p className="w-fit"> First Name</p>
+                        <img src="/sortArrows.png" alt="Sort Arrows" className="h-[20px] w-[20px]" />
                       </div>
                     </th>
                     <th
@@ -459,9 +459,9 @@ const StudentDirectoryPage = () => {
                         SortByAlpha("lastName");
                       }}
                     >
-                      <div className="flex items-center gap-1">
-                        <p className="hover:cursor-pointer w-fit"> Last Name</p>
-                        <img src="/sortArrows.png" alt="Sort Arrows" className="hover:cursor-pointer h-[20px] w-[20px]" />
+                      <div className="flex items-center gap-1 w-fit hover:cursor-pointer">
+                        <p className="w-fit"> Last Name</p>
+                        <img src="/sortArrows.png" alt="Sort Arrows" className="h-[20px] w-[20px]" />
                       </div>
                     </th>
                     <th
@@ -470,9 +470,9 @@ const StudentDirectoryPage = () => {
                         SortByDate();
                       }}
                     >
-                      <div className="flex items-center gap-1">
-                        <p className=" hover:cursor-pointer w-fit"> Date of Birth</p>
-                        <img src="/sortArrows.png" alt="Sort Arrows" className="hover:cursor-pointer h-[20px] w-[20px]" />
+                      <div className="flex items-center gap-1 w-fit hover:cursor-pointer">
+                        <p className="w-fit"> Date of Birth</p>
+                        <img src="/sortArrows.png" alt="Sort Arrows" className="h-[20px] w-[20px]" />
                       </div>
                     </th>
                     <th className=" text-[16px] text-start font-normal overflow-hidden px-2 min-w-48">
@@ -484,9 +484,9 @@ const StudentDirectoryPage = () => {
                         SortByAlpha("email");
                       }}
                     >
-                      <div className="flex items-center gap-1">
-                        <p className=" hover:cursor-pointer w-fit">Email</p>
-                        <img src="/sortArrows.png" alt="Sort Arrows" className="hover:cursor-pointer h-[20px] w-[20px]" />
+                      <div className="flex items-center gap-1 w-fit hover:cursor-pointer">
+                        <p className=" w-fit">Email</p>
+                        <img src="/sortArrows.png" alt="Sort Arrows" className="h-[20px] w-[20px]" />
                       </div>
                       
                     </th>
