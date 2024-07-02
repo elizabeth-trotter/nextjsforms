@@ -318,7 +318,9 @@ export default function Home() {
 
                   <p className='text-red-600 absolute top-0 right-1'>*</p>
 
-                  <img className="hover:cursor-pointer absolute top-3 right-5 aspect-square w-6" src={showPassword ? "/eye.svg" : "/eye-slash.svg"} alt="eyeball" onClick={handleShowPassword} />
+                  <img className="hover:cursor-pointer absolute top-3 right-5 aspect-square w-6" 
+                  src={showPassword ? "/eye.svg" : "/eye-slash.svg"} 
+                  alt="eyeball" onClick={handleShowPassword} />
 
                   {/* Password Input Field */}
                   {!isLoginPage &&
@@ -345,7 +347,8 @@ export default function Home() {
 
                   {/* Password Input Field for Login Page */}
                   {isLoginPage && !isForgotPasswordPage &&
-                    <input placeholder={isForgotPasswordPage ? "New Password" : "Password"} type={showPassword ? "text" : "password"} id="password" name="password"
+                    <input placeholder={isForgotPasswordPage ? "New Password" : "Password"} 
+                    type={showPassword ? "text" : "password"} id="password" name="password"
                       className={`${isLoginPage ?
                         loginError || (loginError && loginData.email.length === 0) ?
                           "border border-red-500" : "" :
