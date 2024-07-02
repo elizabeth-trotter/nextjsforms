@@ -8,6 +8,7 @@ import { Button } from 'flowbite-react';
 import Image from 'next/image';
 import FooterComponent from "@/components/FooterComponent/page";
 import { useAppContext } from '@/context/Context';
+import InputMask from "react-input-mask";
 
 interface IStudentData {
     id: number,
@@ -207,111 +208,148 @@ const ManagementPage = () => {
     return (
         <div>
 
-            <div className={`flex justify-center items-center bg-[#00000089] h-screen w-screen fixed  ${hideEditModel}`} >
-                <div className={`bg-sky-400   w-[800px] min-h-[400px] `}>
+            <div
+                className={`flex justify-center md:items-center  bg-[#00000089] h-full w-screen fixed ${hideEditModel} `}
+            >
+                <div className={`bg-white p-[24px] relative   h-fit `}>
+                    <p className=" text-[20px] md:text-[30px] text-center mb-2 md:mb-6 font-bold">
+                        {" "}
+                        UPDATE {currentStudent?.email.toUpperCase()}S <br /> INFORMATION
+                    </p>
+                    <div className=" grid gap-x-10 md:gap-y-2 grid-cols-1">
+                        <div className=" mx-auto w-full">
+                            <label className=" w-fit rounded font-normal text-slate-600">
+                                Email
+                            </label>
+                            <input
+                                placeholder="First Name"
+                                type="text"
+                                name="email"
+                                className="border w-full text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12 px-12"
+                                value={form?.email}
+                                onChange={updateForm}
+                            />
+                        </div>
+                    </div>
 
-                    <p> Update {currentStudent?.firstName}s information.</p>
-
-                    <div className="">
-                        <label className="block rounded p-3">
+                    <div className=" mx-auto w-full">
+                        <label className=" w-fit rounded font-normal text-slate-600">
                             First Name
                         </label>
-                        <input value={form?.firstName} type="text" placeholder="First Name" name="firstName" className="border rounded p-3" onChange={updateForm} />
+                        <input
+                            placeholder="First Name"
+                            type="text"
+                            name="firstName"
+                            className="border w-full text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12 px-12"
+                            value={form?.firstName}
+                            onChange={updateForm}
+                        />
                     </div>
 
-                    <div className="">
-                        <label className="block rounded p-3">
+                    <div className=" mx-auto w-full">
+                        <label className=" w-fit rounded font-normal text-slate-600">
                             Last Name
                         </label>
-                        <input type="text" placeholder="Last Name" name="lastName" className="border rounded p-3" onChange={updateForm} value={form?.lastName} />
+                        <input
+                            placeholder="Last Name"
+                            type="text"
+                            name="lastName"
+                            className="border w-full text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12 px-12"
+                            value={form?.lastName}
+                            onChange={updateForm}
+                        />
                     </div>
 
-                    <div className="">
-                        <label className="block rounded p-3">
-                            ID
-                        </label>
-                        <input type="text" placeholder="Address" name="address" className="border rounded p-3" onChange={updateForm} value={form?.address} />
-                    </div>
-
-                    <div className="">
-                        <label className="block rounded p-3">
-                            Phone Number
-                        </label>
-                        <input type="text" placeholder="Phone Number" name="phoneNumber" className="border rounded p-3" onChange={updateForm} value={form?.phoneNumber} />
-                    </div>
-
-                    <div className="">
-                        <label className="block rounded p-3">
+                    <div className=" mx-auto w-full ">
+                        <label className=" w-fit rounded font-normal text-slate-600">
                             Date of Birth
                         </label>
-                        <input type="text" placeholder="Date of Birth" name="dob" className="border rounded p-3" onChange={updateForm} value={form?.dob} />
+                        <input
+                            placeholder="Date of Birth"
+                            type="date"
+                            name="dob"
+                            className="border text-center bg-[#ECF0F1] w-full p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12"
+                            value={form?.dob}
+                            onChange={updateForm}
+                        />
                     </div>
 
-                    <div className="">
-                        <label className="block rounded p-3">
-                            Email
-                        </label>
-                        <input type="text" placeholder="Email" name="email" className="border rounded p-3" onChange={updateForm} value={form?.email} />
+                    <div className=" flex justify-end gap-x-5  mt-2 md:mt-6  ">
+                        <button
+                            className=" text-white w-[100px] h-[50px] font-semibold  bg-[#737375]"
+                            onClick={() => setEditHideModel("hidden")}
+                        >
+                            CANCEL
+                        </button>
+
+                        <button
+                            className=" text-white w-[100px] h-[50px] font-semibold  bg-[#DD8A3E]  "
+                            onClick={async () => {
+                                setEditHideModel("hidden");
+
+                                replaceStudentWithoutRefetching(currentStudent?.id, form);
+                                await softDeleteUser({
+                                    id: form?.id,
+                                    firstName: form?.firstName,
+                                    lastName: form?.lastName,
+                                    address: form?.address,
+                                    phoneNumber: form?.phoneNumber,
+                                    dob: form?.dob,
+                                    email: form?.email,
+                                    isDeleted: form?.isDeleted,
+                                });
+                            }}
+                        >
+                            UPDATE
+                        </button>
                     </div>
-
-
-
-                    <button onClick={() => setEditHideModel("hidden")}>cancel</button>
-
-                    <button onClick={async () => {
-                        setEditHideModel("hidden")
-
-                        replaceStudentWithoutRefetching(currentStudent?.id,
-                            form
-                        )
-                        await softDeleteUser(
-                            {
-                                id: form?.id,
-                                firstName: form?.firstName,
-                                lastName: form?.lastName,
-                                address: form?.address,
-                                phoneNumber: form?.phoneNumber,
-                                dob: form?.dob,
-                                email: form?.email,
-                                isDeleted: form?.isDeleted
-                            }
-                        )
-                    }}>update</button>
                 </div>
             </div>
 
-
-            <div className={`flex justify-center items-center bg-[#00000089] h-screen w-screen fixed  ${hideModel}`} >
-                <div className={`bg-sky-400   w-[800px] h-[400px] `}>
-                    <p>Are you sure you want to remove {currentStudent?.firstName}</p>
-                    <button onClick={() => setHideModel("hidden")}>cancel</button>
-                    <button onClick={async () => {
-                        setHideModel("hidden")
-                        removeStudentWithoutRefetching(currentStudent?.id)
-                        await softDeleteUser(
-                            {
-                                id: currentStudent?.id,
-                                firstName: currentStudent?.firstName,
-                                lastName: currentStudent?.lastName,
-                                address: currentStudent?.address,
-                                phoneNumber: currentStudent?.phoneNumber,
-                                dob: currentStudent?.dob,
-                                email: currentStudent?.email,
-                                isDeleted: true
-                            }
-                        )
-                    }}>delete</button>
+            <div
+                className={`flex justify-center items-center bg-[#00000089] h-screen w-screen fixed  ${hideModel}`}
+            >
+                <div className={`bg-white p-5`}>
+                    <p className="text-center pb-5">
+                        Are you sure you want to remove <br /> {currentStudent?.email}
+                    </p>
+                    <div className="flex justify-evenly">
+                        <button
+                            className="text-white w-[100px] h-[50px] font-semibold  bg-[#737375]"
+                            onClick={() => setHideModel("hidden")}
+                        >
+                            CANCEL
+                        </button>
+                        <button
+                            className="text-white w-[100px] h-[50px] font-semibold  bg-[#DD8A3E]"
+                            onClick={async () => {
+                                setHideModel("hidden");
+                                removeStudentWithoutRefetching(currentStudent?.id);
+                                await softDeleteUser({
+                                    id: currentStudent?.id,
+                                    firstName: currentStudent?.firstName,
+                                    lastName: currentStudent?.lastName,
+                                    address: currentStudent?.address,
+                                    phoneNumber: currentStudent?.phoneNumber,
+                                    dob: currentStudent?.dob,
+                                    email: currentStudent?.email,
+                                    isDeleted: true,
+                                });
+                            }}
+                        >
+                            DELETE
+                        </button>
+                    </div>
                 </div>
             </div>
-
 
             <NavbarComponent admin={pageContext.admin} />
 
-            <div className='flex flex-col items-center   w-fit mx-auto '>
+            <div className='flex flex-col items-center w-screen mx-auto lg:w-[95%]'>
 
                 <div className=' mr-auto '>
-                    <input onChange={(e) => { setSearch(e.target.value) }} type="text" className='border my-5 me-5' />
-                    <select onChange={(e) => { setChooseSearch(e.target.value) }}>
+                    <input onChange={(e) => { setSearch(e.target.value) }} type="text" className='border md:my-5 mt-5 lg:me-3 md:w-[50%] w-[100%]' />
+                    <select onChange={(e) => { setChooseSearch(e.target.value) }} className='sm:w-[40%] w-full md:mb-0 mb-5'>
                         <option value="email">Email</option>
                         <option value="firstName">Firstname</option>
                         <option value="lastName">Lastname</option>
@@ -320,71 +358,71 @@ const ManagementPage = () => {
                         <option value="address">Address</option>
                     </select>
                 </div>
-                <div className='min-h-[510px] w-full'>
-                    <table className=' border border-black '>
-                        <thead className='text-white text-[20px] bg-[#23527C] gap-2  '>
-                            <tr>
-                                <th className=' text-start  font-normal  overflow-hidden px-2 w-80' onClick={() => { SortByAlpha("email") }}>Email</th>
-                                <th className=' py-2 text-start font-normal  overflow-hidden px-2 w-48 ' onClick={() => { SortByAlpha("firstName") }}>First Name</th>
-                                <th className=' text-start  font-normal  overflow-hidden px-2 w-48' onClick={() => { SortByAlpha("lastName") }}>Last Name</th>
-                                <th className=' text-start  font-normal  overflow-hidden px-2 w-48' onClick={() => { SortByDate() }}>Date of Birth</th>
-                                <th className=' font-normal w-20'></th>
-                            </tr>
-                        </thead>
 
-                        <tbody className=" ">
-                            {
-                                seedData && seedData.slice(startCut, endCut).map((student: IStudentData | any, idx: number) => {
+                <div className='flex lg:justify-center overflow-auto w-full'>
+                    <div className='min-h-[510px] w-full'>
+                        <table className=' border border-black w-full'>
+                            <thead className='text-white text-[20px] bg-[#23527C] gap-2  '>
+                                <tr>
+                                    <th className=' text-start  font-normal  overflow-hidden px-2 min-w-80' onClick={() => { SortByAlpha("email") }}>Email</th>
+                                    <th className=' py-2 text-start font-normal  overflow-hidden px-2 min-w-48 ' onClick={() => { SortByAlpha("firstName") }}>First Name</th>
+                                    <th className=' text-start  font-normal  overflow-hidden px-2 min-w-48' onClick={() => { SortByAlpha("lastName") }}>Last Name</th>
+                                    <th className=' text-start  font-normal  overflow-hidden px-2 min-w-48' onClick={() => { SortByDate() }}>Date of Birth</th>
+                                    <th className=' font-normal min-w-20'></th>
+                                </tr>
+                            </thead>
 
-
-
-                                    if (student[chooseSearch]?.toLocaleLowerCase().includes(search.toLocaleLowerCase())) {
-                                        let hide = ""
-                                        return <tr key={idx} className={` h-[45px] ${idx % 2 == 0 ? "" : "bg-white"}  ${hide}`}>
-
-                                            <td className='  overflow-hidden px-2'> {student.email ? student.email : "N/A"} </td>
-                                            <td className='  overflow-hidden px-2  '>{student?.firstName ? student?.firstName : "N/A"} </td>
-                                            <td className='  overflow-hidden px-2'>{student.lastName ? student.lastName : "N/A"}  </td>
-                                            <td className='  overflow-hidden px-2'>  {student?.dob ? student?.dob : "N/A"} </td>
-                                            <td className=' flex flex-row items-center p-2 gap-2'>
-                                                <Image
-                                                    onClick={() => {
-                                                        setCurrentStudent(student)
-                                                        setHideModel("block")
-                                                    }}
-                                                    src="/Trash.png"
-                                                    alt="Delete"
-                                                    width={30}
-                                                    height={30}
-                                                    className='cursor-pointer'
-                                                />
-                                                <Image
-                                                    onClick={() => {
-                                                        setForm(student)
-                                                        setCurrentStudent(student)
-                                                        setEditHideModel("block")
-
-                                                    }}
-                                                    src="/Edit.png"
-                                                    alt='"Edit'
-                                                    width={25}
-                                                    height={25}
-                                                    // onClick={}
-                                                    className='cursor-pointer'
-                                                />
-                                            </td>
-                                        </tr>
-                                    } else {
-                                        return null
-                                    }
-
-                                })
-                            }
-                        </tbody>
-                    </table>
+                            <tbody className=" ">
+                                {
+                                    seedData && seedData.slice(startCut, endCut).map((student: IStudentData | any, idx: number) => {
 
 
 
+                                        if (student[chooseSearch]?.toLocaleLowerCase().includes(search.toLocaleLowerCase())) {
+                                            let hide = ""
+                                            return <tr key={idx} className={`h-[45px] ${idx % 2 == 0 ? "" : "bg-white"}  ${hide}`}>
+
+                                                <td className='overflow-hidden px-2'>{student.email ? student.email : "N/A"}</td>
+                                                <td className='overflow-hidden px-2'>{student?.firstName ? student?.firstName : "N/A"}</td>
+                                                <td className='overflow-hidden px-2'>{student.lastName ? student.lastName : "N/A"}</td>
+                                                <td className='overflow-hidden px-2'>{student?.dob ? student?.dob : "N/A"} </td>
+                                                <td className='flex flex-row items-center p-2 gap-2'>
+                                                    <Image
+                                                        onClick={() => {
+                                                            setCurrentStudent(student)
+                                                            setHideModel("block")
+                                                        }}
+                                                        src="/Trash.png"
+                                                        alt="Delete"
+                                                        width={30}
+                                                        height={30}
+                                                        className='cursor-pointer'
+                                                    />
+                                                    <Image
+                                                        onClick={() => {
+                                                            setForm(student)
+                                                            setCurrentStudent(student)
+                                                            setEditHideModel("block")
+
+                                                        }}
+                                                        src="/Edit.png"
+                                                        alt='"Edit'
+                                                        width={25}
+                                                        height={25}
+                                                        // onClick={}
+                                                        className='cursor-pointer'
+                                                    />
+                                                </td>
+                                            </tr>
+                                        } else {
+                                            return null
+                                        }
+
+                                    })
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
                 <div className='my-5 flex justify-between w-full '>
