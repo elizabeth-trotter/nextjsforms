@@ -350,7 +350,7 @@ const ManagementPage = () => {
                 </div>
             </div>
 
-            <NavbarComponent admin={pageContext.admin} />
+            <NavbarComponent admin={data && data.isAdmin} />
 
             <div className='flex flex-col items-center w-screen mx-auto lg:w-[95%]'>
 
