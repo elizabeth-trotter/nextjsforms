@@ -100,17 +100,16 @@ const AddFormPage = () => {
 
 
     return (
-        <div>
+        <div className="min-h-screen bg-[#23527C]">
             <NavbarComponent admin={data && data.isAdmin} />
 
-            <main className="py-40 w-full bg-[#23527C] flex items-center justify-center">
+            <main className="sm:py-40 w-full bg-[#23527C] flex items-center justify-center">
                 <ToastContainer />
 
                 <div className="px-6 py-4">
-                    <h1 className="text-center text-[34px] mb-6 robotoCondensed font-bold text-white"></h1>
 
                     <div className="flex items-center flex-col">
-                        <div className="bg-white px-6 py-4 sm:min-w-[538px] sm:max-w-[538px] max-w-[288px] mb-12">
+                        <div className="bg-white px-6 py-4 sm:min-w-[538px] sm:max-w-[538px] max-w-[288px] my-8">
                             <h1 className="text-center text-[34px] text-black mb-6 robotoCondensed font-light "><strong className="font-bold">ADD STUDENT</strong></h1>
 
                             <form onSubmit={handleSubmit} className="openSans font-semibold">
