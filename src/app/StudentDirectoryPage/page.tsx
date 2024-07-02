@@ -418,7 +418,7 @@ const StudentDirectoryPage = () => {
       <NavbarComponent admin={data !== null && data.isAdmin} />
 
       <div>
-        <div className="flex flex-col items-center w-fit max-w-[1396px] mx-auto">
+        <div className="flex flex-col items-center w-[96%] mx-auto overflow-auto">
           <div className=" md:mr-auto xl:px-0 px-5">
             <input
               placeholder="Search"
@@ -437,8 +437,8 @@ const StudentDirectoryPage = () => {
             </select>
           </div>
 
-          <div className="w-screen overflow-x-auto flex px-5 xl:px-0 xl:justify-center mt-5">
-            <div className="min-h-[510px] max-w-[1396px] ">
+          <div className="flex lg:justify-center overflow-auto w-full">
+            <div className="min-h-[510px] w-full ">
               <table className=" border border-black ">
                 <thead className="text-white text-[20px] bg-[#23527C] gap-2">
                   <tr>
@@ -519,7 +519,7 @@ const StudentDirectoryPage = () => {
                             <td className="overflow-hidden px-2 min-w-48">
                               {student?.dob ? student?.dob : "N/A"}
                             </td>
-                            <td className=" overflow-hidden px-2 min-w-80">
+                            <td className=" overflow-hidden px-2 min-w-72">
                               {student?.address ? student?.address : "N/A"}
                             </td>
                             <td className="overflow-hidden px-2 min-w-48">
@@ -576,7 +576,7 @@ const StudentDirectoryPage = () => {
               Back
             </button>
 
-            <p>{`Page ${pageNumber}`}</p>
+            <p className="text-center">{`Page ${pageNumber}`}</p>
             <button
               className=" bg-[#23527C] w-[94px] h-[36px] px-[16px] py-[8px] text-white rounded-none flex items-center justify-center"
               onClick={handleForward}
