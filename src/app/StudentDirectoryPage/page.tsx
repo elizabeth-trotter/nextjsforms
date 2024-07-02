@@ -151,32 +151,33 @@ const StudentDirectoryPage = () => {
     if (seedData && toggleABC) {
       const sorted = [...seedData].sort((a, b) => {
         if (
-          a[selectedField][0].toLocaleLowerCase() <
-          b[selectedField][0].toLocaleLowerCase()
+          a[selectedField][0].toLowerCase() <
+          b[selectedField][0].toLowerCase()
         ) {
           return -1;
         }
         if (
-          a[selectedField][0].toLocaleLowerCase() >
-          b[selectedField][0].toLocaleLowerCase()
+          a[selectedField][0].toLowerCase() >
+          b[selectedField][0].toLowerCase()
         ) {
           return 1;
         }
         return 0;
+        
       });
       setSeedData(sorted);
       setToggleABC(!toggleABC);
     } else if (seedData && !toggleABC) {
       const sorted = [...seedData].sort((a, b) => {
         if (
-          a[selectedField][0].toLocaleLowerCase() >
-          b[selectedField][0].toLocaleLowerCase()
+          a[selectedField][0].toLowerCase() >
+          b[selectedField][0].toLowerCase()
         ) {
           return -1;
         }
         if (
-          a[selectedField][0].toLocaleLowerCase() <
-          b[selectedField][0].toLocaleLowerCase()
+          a[selectedField][0].toLowerCase() <
+          b[selectedField][0].toLowerCase()
         ) {
           return 1;
         }
@@ -229,8 +230,8 @@ const StudentDirectoryPage = () => {
   const handleSearch = (e: any) => {
     const copyArr = saveArr.filter((student: IStudentData | any) =>
       student?.[chooseSearch]
-        ?.toLocaleLowerCase()
-        .includes(e.toLocaleLowerCase())
+        ?.toLowerCase()
+        .includes(e.toLowerCase())
     );
     setSeedData(copyArr);
   };
@@ -464,7 +465,10 @@ const StudentDirectoryPage = () => {
                         SortByAlpha("firstName");
                       }}
                     >
+                      <div className="flex items-center gap-1">
                       <p className=" hover:cursor-pointer w-fit"> First Name</p>
+                      <img src="/sortArrows.png" alt="Sort Arrows" className="hover:cursor-pointer h-[20px] w-[20px]" />
+                      </div>
                     </th>
                     <th
                       className=" text-[16px] text-start font-normal overflow-hidden px-2 min-w-48"
@@ -472,7 +476,10 @@ const StudentDirectoryPage = () => {
                         SortByAlpha("lastName");
                       }}
                     >
-                      <p className=" hover:cursor-pointer w-fit">Last Name</p>
+                      <div className="flex items-center gap-1">
+                      <p className=" hover:cursor-pointer w-fit"> Last Name</p>
+                      <img src="/sortArrows.png" alt="Sort Arrows" className="hover:cursor-pointer h-[20px] w-[20px]" />
+                      </div>
                     </th>
                     <th
                       className=" text-[16px] text-start font-normal overflow-hidden px-2 min-w-48"
@@ -480,9 +487,10 @@ const StudentDirectoryPage = () => {
                         SortByDate();
                       }}
                     >
-                      <p className=" hover:cursor-pointer w-fit">
-                        Date of Birth
-                      </p>
+                      <div className="flex items-center gap-1">
+                      <p className=" hover:cursor-pointer w-fit"> Date of Birth</p>
+                      <img src="/sortArrows.png" alt="Sort Arrows" className="hover:cursor-pointer h-[20px] w-[20px]" />
+                      </div>
                     </th>
                     <th className=" text-[16px] text-start font-normal overflow-hidden px-2 min-w-48">
                       Address
