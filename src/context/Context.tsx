@@ -9,7 +9,9 @@ interface IContextValue {
     setToken: (token: string) => void,
     admin: boolean,
     setAdmin: (isAdmin: boolean) => void,
-    logout: () => void
+    logout: () => void,
+    loginCount: number,
+    setLoginCount: (num: number) => void
 }
 
 export const Context = createContext<IContextValue>({} as IContextValue);
@@ -19,6 +21,7 @@ export const AppWrapper = ({ children, }: Readonly<{ children: React.ReactNode;}
     const [token, setToken] = useState<string>("");
     const [admin, setAdmin] = useState<boolean>(true);
     const [id, setId] = useState<number>(0);
+    const [loginCount, setLoginCount] = useState<number>(0);
     
     const logout = () => {
         setToken("");
@@ -26,7 +29,7 @@ export const AppWrapper = ({ children, }: Readonly<{ children: React.ReactNode;}
         setId(0);
     }
     return (
-        <Context.Provider value={{token, setToken, admin, setAdmin, id, setId, logout }}>
+        <Context.Provider value={{token, setToken, admin, setAdmin, id, setId, logout, loginCount, setLoginCount }}>
             {children}
         </Context.Provider>
     )
