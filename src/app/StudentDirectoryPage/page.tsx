@@ -248,7 +248,7 @@ const StudentDirectoryPage = () => {
     <div className={` ${noScroll}`}>
       <ToastContainer/>
       <div
-        className={`  flex justify-center items-center bg-[#00000089] h-full w-screen fixed ${hideEditModel} `}
+        className={`  flex justify-center items-center bg-[#00000089] h-full w-screen px-5 fixed ${hideEditModel} `}
       >
         <div className={`bg-white mt-4 p-[24px] relative h-fit `}>
           <p className=" text-[20px] md:text-[30px] text-center mb-2 md:mb-6 font-bold">
@@ -263,7 +263,7 @@ const StudentDirectoryPage = () => {
                 placeholder="First Name"
                 type="text"
                 name="firstName"
-                className="border w-full text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-8 px-2"
+                className="border w-full text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-8 px-2 focus:!border-none focus:!ring-transparent active:!ring-transparent active:!border-none"
                 value={form?.firstName}
                 onChange={updateForm}
               />
@@ -277,7 +277,7 @@ const StudentDirectoryPage = () => {
                 placeholder="Last Name"
                 type="text"
                 name="lastName"
-                className="border w-full text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-8 px-2"
+                className="border w-full text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-8 px-2 focus:!border-none focus:!ring-transparent active:!ring-transparent active:!border-none"
                 value={form?.lastName}
                 onChange={updateForm}
               />
@@ -291,7 +291,7 @@ const StudentDirectoryPage = () => {
                 placeholder="Address"
                 type="text"
                 name="address"
-                className="border w-full text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-8 px-2"
+                className="border w-full text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-8 px-2 focus:!border-none focus:!ring-transparent active:!ring-transparent active:!border-none"
                 value={form?.address}
                 onChange={updateForm}
               />
@@ -327,7 +327,7 @@ const StudentDirectoryPage = () => {
                 placeholder="Date of Birth"
                 type="date"
                 name="dob"
-                className="border text-center bg-[#ECF0F1] w-full p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-8"
+                className="border text-center bg-[#ECF0F1] w-full p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-8 focus:!border-none focus:!ring-transparent active:!ring-transparent active:!border-none"
                 value={form?.dob}
                 onChange={updateForm}
               />
@@ -341,7 +341,7 @@ const StudentDirectoryPage = () => {
                 placeholder="First Name"
                 type="text"
                 name="email"
-                className="border w-full text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-8 px-2"
+                className="border w-full text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-8 px-2 focus:!border-none focus:!ring-transparent active:!ring-transparent active:!border-none"
                 value={form?.email}
                 onChange={updateForm}
               />
@@ -394,7 +394,7 @@ const StudentDirectoryPage = () => {
       >
         <div className={`bg-white p-5`}>
           <p className="text-center pb-5">
-            Are you sure you want to remove {currentStudent?.firstName}
+            Are you sure you want to remove {currentStudent?.firstName} {currentStudent?.lastName}?
           </p>
           <div className="flex justify-evenly">
             <button
@@ -440,7 +440,7 @@ const StudentDirectoryPage = () => {
 
       <div>
         <div className="flex flex-col items-center 2xl:w-[1474px] w-[96%] mx-auto overflow-auto">
-          <div className=" md:mr-auto xl:px-0">
+          <div className="mr-auto">
             <input
               placeholder="Search"
               onChange={handleInputChange}
@@ -590,7 +590,7 @@ const StudentDirectoryPage = () => {
 
           <div className="my-5 flex max-w-[1396px] px-5 xl:px-0  justify-center gap-3  md:gap-10 items-center  w-full ">
             <button
-              className=" bg-[#23527C] w-[94px] h-[36px] px-[16px] py-[8px] text-white rounded-none flex items-center justify-center"
+              className=" bg-[#23527C] w-[94px] h-[36px] px-[16px] py-[8px] disabled:bg-[#23527c8d] text-white rounded-none flex items-center justify-center"
               onClick={handleBack}
               disabled={pageNumber == 1}
             >
@@ -599,7 +599,7 @@ const StudentDirectoryPage = () => {
 
             <p className="text-center">{`Page ${pageNumber}`}</p>
             <button
-              className=" bg-[#23527C] w-[94px] h-[36px] px-[16px] py-[8px] text-white rounded-none flex items-center justify-center"
+              className=" bg-[#23527C] w-[94px] h-[36px] px-[16px] py-[8px] disabled:bg-[#23527c8d] text-white rounded-none flex items-center justify-center"
               onClick={handleForward}
               disabled={pageNumber === Math.ceil(seedData?.length / 10)}
             >

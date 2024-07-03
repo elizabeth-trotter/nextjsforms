@@ -54,7 +54,8 @@ const ManagementPage = () => {
     const [pageNumber, setPageNumber] = useState(1);
     const [saveArr, setSaveArr] = useState<IStudentData[] | any>();
     const [inputValue, setInputValue] = useState("");
-    const [inputValidation, setInputValidation] = useState("text");  
+    const [inputValidation, setInputValidation] = useState("text");
+    const [noScroll, setNoScroll] = useState("");
 
     const [seedData, setSeedData] = useState<IStudentData[] | any>();
 
@@ -83,26 +84,26 @@ const ManagementPage = () => {
         }
         const { value } = e.target;
         switch (chooseSearch) {
-          case "phoneNumber":
-            setInputValue(value.replace(/[^0-9]/g, ""));
-            handleSearch(value);
-            break;
-          case "email":
-            setInputValue(value);
-            handleSearch(value);
-            break;
-          default:
-            setInputValue(value);
-            handleSearch(value);
-            break;
+            case "phoneNumber":
+                setInputValue(value.replace(/[^0-9]/g, ""));
+                handleSearch(value);
+                break;
+            case "email":
+                setInputValue(value);
+                handleSearch(value);
+                break;
+            default:
+                setInputValue(value);
+                handleSearch(value);
+                break;
         }
-      };
+    };
 
-      const handleSelectChange = (e: any) => {
+    const handleSelectChange = (e: any) => {
         setChooseSearch(e.target.value);
         setInputValue("");
         setInputValidation(e.target.value === "phoneNumber" ? "tel" : "text");
-      };
+    };
 
     const FetchAllUsers = async () => {
         const res = await fetch("https://williamform.azurewebsites.net/User/GetAllUsers");
@@ -173,78 +174,78 @@ const ManagementPage = () => {
 
     const SortByAlpha = (selectedField: string) => {
         if (seedData) {
-          const sorted = [...seedData].sort((a, b) => {
-            const fieldA = a[selectedField]?.toLowerCase() || '';
-            const fieldB = b[selectedField]?.toLowerCase() || '';
-    
-            if (fieldA === '' && fieldB === '') return 0;
-            if (fieldA === '') return 1;
-            if (fieldB === '') return -1;
-    
-            if (toggleABC) {
-              if (fieldA < fieldB) return -1;
-              if (fieldA > fieldB) return 1;
-            } else {
-              if (fieldA > fieldB) return -1;
-              if (fieldA < fieldB) return 1;
-            }
-            return 0;
-          });
-          setSeedData(sorted);
-          setToggleABC(!toggleABC);
+            const sorted = [...seedData].sort((a, b) => {
+                const fieldA = a[selectedField]?.toLowerCase() || '';
+                const fieldB = b[selectedField]?.toLowerCase() || '';
+
+                if (fieldA === '' && fieldB === '') return 0;
+                if (fieldA === '') return 1;
+                if (fieldB === '') return -1;
+
+                if (toggleABC) {
+                    if (fieldA < fieldB) return -1;
+                    if (fieldA > fieldB) return 1;
+                } else {
+                    if (fieldA > fieldB) return -1;
+                    if (fieldA < fieldB) return 1;
+                }
+                return 0;
+            });
+            setSeedData(sorted);
+            setToggleABC(!toggleABC);
         }
-      }
-    
-      const SortByDate = () => {
+    }
+
+    const SortByDate = () => {
         if (seedData) {
-          const sorted = [...seedData].sort((a, b) => {
-            const dateA = new Date(a.dob || '').getTime();
-            const dateB = new Date(b.dob || '').getTime();
-    
-            if (!a.dob && !b.dob) return 0;
-            if (!a.dob) return 1;
-            if (!b.dob) return -1;
-    
-            if (toggleABC) {
-              return dateA - dateB;
-            } else {
-              return dateB - dateA;
-            }
-          });
-          setSeedData(sorted);
-          setToggleABC(!toggleABC);
+            const sorted = [...seedData].sort((a, b) => {
+                const dateA = new Date(a.dob || '').getTime();
+                const dateB = new Date(b.dob || '').getTime();
+
+                if (!a.dob && !b.dob) return 0;
+                if (!a.dob) return 1;
+                if (!b.dob) return -1;
+
+                if (toggleABC) {
+                    return dateA - dateB;
+                } else {
+                    return dateB - dateA;
+                }
+            });
+            setSeedData(sorted);
+            setToggleABC(!toggleABC);
         }
-      };
-    
-      useEffect(() => {
+    };
+
+    useEffect(() => {
         const session = sessionStorage.getItem("WA-SessionStorage");
         setData(session ? JSON.parse(session) : null);
         CheckToken(session ? JSON.parse(session) : null);
-    
+
         const loadAll = async () => {
-          let copyArr = await FetchAllUsers();
-          setSeedData(copyArr);
-          setSaveArr(copyArr);
+            let copyArr = await FetchAllUsers();
+            setSeedData(copyArr);
+            setSaveArr(copyArr);
         };
         loadAll();
-      }, []);
-    
-      const CheckToken = (data: IToken | null) => {
+    }, []);
+
+    const CheckToken = (data: IToken | null) => {
         if ((data !== null && data.token === null) || data === null) {
-          router.push("/");
+            router.push("/");
         }
-      };
-    
-      const handleSearch = (e: any) => {
+    };
+
+    const handleSearch = (e: any) => {
         const copyArr = saveArr.filter((student: IStudentData | any) =>
-          student?.[chooseSearch]
-            ?.toLowerCase()
-            .includes(e.toLowerCase())
+            student?.[chooseSearch]
+                ?.toLowerCase()
+                .includes(e.toLowerCase())
         );
         setSeedData(copyArr);
-      };
-    
-      const [form, setForm] = useState<any>({
+    };
+
+    const [form, setForm] = useState<any>({
         id: 0,
         firstName: "",
         lastName: "",
@@ -253,22 +254,22 @@ const ManagementPage = () => {
         phoneNumber: "",
         dob: "",
         isDeleted: false,
-      });
-    
-      const updateForm = (e: React.ChangeEvent<HTMLInputElement>) => {
+    });
+
+    const updateForm = (e: React.ChangeEvent<HTMLInputElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value });
         console.log(form);
-      };
-    
+    };
+
 
     return (
-        <div>
+        <div className={` ${noScroll}`}>
             <ToastContainer />
 
             <div
-                className={`flex justify-center md:items-center  bg-[#00000089] h-full w-screen fixed ${hideEditModel} `}
+                className={`flex justify-center items-center  bg-[#00000089] h-full w-screen fixed ${hideEditModel} `}
             >
-                <div className={`bg-white p-[24px] relative   h-fit `}>
+                <div className={`bg-white  mt-4 p-[24px] relative   h-fit `}>
                     <p className=" text-[20px] md:text-[30px] text-center mb-2 md:mb-6 font-bold">
                         {" "}
                         UPDATE USER INFORMATION
@@ -283,7 +284,7 @@ const ManagementPage = () => {
                                     type="text"
                                     name="email"
                                     maxLength={100}
-                                    className="border w-full text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12 px-12"
+                                    className="border w-full text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12 px-12 focus:!border-none focus:!ring-transparent active:!ring-transparent active:!border-none"
                                     value={form?.email}
                                     onChange={updateForm}
                                 />
@@ -300,7 +301,7 @@ const ManagementPage = () => {
                                 type="text"
                                 name="firstName"
                                 maxLength={100}
-                                className="border w-full text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12 px-12"
+                                className="border w-full text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12 px-12 focus:!border-none focus:!ring-transparent active:!ring-transparent active:!border-none"
                                 value={form?.firstName ? form?.firstName : resetFirst}
                                 onChange={updateForm}
                             />
@@ -316,7 +317,7 @@ const ManagementPage = () => {
                                 type="text"
                                 name="lastName"
                                 maxLength={100}
-                                className="border w-full text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12 px-12"
+                                className="border w-full text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12 px-12 focus:!border-none focus:!ring-transparent active:!ring-transparent active:!border-none"
                                 value={form?.lastName ? form?.lastName : resetLast}
                                 onChange={updateForm}
                             />
@@ -331,7 +332,7 @@ const ManagementPage = () => {
                                 placeholder="Date of Birth"
                                 type="date"
                                 name="dob"
-                                className="border text-center bg-[#ECF0F1] w-full p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12"
+                                className="border text-center bg-[#ECF0F1] w-full p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-12 focus:!border-none focus:!ring-transparent active:!ring-transparent active:!border-none"
                                 value={form?.dob ? form?.dob : resetDob}
                                 onChange={updateForm}
                             />
@@ -341,7 +342,10 @@ const ManagementPage = () => {
                     <div className=" flex justify-end gap-x-5  mt-2 md:mt-6  ">
                         <button
                             className=" text-white w-[100px] h-[50px] font-semibold  bg-[#737375]"
-                            onClick={() => setEditHideModel("hidden")}
+                            onClick={() => {
+                                setEditHideModel("hidden");
+                                setNoScroll(" h-full");
+                            }}
                         >
                             CANCEL
                         </button>
@@ -350,7 +354,7 @@ const ManagementPage = () => {
                             className=" text-white w-[100px] h-[50px] font-semibold  bg-[#DD8A3E]  "
                             onClick={async () => {
                                 setEditHideModel("hidden");
-
+                                setNoScroll(" h-full");
                                 replaceStudentWithoutRefetching(currentStudent?.id, form);
 
                                 try {
@@ -381,19 +385,23 @@ const ManagementPage = () => {
             >
                 <div className={`bg-white p-5`}>
                     <p className="text-center pb-5">
-                        Are you sure you want to remove <br /> {currentStudent?.email}
+                        Are you sure you want to remove <br /> {currentStudent?.email}?
                     </p>
                     <div className="flex justify-evenly">
                         <button
                             className="text-white w-[100px] h-[50px] font-semibold  bg-[#737375]"
-                            onClick={() => setHideModel("hidden")}
+                            onClick={() => {
+                                setHideModel("hidden ");
+                                setNoScroll(" h-full");
+                            }}
                         >
                             CANCEL
                         </button>
                         <button
                             className="text-white w-[100px] h-[50px] font-semibold  bg-[#DD8A3E]"
                             onClick={async () => {
-                                setHideModel("hidden");
+                                setHideModel("hidden ");
+                                setNoScroll(" h-full");
                                 removeStudentWithoutRefetching(currentStudent?.id);
                                 try {
                                     await softDeleteUser({
@@ -431,13 +439,13 @@ const ManagementPage = () => {
                         placeholder='Search' />
                     <select name='sortBy' onChange={handleSelectChange} value={chooseSearch} className='md:w-[40%] mt-3 w-full md:mb-0 mb-5'>
                         <option value="email">Email</option>
-                        <option value="firstName" className='py-1'>Firstname</option>
-                        <option value="lastName" className='py-1'>Lastname</option>
+                        <option value="firstName" className='py-1'>First Name</option>
+                        <option value="lastName" className='py-1'>Last Name</option>
                         <option value="dob">Date Of Birth</option>
                     </select>
                 </div>
 
-                <div className='flex lg:justify-center overflow-auto w-full mt-5'>
+                <div className='flex lg:justify-center overflow-auto w-full'>
                     <div className='min-h-[510px] w-full'>
                         <table className=' border border-black w-full'>
                             <thead className='text-white text-[20px] bg-[#23527C] gap-2  '>
@@ -483,8 +491,9 @@ const ManagementPage = () => {
                                                 <td className='flex flex-row items-center p-2 gap-2'>
                                                     <Image
                                                         onClick={() => {
-                                                            setCurrentStudent(student)
-                                                            setHideModel("block")
+                                                            setCurrentStudent(student);
+                                                            setNoScroll("no-doc-scroll");
+                                                            setHideModel("block");
                                                         }}
                                                         src="/Trash.png"
                                                         alt="Delete"
@@ -494,9 +503,10 @@ const ManagementPage = () => {
                                                     />
                                                     <Image
                                                         onClick={() => {
-                                                            setForm(student)
-                                                            setCurrentStudent(student)
-                                                            setEditHideModel("block")
+                                                            setForm(student);
+                                                            setNoScroll("no-doc-scroll");
+                                                            setCurrentStudent(student);
+                                                            setEditHideModel("block");
                                                             if (student.firstName === 'N/A') {
                                                                 setResetFirst('')
                                                             } if (student.Lastname === 'N/A') {
@@ -509,7 +519,6 @@ const ManagementPage = () => {
                                                         alt='"Edit'
                                                         width={25}
                                                         height={25}
-                                                        // onClick={}
                                                         className='cursor-pointer'
                                                     />
                                                 </td>
@@ -528,7 +537,7 @@ const ManagementPage = () => {
 
                 <div className="my-5 flex max-w-[1396px] px-5 xl:px-0  justify-center gap-3  md:gap-10 items-center  w-full ">
                     <button
-                        className=" bg-[#23527C] w-[94px] h-[36px] px-[16px] py-[8px] text-white rounded-none flex items-center justify-center"
+                        className=" bg-[#23527C] w-[94px] h-[36px] px-[16px] py-[8px] disabled:bg-[#23527c8d] text-white rounded-none flex items-center justify-center"
                         onClick={handleBack}
                         disabled={pageNumber == 1}
                     >
@@ -537,7 +546,7 @@ const ManagementPage = () => {
 
                     <p>{`Page ${pageNumber}`}</p>
                     <button
-                        className=" bg-[#23527C] w-[94px] h-[36px] px-[16px] py-[8px] text-white rounded-none flex items-center justify-center"
+                        className=" bg-[#23527C] w-[94px] h-[36px] px-[16px] py-[8px] disabled:bg-[#23527c8d] text-white rounded-none flex items-center justify-center"
                         onClick={handleForward}
                         disabled={pageNumber === Math.ceil(seedData?.length / 10)}
                     >
