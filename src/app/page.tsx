@@ -120,7 +120,7 @@ export default function Home() {
       }
 
       // Logic For Forgot Password Page
-      else if (isForgotPasswordPage && !loginErrorForgetPassword) {
+      else if (isForgotPasswordPage && !loginErrorForgetPassword && passwordsMatch) {
         if (loginData.oldPassword) {
           try {
             const data: IToken = await LoginAPI({ email: loginData.email, password: loginData.oldPassword });
@@ -152,6 +152,8 @@ export default function Home() {
         }
       } else if (loginErrorForgetPassword) {
         toast("Login Unsuccessful", { type: "error", className: " !grid !grid-cols-[95%_5%] text-center" });
+      } else if (!passwordsMatch) {
+        toast("Passwords do not match.", { type: "error", className: " !grid !grid-cols-[95%_5%] text-center" });
       }
     } else {
       if (!isFilled) {
