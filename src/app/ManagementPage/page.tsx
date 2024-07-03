@@ -421,7 +421,7 @@ const ManagementPage = () => {
 
             <NavbarComponent admin={data && data.isAdmin} />
 
-            <div className='flex flex-col items-center xl:w-[1396px] w-[96%] mx-auto overflow-auto'>
+            <div className='flex flex-col items-center 2xl:w-[1474px] w-[96%] mx-auto overflow-auto'>
 
                 <div className=' mr-auto '>
                     <input name='searchBar'

@@ -54,6 +54,11 @@ const StudentDirectoryPage = () => {
   const router = useRouter();
 
   const handleInputChange = (e: any) => {
+    if (startCut > 0) {
+      setStartCut(0);
+      setEndCut(10);
+      setPageNumber(1);
+    }
     const { value } = e.target;
     switch (chooseSearch) {
       case "phoneNumber":
@@ -247,7 +252,7 @@ const StudentDirectoryPage = () => {
       >
         <div className={`bg-white mt-4 p-[24px] relative h-fit `}>
           <p className=" text-[20px] md:text-[30px] text-center mb-2 md:mb-6 font-bold">
-            UPDATE {currentStudent?.firstName.toUpperCase()}S INFORMATION
+            UPDATE STUDENT INFORMATION
           </p>
           <div className=" grid gap-x-10 md:gap-y-2 grid-cols-2">
             <div className=" mx-auto w-full">
@@ -302,7 +307,7 @@ const StudentDirectoryPage = () => {
                     false && form?.phoneNumber.length > 0
                     ? "border border-red-500 "
                     : ""
-                    } border w-full text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-8 px-2`}
+                    } border border-zinc-500 w-full text-center bg-[#ECF0F1] p-4 text-sm text-black mb-4 focus:outline-[#DD8A3E] focus:rounded-none h-8 px-2`}
                   placeholder="(xxx)-xxx-xxxx"
                   autoComplete="tel"
                   mask="(999)-999-9999"
@@ -434,7 +439,7 @@ const StudentDirectoryPage = () => {
       <NavbarComponent admin={data !== null && data.isAdmin} />
 
       <div>
-        <div className="flex flex-col items-center w-[96%] mx-auto overflow-auto">
+        <div className="flex flex-col items-center 2xl:w-[1474px] w-[96%] mx-auto overflow-auto">
           <div className=" md:mr-auto xl:px-0">
             <input
               placeholder="Search"
@@ -442,7 +447,7 @@ const StudentDirectoryPage = () => {
               value={inputValue}
               type={inputValidation}
               className='border md:my-5 mt-5 sm:me-3 sm:w-[50%] w-[100%]'
-              />
+            />
             <select onChange={handleSelectChange} value={chooseSearch} className="sm:w-[40%] mt-3 w-full md:mb-0 mb-5">
               <option value="firstName">First Name</option>
               <option value="lastName">Last Name</option>
@@ -455,7 +460,7 @@ const StudentDirectoryPage = () => {
 
           <div className="flex lg:justify-center overflow-auto w-full">
             <div className="min-h-[510px] w-full ">
-              <table className=" border border-black ">
+              <table className="mx-auto border border-black ">
                 <thead className="text-white text-[20px] bg-[#23527C] gap-2">
                   <tr>
                     <th
@@ -504,7 +509,7 @@ const StudentDirectoryPage = () => {
                         <p className=" w-fit">Email</p>
                         <img src="/sortArrows.png" alt="Sort Arrows" className="h-[20px] w-[20px]" />
                       </div>
-                      
+
                     </th>
                     <th className=" text-[16px] text-start font-normal overflow-hidden px-2 min-w-48">
                       <p className="w-fit">
