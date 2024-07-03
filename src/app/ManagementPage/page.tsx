@@ -52,6 +52,9 @@ const ManagementPage = () => {
     const [resetLast, setResetLast] = useState('')
     const [resetDob, setResetDob] = useState('')
     const [pageNumber, setPageNumber] = useState(1);
+    const [saveArr, setSaveArr] = useState<IStudentData[] | any>();
+    const [inputValue, setInputValue] = useState("");
+    const [inputValidation, setInputValidation] = useState("text");  
 
     const [seedData, setSeedData] = useState<IStudentData[] | any>();
 
@@ -71,6 +74,35 @@ const ManagementPage = () => {
             setPageNumber(pageNumber - 1);
         }
     };
+
+    const handleInputChange = (e: any) => {
+        if (startCut > 0) {
+            setStartCut(0);
+            setEndCut(10);
+            setPageNumber(1);
+        }
+        const { value } = e.target;
+        switch (chooseSearch) {
+          case "phoneNumber":
+            setInputValue(value.replace(/[^0-9]/g, ""));
+            handleSearch(value);
+            break;
+          case "email":
+            setInputValue(value);
+            handleSearch(value);
+            break;
+          default:
+            setInputValue(value);
+            handleSearch(value);
+            break;
+        }
+      };
+
+      const handleSelectChange = (e: any) => {
+        setChooseSearch(e.target.value);
+        setInputValue("");
+        setInputValidation(e.target.value === "phoneNumber" ? "tel" : "text");
+      };
 
     const FetchAllUsers = async () => {
         const res = await fetch("https://williamform.azurewebsites.net/User/GetAllUsers");
@@ -141,51 +173,78 @@ const ManagementPage = () => {
 
     const SortByAlpha = (selectedField: string) => {
         if (seedData) {
-            const sorted = [...seedData].sort((a, b) => {
-                const fieldA = a[selectedField]?.toLowerCase() || '';
-                const fieldB = b[selectedField]?.toLowerCase() || '';
-
-                if (fieldA === '' && fieldB === '') return 0;
-                if (fieldA === '') return 1;
-                if (fieldB === '') return -1;
-
-                if (toggleABC) {
-                    if (fieldA < fieldB) return -1;
-                    if (fieldA > fieldB) return 1;
-                } else {
-                    if (fieldA > fieldB) return -1;
-                    if (fieldA < fieldB) return 1;
-                }
-                return 0;
-            });
-            setSeedData(sorted);
-            setToggleABC(!toggleABC);
+          const sorted = [...seedData].sort((a, b) => {
+            const fieldA = a[selectedField]?.toLowerCase() || '';
+            const fieldB = b[selectedField]?.toLowerCase() || '';
+    
+            if (fieldA === '' && fieldB === '') return 0;
+            if (fieldA === '') return 1;
+            if (fieldB === '') return -1;
+    
+            if (toggleABC) {
+              if (fieldA < fieldB) return -1;
+              if (fieldA > fieldB) return 1;
+            } else {
+              if (fieldA > fieldB) return -1;
+              if (fieldA < fieldB) return 1;
+            }
+            return 0;
+          });
+          setSeedData(sorted);
+          setToggleABC(!toggleABC);
         }
-    }
-
-    const SortByDate = () => {
+      }
+    
+      const SortByDate = () => {
         if (seedData) {
-            const sorted = [...seedData].sort((a, b) => {
-                const dateA = new Date(a.dob || '').getTime();
-                const dateB = new Date(b.dob || '').getTime();
-
-                if (!a.dob && !b.dob) return 0;
-                if (!a.dob) return 1;
-                if (!b.dob) return -1;
-
-                if (toggleABC) {
-                    return dateA - dateB;
-                } else {
-                    return dateB - dateA;
-                }
-            });
-            setSeedData(sorted);
-            setToggleABC(!toggleABC);
+          const sorted = [...seedData].sort((a, b) => {
+            const dateA = new Date(a.dob || '').getTime();
+            const dateB = new Date(b.dob || '').getTime();
+    
+            if (!a.dob && !b.dob) return 0;
+            if (!a.dob) return 1;
+            if (!b.dob) return -1;
+    
+            if (toggleABC) {
+              return dateA - dateB;
+            } else {
+              return dateB - dateA;
+            }
+          });
+          setSeedData(sorted);
+          setToggleABC(!toggleABC);
         }
-    };
-
-
-    const [form, setForm] = useState<any>({
+      };
+    
+      useEffect(() => {
+        const session = sessionStorage.getItem("WA-SessionStorage");
+        setData(session ? JSON.parse(session) : null);
+        CheckToken(session ? JSON.parse(session) : null);
+    
+        const loadAll = async () => {
+          let copyArr = await FetchAllUsers();
+          setSeedData(copyArr);
+          setSaveArr(copyArr);
+        };
+        loadAll();
+      }, []);
+    
+      const CheckToken = (data: IToken | null) => {
+        if ((data !== null && data.token === null) || data === null) {
+          router.push("/");
+        }
+      };
+    
+      const handleSearch = (e: any) => {
+        const copyArr = saveArr.filter((student: IStudentData | any) =>
+          student?.[chooseSearch]
+            ?.toLowerCase()
+            .includes(e.toLowerCase())
+        );
+        setSeedData(copyArr);
+      };
+    
+      const [form, setForm] = useState<any>({
         id: 0,
         firstName: "",
         lastName: "",
@@ -194,56 +253,13 @@ const ManagementPage = () => {
         phoneNumber: "",
         dob: "",
         isDeleted: false,
-    })
-
-    const updateForm = (e: React.ChangeEvent<HTMLInputElement>) => {
-        //passing through its current values, and updating
-        setForm({ ...form, [e.target.name]: e.target.value })
-        console.log(form)
-    }
-
-    const CheckToken = (data: IToken | null) => {
-        if ((data != null && data.token === null || !data?.isAdmin) || data === null) {
-            return notFound();
-        }
-    }
-
-    const [currentSortField, setCurrentSortField] = useState<string>('email|alpha');
-
-    const sortData = (field: string, type: 'alpha' | 'date') => {
-        if (seedData) {
-            const sorted = [...seedData].sort((a, b) => {
-                if (type === 'alpha') {
-                    const fieldA = a[field]?.toLowerCase() || '';
-                    const fieldB = b[field]?.toLowerCase() || '';
-
-                    if (fieldA === '' && fieldB === '') return 0;
-                    if (fieldA === '') return 1;
-                    if (fieldB === '') return -1;
-
-                    if (fieldA < fieldB) return -1;
-                    if (fieldA > fieldB) return 1;
-                } else if (type === 'date') {
-                    const dateA = new Date(a[field] || '').getTime();
-                    const dateB = new Date(b[field] || '').getTime();
-
-                    if (!a[field] && !b[field]) return 0;
-                    if (!a[field]) return 1;
-                    if (!b[field]) return -1;
-
-                    return dateA - dateB;
-                }
-                return 0;
-            });
-            setSeedData(sorted);
-        }
-    };
-
-    const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const [field, type] = e.target.value.split('|');
-        setCurrentSortField(field);
-        sortData(field, type as 'alpha' | 'date');
-    };
+      });
+    
+      const updateForm = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setForm({ ...form, [e.target.name]: e.target.value });
+        console.log(form);
+      };
+    
 
     return (
         <div>
@@ -409,15 +425,15 @@ const ManagementPage = () => {
 
                 <div className=' mr-auto '>
                     <input name='searchBar'
-                        onChange={(e) => { setSearch(e.target.value) }}
+                        onChange={handleInputChange}
                         type="text"
                         className='border md:my-5 mt-5 sm:me-3 md:w-[50%] w-[100%]'
                         placeholder='Search' />
-                    <select name='sortBy' onChange={handleSortChange} className='sm:w-[40%] mt-3 w-full md:mb-0 mb-5'>
-                        <option value="email|alpha">Email</option>
-                        <option value="firstName|alpha">Firstname</option>
-                        <option value="lastName|alpha">Lastname</option>
-                        <option value="dob|date">Date Of Birth</option>
+                    <select name='sortBy' onChange={handleSelectChange} value={chooseSearch} className='md:w-[40%] mt-3 w-full md:mb-0 mb-5'>
+                        <option value="email">Email</option>
+                        <option value="firstName" className='py-1'>Firstname</option>
+                        <option value="lastName" className='py-1'>Lastname</option>
+                        <option value="dob">Date Of Birth</option>
                     </select>
                 </div>
 
