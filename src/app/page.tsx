@@ -116,7 +116,6 @@ export default function Home() {
           toast("Username or password is incorrect", { type: "warning", className: " !grid !grid-cols-[95%_5%] text-center" });
           setLoginError(true);
         }
-
       }
 
       // Logic For Forgot Password Page
@@ -129,15 +128,12 @@ export default function Home() {
               try {
                 const data = await ResetPasswordAPI(loginData.email, loginData.password)
                 toast("You've successfully reset your password!", { type: "success", className: " !grid !grid-cols-[95%_5%] text-center" });
-
-                // Reset all form fields
                 formReset()
                 setIsSubmitted(false);
                 setIsForgotPasswordPage(false);
                 setIsLoginPage(true);
               } catch (error) {
                 toast("Something went wrong, the api might be down", { type: "success", className: " !grid !grid-cols-[95%_5%] text-center" });
-
               }
             } else if (data.token !== undefined || data.token === null && loginData.oldPassword === loginData.password) {
               toast("Your password can't be reset to your old previous password.", { type: "error", className: " !grid !grid-cols-[95%_5%] text-center" });
