@@ -113,14 +113,13 @@ export default function Home() {
             router.push('/AddFormPage')
           }
         } catch (error) {
-          toast("Username or password is incorrect", { type: "warning", className: " !grid !grid-cols-[95%_5%] text-center" });
+          toast("Email or password is incorrect", { type: "warning", className: " !grid !grid-cols-[95%_5%] text-center" });
           setLoginError(true);
         }
-
       }
 
       // Logic For Forgot Password Page
-      else if (isForgotPasswordPage && !loginErrorForgetPassword) {
+      else if (isForgotPasswordPage && !loginErrorForgetPassword && passwordsMatch) {
         if (loginData.oldPassword) {
           try {
             const data: IToken = await LoginAPI({ email: loginData.email, password: loginData.oldPassword });
@@ -129,29 +128,28 @@ export default function Home() {
               try {
                 const data = await ResetPasswordAPI(loginData.email, loginData.password)
                 toast("You've successfully reset your password!", { type: "success", className: " !grid !grid-cols-[95%_5%] text-center" });
-
-                // Reset all form fields
                 formReset()
                 setIsSubmitted(false);
                 setIsForgotPasswordPage(false);
                 setIsLoginPage(true);
               } catch (error) {
                 toast("Something went wrong, the api might be down", { type: "success", className: " !grid !grid-cols-[95%_5%] text-center" });
-
               }
             } else if (data.token !== undefined || data.token === null && loginData.oldPassword === loginData.password) {
               toast("Your password can't be reset to your old previous password.", { type: "error", className: " !grid !grid-cols-[95%_5%] text-center" });
               setNewPasswordBooleanError(true);
             }
           } catch (error) {
-            toast("Login Unsuccessful", { type: "error", className: " !grid !grid-cols-[95%_5%] text-center" });
+            toast("Incorrect email or password", { type: "error", className: " !grid !grid-cols-[95%_5%] text-center" });
             setLoginErrorForgetPassword(true)
           }
         } else {
           toast("Please fill out all required fields.", { type: "error", className: " !grid !grid-cols-[95%_5%] text-center" });
         }
       } else if (loginErrorForgetPassword) {
-        toast("Login Unsuccessful", { type: "error", className: " !grid !grid-cols-[95%_5%] text-center" });
+        toast("Incorrect email or password", { type: "error", className: " !grid !grid-cols-[95%_5%] text-center" });
+      } else if (!passwordsMatch) {
+        toast("Passwords do not match.", { type: "error", className: " !grid !grid-cols-[95%_5%] text-center" });
       }
     } else {
       if (!isFilled) {
