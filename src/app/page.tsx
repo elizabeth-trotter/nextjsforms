@@ -113,7 +113,7 @@ export default function Home() {
             router.push('/AddFormPage')
           }
         } catch (error) {
-          toast("Username or password is incorrect", { type: "warning", className: " !grid !grid-cols-[95%_5%] text-center" });
+          toast("Email or password is incorrect", { type: "warning", className: " !grid !grid-cols-[95%_5%] text-center" });
           setLoginError(true);
         }
       }
@@ -140,14 +140,14 @@ export default function Home() {
               setNewPasswordBooleanError(true);
             }
           } catch (error) {
-            toast("Login Unsuccessful", { type: "error", className: " !grid !grid-cols-[95%_5%] text-center" });
+            toast("Incorrect email or password", { type: "error", className: " !grid !grid-cols-[95%_5%] text-center" });
             setLoginErrorForgetPassword(true)
           }
         } else {
           toast("Please fill out all required fields.", { type: "error", className: " !grid !grid-cols-[95%_5%] text-center" });
         }
       } else if (loginErrorForgetPassword) {
-        toast("Login Unsuccessful", { type: "error", className: " !grid !grid-cols-[95%_5%] text-center" });
+        toast("Incorrect email or password", { type: "error", className: " !grid !grid-cols-[95%_5%] text-center" });
       } else if (!passwordsMatch) {
         toast("Passwords do not match.", { type: "error", className: " !grid !grid-cols-[95%_5%] text-center" });
       }
